@@ -58,7 +58,7 @@ cloudinary.config({
         },100)
         return Response.json({message:"New Item has been sucessfully created",title:title})
     }catch(error:unknown){
-        return({
+        return Response.json({
             message:"Something Went Wrong Please Try Again",
             error:error
         })
