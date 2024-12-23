@@ -1,6 +1,5 @@
 import {v2 as cloudinary} from "cloudinary"
 import Product from "@/app/lib/models/Product";
-import { Interval } from "date-fns";
 import dbConnect from "@/app/lib/DBconnect";
 cloudinary.config({
     cloud_name: String(process.env.cloud_name),
