@@ -1,6 +1,6 @@
 import dbConnect from "@/app/lib/DBconnect";
 import Product from "@/app/lib/models/Product";
-export async function POST(req:Request,res:Response) {
+export async function POST(req:Request) {
     await dbConnect();
     try{
         const filter= await new Response(req.body).json()
@@ -13,7 +13,7 @@ export async function POST(req:Request,res:Response) {
         
     //     const products= await Product.find()  
       
-    }catch(err:any){
-       return Response.json({error: err.message})
+    }catch(err:unknown){
+       return Response.json({error: err})
     }
 }

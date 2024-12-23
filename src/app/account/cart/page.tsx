@@ -7,7 +7,11 @@ import { useSnapshot } from 'valtio';
 import { state } from '@/store/state';
 import PacmanLoader from "react-spinners/PacmanLoader"
 
-
+export interface iCheckoutDetails {
+        cartId:string,
+        price:number
+      
+}
 const Page = () => {
     const [isLoading,setIsLoading]= useState(true)
     const [cart,setCart]=useState<Array<iCart>>([])
@@ -17,8 +21,7 @@ const Page = () => {
     const snap=useSnapshot(state)
     const email=snap.user?snap.user.email:"no email"
     const publicKey= String(process.env.paystack_publicKey)
-    const postToProducts=async (x:any)=>{
-        console.log(x);
+    const postToProducts=async (x:unknown)=>{
         
         const date= new Date ()
         const items=await Promise.all(cart.map(async (cartItem)=>{
@@ -73,7 +76,7 @@ const Page = () => {
             setCart([])
         }       
      }
-     const AddToTotalAmount=(newItem:any)=>{
+     const AddToTotalAmount=(newItem:iCheckoutDetails)=>{
         const newAmount= checkoutDetails
         {!newAmount.find((item)=>item.cartId==newItem.cartId) && newAmount.push(newItem)}
         // checking if it previously exists on the checkoutDetails array
@@ -111,7 +114,7 @@ const Page = () => {
                         </div>
                         <div className='flex flex-col gap-2 mb-4 overflow-y-auto'>
                             {cart.map((cartItem )=>(
-                                <CartItem cartItem={cartItem} setPaystackButton={setPaystackButton} getCart={getCart} AddToTotalAmount={AddToTotalAmount}/>
+                                <CartItem key={cartItem.id} cartItem={cartItem} setPaystackButton={setPaystackButton} getCart={getCart} AddToTotalAmount={AddToTotalAmount}/>
                             ))}
                         </div>
                         <div className='flex justify-between px-6 mt-4 w-5/6'>

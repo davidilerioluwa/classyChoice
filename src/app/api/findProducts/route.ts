@@ -2,12 +2,10 @@ import dbConnect from "@/app/lib/DBconnect";
 import Product from "@/app/lib/models/Product";
 import mongoose from "mongoose";
 
-export async function POST(req:Request,res:Response) {
+export async function POST(req:Request) {
     await dbConnect();
     try{
-        const x={
-            f:{$gte:38}
-        }
+     
         const request= await new Response(req.body).json()
         type filterInterface={
             title?:string
@@ -35,7 +33,7 @@ export async function POST(req:Request,res:Response) {
           
        return Response.json(products)
       
-    }catch(err:any){
-       return Response.json({error: err.message})
+    }catch(err:unknown){
+       return Response.json({error: err})
     }
 }

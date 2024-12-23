@@ -24,8 +24,8 @@ export async function POST(req: NextRequest){
          })
         }
        
-     }catch(err:any){
-        return NextResponse.json({error: err.message})
-     }
+     }catch(err:unknown){
+      return NextResponse.json({error: err})
+   }
  
  }

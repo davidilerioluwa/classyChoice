@@ -4,10 +4,10 @@ import { iCart } from '../lib/models/Cart'
 import { iProduct } from '../lib/models/Product'
 import { toast,Toaster } from 'sonner'
 
-const CartItem = ({cartItem,getCart,AddToTotalAmount,setPaystackButton}:{cartItem:iCart,getCart:any,AddToTotalAmount:any,setPaystackButton:Dispatch<SetStateAction<boolean>>}) => {
+
+const CartItem = ({cartItem,getCart,AddToTotalAmount,setPaystackButton}:{cartItem:iCart,getCart:any,AddToTotalAmount:Function,setPaystackButton:Dispatch<SetStateAction<boolean>>}) => {
     
     const [product,setProduct]= useState<iProduct>()
-    const [quantity,setQuantity]= useState(cartItem.quantity)
     const imageUrl=(product?(product.images?product.images[0].url:"loading"):"");
 
     const reduceQuantity=async ()=>{

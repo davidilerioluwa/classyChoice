@@ -1,6 +1,5 @@
 "use client"
 import React, { useEffect,useState } from 'react'
-import Image from 'next/image';
 import { useSnapshot } from 'valtio';
 import { state } from '@/store/state';
 import { toast } from 'sonner';
@@ -49,7 +48,7 @@ const Page = () => {
                                 <span>{order.amount}</span>
                             </div>   
                         </div>
-                        {order.items.map((item)=><OrderItem item={item}/>)}
+                        {order.items.map((item)=><OrderItem key={item.productId} item={item}/>)}
                     </div>
                 </div>
             </section>)

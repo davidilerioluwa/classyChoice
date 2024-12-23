@@ -1,22 +1,16 @@
 "use client"
 import React,{useEffect, useState} from 'react'
-import Image from 'next/image';
-import { BsSliders, BsBriefcase,BsCaretDown } from "react-icons/bs";
+import { BsCaretDown } from "react-icons/bs";
 import { state } from '@/store/state';
 import { useSnapshot } from 'valtio';
-import { headers } from 'next/headers';
-import { iUser } from '@/app/lib/models/User';
 import { toast } from 'sonner';
 import { getUserSession } from '@/app/lib/session';
-import { add } from 'date-fns';
 
 const Page = () => {
   // Note: profile was updated through valtio state using the navbar
   const snap=useSnapshot(state)
-  const userId=(snap.userId);
   const [showEditAccount,setShowEditAccount]= useState<boolean>(false)
   const [showEditAddress,setShowEditAddress]= useState<boolean>(false)
-  const [user,setUser]=useState<iUser>()
  const [name,setName]=useState(snap.user?.name?snap.user.name:"")
  const [phoneNumber,setPhoneNumber]=useState(snap.user?.phoneNumber?snap.user.phoneNumber:"")
  const [address,setAddress]=useState(snap.user?snap.user.address:"")
@@ -99,7 +93,7 @@ const Page = () => {
         </div>
   )
 }
-const EditAccountDetails = ({setShowEditAccount,showEditAccount,name,setName,phoneNumber,setPhoneNumber,updateAccountDetails}:{setShowEditAccount: React.Dispatch<React.SetStateAction<boolean>>,showEditAccount:boolean,name:string,setName:React.Dispatch<React.SetStateAction<string>>,updateAccountDetails:Function,phoneNumber:string,setPhoneNumber:React.Dispatch<React.SetStateAction<string>>})=>{
+const EditAccountDetails = ({setShowEditAccount,showEditAccount,name,setName,phoneNumber,setPhoneNumber,updateAccountDetails}:{setShowEditAccount: React.Dispatch<React.SetStateAction<boolean>>,showEditAccount:boolean,name:string,setName:React.Dispatch<React.SetStateAction<string>>,updateAccountDetails: (param: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void,phoneNumber:string,setPhoneNumber:React.Dispatch<React.SetStateAction<string>>})=>{
  
   return(
       <section className={`text-purple-800 w-full bg-lgray p-4 flex flex-col gap-1 absolute  left-[-100px] z-50 ${showEditAccount?"flex":"hidden"}`}>
@@ -132,7 +126,7 @@ const EditAccountDetails = ({setShowEditAccount,showEditAccount,name,setName,pho
     </section>
     )
 }
-const EditAddressDetails = ({setShowEditAddress,showEditAddress,address,city,state,setAddress,setCity,setState,updateAccountDetails}:{setShowEditAddress: React.Dispatch<React.SetStateAction<boolean>>,showEditAddress:boolean,address:string,city:string,state:string,setCity:React.Dispatch<React.SetStateAction<string>>,setAddress:React.Dispatch<React.SetStateAction<string>>,setState:React.Dispatch<React.SetStateAction<string>>,updateAccountDetails:Function})=>{
+const EditAddressDetails = ({setShowEditAddress,showEditAddress,address,city,state,setAddress,setCity,setState,updateAccountDetails}:{setShowEditAddress: React.Dispatch<React.SetStateAction<boolean>>,showEditAddress:boolean,address:string,city:string,state:string,setCity:React.Dispatch<React.SetStateAction<string>>,setAddress:React.Dispatch<React.SetStateAction<string>>,setState:React.Dispatch<React.SetStateAction<string>>,updateAccountDetails:(params:React.MouseEvent<HTMLButtonElement, MouseEvent>)=>void})=>{
  
   const statesInNigeria = [
     "Abia", "Adamawa", "Akwa Ibom", "Anambra", "Bauchi", "Bayelsa", "Benue",

@@ -21,9 +21,9 @@ export async function POST(req: NextRequest){
           
         return Response.json("sucessfully added to cart")
        
-     }catch(err:any){
-        return NextResponse.json({error: err.message})
-     }
+     }catch(err:unknown){
+      return NextResponse.json({error: err})
+   }
  
  }
 
@@ -42,9 +42,9 @@ export async function POST(req: NextRequest){
          message:"cart has been sucessfully updated"
         })
        
-     }catch(err:any){
-        return NextResponse.json({error: err.message})
-     }
+     }catch(err:unknown){
+      return NextResponse.json({error: err})
+   }
  
  }
  export async function GET(req: NextRequest){
@@ -57,9 +57,9 @@ export async function POST(req: NextRequest){
         const cart=await Cart.find({userId:userId})
         return Response.json(cart)
        
-     }catch(err:any){
-        return NextResponse.json({error: err.message})
-     }
+     }catch(err:unknown){
+      return NextResponse.json({error: err})
+   }
  
  }
 
@@ -73,8 +73,8 @@ export async function POST(req: NextRequest){
          message:"sucessfully deleted from cart"
        })
       
-    }catch(err:any){
-       return NextResponse.json({error: err.message})
+    }catch(err:unknown){
+       return NextResponse.json({error: err})
     }
 
 }
