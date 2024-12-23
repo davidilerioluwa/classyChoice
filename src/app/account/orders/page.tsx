@@ -6,7 +6,7 @@ import { state } from '@/store/state';
 import { toast } from 'sonner';
 import { iOrder } from '@/app/lib/models/Orders';
 import OrderItem from '@/app/components/OrderItem';
-const page = () => {
+const Page = () => {
     const snap=useSnapshot(state)
     const [orders,setOrders]=useState<Array<iOrder>>([])
     
@@ -59,4 +59,4 @@ const page = () => {
   )
 }
 
-export default page
+export default Page

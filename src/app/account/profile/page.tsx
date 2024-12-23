@@ -10,7 +10,7 @@ import { toast } from 'sonner';
 import { getUserSession } from '@/app/lib/session';
 import { add } from 'date-fns';
 
-const page = () => {
+const Page = () => {
   // Note: profile was updated through valtio state using the navbar
   const snap=useSnapshot(state)
   const userId=(snap.userId);
@@ -180,4 +180,4 @@ const EditAddressDetails = ({setShowEditAddress,showEditAddress,address,city,sta
     </section>
     )
 }
-export default page
+export default Page

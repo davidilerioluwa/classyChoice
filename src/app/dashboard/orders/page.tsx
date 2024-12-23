@@ -6,7 +6,7 @@ import { state } from '@/store/state';
 import { toast } from 'sonner';
 import { iOrder } from '@/app/lib/models/Orders';
 import DashboardOrders from '@/app/components/DashboardOrders';
-const page = () => {
+const Page = () => {
     const snap=useSnapshot(state)
     const [orders,setOrders]=useState<Array<iOrder>>([])
     const getProducts=async ()=>{
@@ -37,4 +37,4 @@ const page = () => {
   )
 }
 
-export default page
+export default Page

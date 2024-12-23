@@ -1,7 +1,6 @@
 "use client"
 import React, { useEffect, useState } from 'react'
 import { PaystackButton } from 'react-paystack';
-import Image from 'next/image';
 import { iCart } from '@/app/lib/models/Cart';
 import CartItem from '@/app/components/CartItem';
 import { useSnapshot } from 'valtio';
@@ -9,7 +8,7 @@ import { state } from '@/store/state';
 import PacmanLoader from "react-spinners/PacmanLoader"
 
 
-const page = () => {
+const Page = () => {
     const [isLoading,setIsLoading]= useState(true)
     const [cart,setCart]=useState<Array<iCart>>([])
     const [totalAmount,setTotalAmount]= useState<number>(0)
@@ -157,4 +156,4 @@ const page = () => {
   )
 }
 
-export default page
+export default Page

@@ -6,7 +6,7 @@ import CreateNewListingForm from '@/app/components/CreateNewListingForm';
 import  { iProduct } from '@/app/lib/models/Product';
 import PacmanLoader from "react-spinners/PacmanLoader"
 
-const page = () => {
+const Page = () => {
     const rows= ["Free return within 7 days for ALL eligible item",2,]
     // const products=[1,2,3,4,5,6,7,8,9]
     const [showListingForm,setShowListingForm]= useState(false)
@@ -49,4 +49,4 @@ const page = () => {
   )
 }
 
-export default page
+export default Page

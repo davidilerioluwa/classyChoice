@@ -9,7 +9,7 @@ import PacmanLoader from "react-spinners/PacmanLoader"
 import { HiAdjustmentsHorizontal } from "react-icons/hi2";
 import Search from '../components/Search'
 
-const page = () => {
+const Page = () => {
     const [products,setProducts]=useState<Array<iProduct>>([])
     const [isLoading,setIsLoading]= useState(true)
     const [showSearch,setShowSearch]=useState(false)
@@ -57,4 +57,4 @@ const page = () => {
   )
 }
 
-export default page
+export default Page
