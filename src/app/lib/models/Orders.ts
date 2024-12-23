@@ -1,0 +1,43 @@
+import mongoose,{Schema, Document } from "mongoose";
+export interface product {
+    productId: string,
+    quantity: string,
+    title:string,
+    price: number
+}
+export interface iOrder extends Document {
+    items: Array<product>
+    time?: Date,
+    userId?:String
+    _id: string,
+    status:string,
+    amount: number
+}
+
+const orderSchema: Schema= new mongoose.Schema({
+    items :{
+        type: Array<product>,
+        required: true
+    },
+    time:{
+        type:Date,
+        required:true
+    },
+    userId:{
+        type: String,
+        required: true
+    },
+    status:{
+        type:String,
+        required:true
+    },
+    amount:{
+        type:Number,
+        required:true
+    }
+
+})
+
+const Order =mongoose.models.order || mongoose.model<iOrder>("order",orderSchema)
+
+export default Order

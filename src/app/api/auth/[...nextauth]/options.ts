@@ -1,0 +1,60 @@
+
+import {useSession} from "next-auth/react"
+import  CredentialsProvider  from "next-auth/providers/credentials"
+import GoogleProvider from "next-auth/providers/google";
+import GithubProvider from "next-auth/providers/credentials"
+import { NextAuthOptions } from "next-auth"
+import mongoose from "mongoose"
+import dbConnect from "../../../lib/DBconnect";
+import {session} from "../../../lib/session"
+
+import User from "@/app/lib/models/User";
+export const options: NextAuthOptions={
+    session:{
+        strategy:"jwt"
+    },
+    providers: [
+        GoogleProvider({
+          clientId: String(process.env.clientId),
+          clientSecret: String(process.env.clientSecret),
+        })
+      ],
+      callbacks:{
+        async signIn({account,profile}){
+            dbConnect()
+            if(!profile?.email){
+                throw new Error("No Profile")
+            }else{
+              console.log("logged in");
+              
+              const user= await User.findOne({email
+                :profile.email})
+              if(user){
+                console.log(user);
+              
+              }else{
+                  const newUser =new User({name:profile.name,email:profile.email,accountType:"user"})
+                  newUser.save();
+                  
+                  
+              }
+              
+            }
+           
+            return true;
+        },
+        session,
+        async jwt({ token, user, account, profile }) {
+            if (profile) {
+              const user = await User.findOne({email: profile.email})
+              if (!user) {
+                throw new Error('No user found')
+              }
+              token.id = user.id
+              
+            }
+            return token
+          },
+      }
+
+}
