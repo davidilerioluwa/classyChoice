@@ -11,9 +11,11 @@ cloudinary.config({
     assetId?:string
   }
  export  async function POST(req:Request){
+    const formData=await req.formData()
+    const title=formData.get("title")
     try{
-        const formData=await req.formData()
-        const title=formData.get("title")
+      
+       
         const description= formData.get("description")
         const category= formData.get("category")
         const price= formData.get("price")
@@ -52,8 +54,9 @@ cloudinary.config({
                         console.log(newProductItem);
                         clearTimeout(interval)
             }
+            
         },100)
-        return Response.json({message:"New Item has been sucessfully created"})
+        return Response.json({message:"New Item has been sucessfully created",title:title})
     }catch(error:unknown){
         return({
             message:"Something Went Wrong Please Try Again"
