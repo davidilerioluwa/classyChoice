@@ -2,11 +2,6 @@ import {v2 as cloudinary} from "cloudinary"
 import Product, { iProduct } from "@/app/lib/models/Product";
 import { Interval } from "date-fns";
 import dbConnect from "@/app/lib/DBconnect";
-export const config={
-    api:{
-        bodyParser:false,
-    }
-}
 cloudinary.config({
     cloud_name: String(process.env.cloud_name),
     api_key: String(process.env.api_key),
