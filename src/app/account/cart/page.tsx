@@ -1,11 +1,15 @@
 "use client"
 import React, { useEffect, useState } from 'react'
-import { PaystackButton } from 'react-paystack';
+// import { PaystackButton } from 'react-paystack';
 import { iCart } from '@/app/lib/models/Cart';
 import CartItem from '@/app/components/CartItem';
 import { useSnapshot } from 'valtio';
 import { state } from '@/store/state';
-import PacmanLoader from "react-spinners/PacmanLoader"
+import dynamic from 'next/dynamic';
+
+// Dynamically import PacmanLoader with { ssr: false } to prevent server-side rendering
+const PacmanLoader = dynamic(() => import("react-spinners/PacmanLoader"), { ssr: false });
+const PaystackButton = dynamic(() => import('react-paystack').then(mod => mod.PaystackButton), { ssr: false });
 
 export interface iCheckoutDetails {
         cartId:string,
@@ -94,6 +98,9 @@ const Page = () => {
      }
     useEffect(()=>{
          getCart()
+    },[])
+    useEffect(()=>{
+
     },[])
   return (
     <>
