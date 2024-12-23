@@ -1,9 +1,9 @@
-import React, { ChangeEvent, Dispatch, SetStateAction,useEffect,useState } from 'react'
+import React, { ChangeEvent, Dispatch, SetStateAction,useState } from 'react'
 import { categories } from '@/store/constants'
 import { BsCaretDown } from 'react-icons/bs'
 import { toast } from 'sonner'
 
-const CreateNewListingForm = ({setShowListingForm,getProducts}:{setShowListingForm:Dispatch<SetStateAction<boolean>>,getProducts:Function}) => {
+const CreateNewListingForm = ({setShowListingForm}:{setShowListingForm:Dispatch<SetStateAction<boolean>>}) => {
   const [files,setFiles]= useState<Array<File>>([])
   const [title,setTitle]= useState("")
   const [description,setDescription]=useState("")
@@ -35,7 +35,7 @@ console.log(category);
     
     
   }
-  const CreateNewListing = async (e:ChangeEvent<HTMLInputElement>)=>{
+  const CreateNewListing = async (e:React.FormEvent<HTMLFormElement>)=>{
     const formData = new FormData();
     e.preventDefault()
     files.forEach(file => {
@@ -85,7 +85,7 @@ console.log(category);
         <div className='bg-white rounded-md p-4 w-96 h-full md:h-screen  relative overflow-y-auto'>
             <span onClick={()=>setShowListingForm(false)} className='absolute top-2 right-2 px-3  pb-1 rounded-md cursor-pointer text-xl  text-red-800 border border-red-800 '>x</span>
             <h1 className='text-lg text-center mt-2 font-bold text-purple-800 w-full '>Create New Listing</h1>
-            <form className='text-purple-800 flex flex-col gap-2' onSubmit={(e:any)=>CreateNewListing(e)}>
+            <form className='text-purple-800 flex flex-col gap-2' onSubmit={(e:React.FormEvent<HTMLFormElement>)=>CreateNewListing(e)}>
                 <div className='flex flex-col gap-2'>
                     <label>Title</label>
                     <input onChange={(e)=>setTitle(e.target.value)} type='text' className='px-2 py-2 text-purple-800 outline outline-[1px] outline-purple-800 rounded-md'/>
@@ -102,7 +102,7 @@ console.log(category);
                     <label>Category</label>
                     <div className="flex relative rounded-md justify-between">
                         <select onChange={(e)=>setCategory(e.target.value)} className="appearance-none  outline-none w-full  border border-purple-800 p-2 py-3 rounded-md text-sm">
-                        {categories.map((Category)=><option value={Category}>{Category}</option>)}
+                        {categories.map((Category)=><option key={category} value={Category}>{Category}</option>)}
                         </select>
                         <span className="absolute right-2 flex items-center top-2 rounded-md bg-purple-800 p-1 text-white"><BsCaretDown/></span>
                     </div>
@@ -110,7 +110,7 @@ console.log(category);
                 <div>
                     <div className='mb-2'>Pictures</div>
                     <div className='flex items-center justify-center flex-wrap gap-2 mb-20'>
-                    {urls.map((url)=><div className='relative border border-purple-800 rounded-md'>
+                    {urls.map((url)=><div key={url} className='relative border border-purple-800 rounded-md'>
                             <span className='absolute right-2 top-2 px-3 py-1 cursor-pointer bg-purple-800 text-white rounded-md'>x</span>
                             <img src={url} className='object-cover w-32 h-32 rounded-md'/>
                     </div>)}

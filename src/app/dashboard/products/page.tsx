@@ -7,7 +7,6 @@ import  { iProduct } from '@/app/lib/models/Product';
 import PacmanLoader from "react-spinners/PacmanLoader"
 
 const Page = () => {
-    const rows= ["Free return within 7 days for ALL eligible item",2,]
     // const products=[1,2,3,4,5,6,7,8,9]
     const [showListingForm,setShowListingForm]= useState(false)
     const [products,setProducts] = useState <Array<iProduct>>([])
@@ -31,7 +30,7 @@ const Page = () => {
   return (
     
         <div className='w-full gap-4 h-full pb-12 mt-20 p-4'>
-            {showListingForm?<CreateNewListingForm getProducts={getProducts} setShowListingForm={setShowListingForm}/>:""}
+            {showListingForm?<CreateNewListingForm setShowListingForm={setShowListingForm}/>:""}
             <h1 className='font-bold p-2 text-lg text-purple-800 mb-2'>Products</h1>
             <div className='w-full flex gap-2 mb-4'>
                         <input type='text' className='w-full px-2 text-purple-800 outline outline-[1px] outline-purple-800 rounded-md'/>

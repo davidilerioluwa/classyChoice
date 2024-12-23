@@ -16,7 +16,8 @@ export const options: NextAuthOptions={
         })
       ],
       callbacks:{
-        async signIn({account,profile}){
+        async signIn({profile}){
+          // account,
             dbConnect()
             if(!profile?.email){
                 throw new Error("No Profile")
@@ -40,7 +41,8 @@ export const options: NextAuthOptions={
             return true;
         },
         session,
-        async jwt({ token, user, account, profile }) {
+        async jwt({ token,  profile }) {
+          // user, account,
             if (profile) {
               const user = await User.findOne({email: profile.email})
               if (!user) {

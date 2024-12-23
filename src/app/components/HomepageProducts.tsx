@@ -40,7 +40,7 @@ const HomepageProducts = () => {
     <section className='w-screen '>
         <div className='flex flex-col items-center justify-center '>
           <div className='flex flex-wrap justify-center items-center gap-6 text-sm  py-2 px-2 rounded-md mt-4 mx-4 bg-gray-200 rounded-md'>
-             {categories.map((category)=><button className={`cursor-pointer text-purple-900 p-1  ${active===category?" font-bold drop-shadow-md bg-white rounded-md":""}`} onClick={()=>setActive(category)}>{category}</button>)}
+             {categories.map((category)=><button key={category} className={`cursor-pointer text-purple-900 p-1  ${active===category?" font-bold drop-shadow-md bg-white rounded-md":""}`} onClick={()=>setActive(category)}>{category}</button>)}
           </div>
           <div className='flex gap-2 py-4'>
               {categories.map((category)=><span className={`cursor-pointer h-4 w-4 rounded-full ${active===category?"bg-purple-800":"border border-purple-800"}`} key={category} onClick={()=>setActive(category)}></span>)}

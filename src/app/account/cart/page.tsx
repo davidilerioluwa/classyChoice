@@ -16,12 +16,13 @@ const Page = () => {
     const [isLoading,setIsLoading]= useState(true)
     const [cart,setCart]=useState<Array<iCart>>([])
     const [totalAmount,setTotalAmount]= useState<number>(0)
-    const [checkoutDetails,setCheckoutDetails]= useState<Array<any>>([])
+    const [checkoutDetails,setCheckoutDetails]= useState<Array<iCheckoutDetails>>([])
     const [showPaystackButton,setPaystackButton]=useState(true)
     const snap=useSnapshot(state)
     const email=snap.user?snap.user.email:"no email"
     const publicKey= String(process.env.paystack_publicKey)
     const postToProducts=async (x:unknown)=>{
+        console.log(x);
         
         const date= new Date ()
         const items=await Promise.all(cart.map(async (cartItem)=>{

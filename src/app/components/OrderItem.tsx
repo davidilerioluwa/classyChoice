@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import { product } from '../lib/models/Orders'
 const OrderItem = ({item}:{item:product}) => {
 

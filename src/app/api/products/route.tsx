@@ -1,5 +1,5 @@
 import {v2 as cloudinary} from "cloudinary"
-import Product, { iProduct } from "@/app/lib/models/Product";
+import Product from "@/app/lib/models/Product";
 import { Interval } from "date-fns";
 import dbConnect from "@/app/lib/DBconnect";
 cloudinary.config({
@@ -11,7 +11,7 @@ cloudinary.config({
     url?: string,
     assetId?:string
   }
- export  async function POST(req:Request,res:Response){
+ export  async function POST(req:Request){
     try{
         const formData=await req.formData()
         const title=formData.get("title")
@@ -38,7 +38,7 @@ cloudinary.config({
             
         })
     
-    const interval= setInterval((x:Interval)=>{
+    const interval= setInterval(()=>{
             if(imageUrls.length==files.length){
                 console.log(imageUrls);
                 
@@ -62,18 +62,18 @@ cloudinary.config({
     }
 }
 
-export async function GET(req:Request,res:Response) {
+export async function GET() {
     await dbConnect();
     try{
         const products= await Product.find()    
        return Response.json(products)
       
-    }catch(err:any){
-       return Response.json({error: err.message})
+    }catch(err){
+       return Response.json({error: err})
     }
 }
 
-export async function PUT(req:Request,res:Response) {
+export async function PUT(req:Request) {
     
     await dbConnect();
     try{
@@ -90,6 +90,7 @@ export async function PUT(req:Request,res:Response) {
             
             if(deleted.result=="ok"){
                 const deletedProduct= await Product.deleteOne({_id:productId}) 
+                if(deletedProduct){}
             }
             
         })
@@ -101,7 +102,7 @@ export async function PUT(req:Request,res:Response) {
         message:"sucessfully deleted"
        })
       
-    }catch(err:any){
-       return Response.json({error: err.message})
+    }catch(err){
+       return Response.json({error: err})
     }
 }

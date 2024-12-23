@@ -8,7 +8,7 @@ export interface product {
 export interface iOrder extends Document {
     items: Array<product>
     time?: Date,
-    userId?:String
+    userId?:string
     _id: string,
     status:string,
     amount: number

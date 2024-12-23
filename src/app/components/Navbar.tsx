@@ -17,7 +17,7 @@ const Navbar = () => {
   const [showAccountDropdown,setShowAccountDropdown]=useState(false)
   const [showCategoriesDropdown,setShowCategoriesDropdown]=useState(false)
   const [showSearch,setShowSearch]=useState(false)
-  const [loggedIn,setLoggedIn] = useState<any>(null)
+  const [loggedIn,setLoggedIn] = useState<string>()
     
   useEffect(()=>{
     (async function name() {
@@ -56,7 +56,7 @@ const Navbar = () => {
   )
 }
 const CategoriesDropdown=()=>{
-  const snap= useSnapshot(state)
+  // const snap= useSnapshot(state)
   const router=useRouter()
   function navigateToCategories(category:string){
     state.filter={
@@ -69,7 +69,7 @@ const CategoriesDropdown=()=>{
 }
 return(
 <div className='absolute top-8 left-[-30px] w-fit bg-white p-4 rounded-md flex flex-col drop-shadow-md text-sm'>
-  {categories.map((category)=><button onClick={()=>{navigateToCategories(category)}} className='p-2 text-left  text-nowrap hover:drop-shadow-lg rounded-md bg-white'>{category}</button>)}  
+  {categories.map((category)=><button key={category} onClick={()=>{navigateToCategories(category)}} className='p-2 text-left  text-nowrap hover:drop-shadow-lg rounded-md bg-white'>{category}</button>)}  
 </div>
 )
 }

@@ -3,7 +3,7 @@ import mongoose,{Schema, Document } from "mongoose";
 export interface iCart extends Document {
     productId?: string,
     quantity?: string,
-    userId?:String
+    userId?:string
 }
 
 const cartSchema: Schema= new mongoose.Schema({

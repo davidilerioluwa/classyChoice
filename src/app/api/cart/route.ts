@@ -37,7 +37,7 @@ export async function POST(req: NextRequest){
     await dbConnect();
      try{
           const updatedItem=await Cart.findByIdAndUpdate({_id:cartId},{quantity:quantity})
-          
+          if(updatedItem){}
         return Response.json({
          message:"cart has been sucessfully updated"
         })
@@ -47,7 +47,7 @@ export async function POST(req: NextRequest){
    }
  
  }
- export async function GET(req: NextRequest){
+ export async function GET(){
     await dbConnect();
      try{
         
@@ -69,6 +69,7 @@ export async function POST(req: NextRequest){
    await dbConnect();
     try{
          const updatedItem=await Cart.findByIdAndDelete({_id:cartId})
+         if(updatedItem){}
        return Response.json({
          message:"sucessfully deleted from cart"
        })

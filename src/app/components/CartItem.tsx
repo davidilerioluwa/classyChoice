@@ -1,11 +1,11 @@
 import React,{Dispatch, SetStateAction, useEffect, useState} from 'react'
-import Image from 'next/image'
 import { iCart } from '../lib/models/Cart'
 import { iProduct } from '../lib/models/Product'
-import { toast,Toaster } from 'sonner'
+import { toast} from 'sonner'
+import { iCheckoutDetails } from '../account/cart/page'
 
 
-const CartItem = ({cartItem,getCart,AddToTotalAmount,setPaystackButton}:{cartItem:iCart,getCart:any,AddToTotalAmount:Function,setPaystackButton:Dispatch<SetStateAction<boolean>>}) => {
+const CartItem = ({cartItem,getCart,AddToTotalAmount,setPaystackButton}:{cartItem:iCart,getCart:()=>void,AddToTotalAmount:(params:iCheckoutDetails)=>void,setPaystackButton:Dispatch<SetStateAction<boolean>>}) => {
     
     const [product,setProduct]= useState<iProduct>()
     const imageUrl=(product?(product.images?product.images[0].url:"loading"):"");
@@ -111,7 +111,7 @@ const CartItem = ({cartItem,getCart,AddToTotalAmount,setPaystackButton}:{cartIte
             )
             const products=await response.json()
             const checkoutDetails={
-              cartId:cartItem._id,
+              cartId:String(cartItem._id),
               price:products[0].price*Number(cartItem.quantity)
             }
             console.log(checkoutDetails);

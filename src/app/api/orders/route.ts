@@ -1,6 +1,6 @@
 import Cart from "@/app/lib/models/Cart";
 import Order from "@/app/lib/models/Orders"
-export async function PUT (req:Request,res:Response){
+export async function PUT (req:Request){
     
 
     try{
@@ -9,6 +9,7 @@ export async function PUT (req:Request,res:Response){
         newOrder.save()
         console.log(newOrder.items);
         const deletedCart= await Cart.deleteMany({userId:order.userId})
+        if(deletedCart){}
         console.log("orders cleared");
         
         return  Response.json({
@@ -20,7 +21,7 @@ export async function PUT (req:Request,res:Response){
         return Response.json("error")
     }
 }
-export async function POST (req:Request,res:Response){
+export async function POST (req:Request){
     
 
     try{
@@ -32,7 +33,7 @@ export async function POST (req:Request,res:Response){
         return Response.json("error")
     }
 }
-export async function GET (req:Request,res:Response){
+export async function GET (){
     
 
     try{

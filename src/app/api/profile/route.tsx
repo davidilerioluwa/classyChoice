@@ -13,8 +13,8 @@ export async function GET(req: NextRequest){
          statusCode:200
        })
       
-    }catch(err:any){
-       return NextResponse.json({error: err.message})
+    }catch(err){
+       return NextResponse.json({error: err})
     }
 
 }
@@ -27,7 +27,8 @@ export async function PATCH(req: NextRequest){
       const userId= request.userId
       console.log(userId);
       
-        const updated= await User.updateOne({_id:userId},{...request.profile})  
+        const updated= await User.updateOne({_id:userId},{...request.profile})
+        if(updated){}  
       const user=await User.findOne({_id:userId})
         console.log(user);
           
@@ -36,8 +37,8 @@ export async function PATCH(req: NextRequest){
          user:user
        })
       
-    }catch(err:any){
-       return NextResponse.json({error: err.message})
+    }catch(err){
+       return NextResponse.json({error:err})
     }
 
 }

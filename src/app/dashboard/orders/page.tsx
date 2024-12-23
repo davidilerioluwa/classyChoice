@@ -1,6 +1,5 @@
 "use client"
 import React, { useEffect,useState } from 'react'
-import Image from 'next/image';
 import { useSnapshot } from 'valtio';
 import { state } from '@/store/state';
 import { toast } from 'sonner';
@@ -31,7 +30,7 @@ const Page = () => {
                         <button className='bg-purple-800 px-4 py-2 rounded-md text-white'>Search</button>
             </div>
            <div className='flex flex-col gap-2'>
-           {orders.map((order)=><DashboardOrders order={order}/> )}
+           {orders.map((order)=><DashboardOrders key={order.id} order={order}/> )}
            </div>
         </div>
   )

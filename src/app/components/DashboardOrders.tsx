@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { iOrder } from '../lib/models/Orders';
 import OrderItem from './OrderItem';
-import { iUser } from '../lib/models/User';
 import { FaAngleDown, FaAngleUp } from 'react-icons/fa6';
 
 const DashboardOrders = ({order}:{order:iOrder}) => {
@@ -43,7 +42,7 @@ const DashboardOrders = ({order}:{order:iOrder}) => {
                     </div> 
                 </div>
                 <div className='flex flex-col gap-2 w-full'>
-                  {showOrders?order.items.map((item)=><OrderItem item={item}/>):""}
+                  {showOrders?order.items.map((item)=><OrderItem key={item.productId} item={item}/>):""}
                 </div>
             </div>
         </div>

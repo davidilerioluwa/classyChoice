@@ -2,7 +2,6 @@
 import React, { useEffect, useState } from 'react'
 import ProductsCard from '../components/ProductsCard'
 import { iProduct } from '../lib/models/Product'
-import { FaFilter } from 'react-icons/fa6'
 import { useSnapshot } from 'valtio'
 import { state } from '@/store/state'
 import PacmanLoader from "react-spinners/PacmanLoader"

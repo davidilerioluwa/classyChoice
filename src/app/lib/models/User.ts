@@ -7,7 +7,7 @@ export interface iUser extends Document {
     address: string,
     city: string,
     state:string,
-    accountType:String
+    accountType:string
 }
 
 const userSchema: Schema= new mongoose.Schema({
