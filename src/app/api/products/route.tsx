@@ -109,3 +109,77 @@ export async function PUT(req:Request) {
        return Response.json({error: err})
     }
 }
+export async function PATCH(req:Request) {
+    await dbConnect();
+    const formData=await req.formData()
+    const title=formData.get("title")
+    try{
+        const id= formData.get("id")
+        const description= formData.get("description")
+        const category= formData.get("category")
+        const price= formData.get("price")
+        const oldImages= formData.getAll("oldUrls")
+        const oldImagesParsed= oldImages.map((img)=>JSON.parse(String(img)))
+        const deletedUrls= formData.getAll("deletedUrls")
+        
+        const imageUrls: Array<Url>=[]
+        
+        imageUrls.push(...oldImagesParsed)
+        
+        const files= formData.getAll("files") as Array<Blob> | Array<null>
+        const uploadPromises = files.map(async (file) => {
+            if (!file) return;
+        
+            const buffer = Buffer.from(await file.arrayBuffer());
+        
+            return new Promise((resolve, reject) => {
+                const stream = cloudinary.uploader.upload_stream(
+                    { folder: "JENS" },
+                    (err, res) => {
+                        if (err) {
+                            reject(err);
+                        } else {
+                            const newUrl = {
+                                url: res?.url,
+                                assetId: res?.public_id,
+                            };
+                            imageUrls.push(newUrl);
+                            resolve(newUrl);
+                        }
+                    }
+                );
+        
+                stream.write(buffer);
+                stream.end();
+            });
+        });
+        
+        (async () => {
+            try {
+                await Promise.all(uploadPromises);
+                console.log(deletedUrls);
+                
+                deletedUrls.forEach(async (assetId)=>{
+                    const deleted=await cloudinary.uploader.destroy(String(assetId))  
+                    console.log("deleted",deleted)
+                })
+                const newListing={
+                    title:title,
+                    description:description,
+                    category:category,
+                    price:Number(price),
+                    images: imageUrls
+                    }
+                    
+                const updatedListing=await Product.findOneAndUpdate({_id:id},{...newListing})
+                
+            } catch (err) {
+                console.error("Upload failed:", err);
+            }
+        })();
+        console.log("final:",imageUrls);
+        return Response.json({message:"sucessfully Updated"})
+    }catch{
+        return Response.json({message:"failed"})
+    }
+}

@@ -3,8 +3,9 @@ import { iProduct } from '../lib/models/Product'
 import { state } from '@/store/state';
 import { useSnapshot } from 'valtio';
 import { toast } from 'sonner';
+import CreateNewListingForm from './CreateNewListingForm';
 
-const ProductsCard = ({product}:{product:iProduct}) => {
+const ProductsCard = ({product,setEditListingId,setShowListingForm}:{product:iProduct,setEditListingId?:React.Dispatch<React.SetStateAction<string>>,setShowListingForm?:React.Dispatch<React.SetStateAction<boolean>>}) => {
   const snap=useSnapshot(state)
   const [disableAdd,setDisableAdd]=useState(true)
   const [showEditMenu,setShowEditMenu]=useState(false)
@@ -46,6 +47,7 @@ const ProductsCard = ({product}:{product:iProduct}) => {
       setDisableAdd(false)
     }
   }
+  
   const deleteProduct=async ()=>{
     toast("loading")
     const response= await fetch("/api/products",{
@@ -63,7 +65,8 @@ const ProductsCard = ({product}:{product:iProduct}) => {
   },[])
   return (
     <div className={`bg-white drop-shadow-md p-3 rounded-md  flex flex-col gap-0.5 cursor-pointer ${hideCard?"hidden":""}`}>
-        <img src={product.images?product.images[0].url:""} className='w-32 md:w-60 h-32 md:h-60  m-0 rounded-md object-cover'/>
+        
+        <img src={product.images?product.images[0].url:""} className='w-32 md:w-60 h-32 md:h-60 bg-white drop-shadow-lg m-0 rounded-md object-cover'/>
         <p className='font-bold text-purple-800 mt-2 hover:text-purple-800 '>{product.title}</p>
         <p className='text-purple-800 mb-2'>₦{product.price}</p>
         {snap.user?.accountType=="admin"?
@@ -76,7 +79,12 @@ const ProductsCard = ({product}:{product:iProduct}) => {
             >Edit</button>
             {showEditMenu?
             <div className='absolute text-purple-900 w-full bg-white drop-shadow-lg rounded-md p-2 flex flex-col gap-1 top-[-65px]'>
-                <button className='bg-white p-1 rounded-md hover:drop-shadow-lg' >Edit</button>
+                <button className='bg-white p-1 rounded-md hover:drop-shadow-lg' onClick={()=>{
+                  if(setEditListingId && setShowListingForm){
+                    setEditListingId(String(product._id))
+                    setShowListingForm(true)
+                  }
+                }}>Edit</button>
                 <button className='bg-white rounded-md p-1 hover:drop-shadow-lg' onClick={()=>deleteProduct()}>Delete</button>
             </div>
             :""}

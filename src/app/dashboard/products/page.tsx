@@ -11,12 +11,13 @@ const Page = () => {
     const [showListingForm,setShowListingForm]= useState(false)
     const [products,setProducts] = useState <Array<iProduct>>([])
     const [isLoading,setIsLoading]= useState(true)
+    const [EditListingId,setEditListingId]=useState("")
     console.log(products);
     async function  getProducts(){
         try{
             const response= await fetch("/api/products")
             const products=await response.json()
-            setProducts(products)
+            {products.length?setProducts(products):setProducts([])}
             setIsLoading(false)
         }catch(error){
             console.log(error);
@@ -30,7 +31,7 @@ const Page = () => {
   return (
     
         <div className='w-full gap-4 h-full pb-12 mt-20 p-4'>
-            {showListingForm?<CreateNewListingForm setShowListingForm={setShowListingForm}/>:""}
+            {showListingForm?<CreateNewListingForm EditListingId={EditListingId} setShowListingForm={setShowListingForm}/>:""}
             <h1 className='font-bold p-2 text-lg text-purple-800 mb-2'>Products</h1>
             <div className='w-full flex gap-2 mb-4'>
                         <input type='text' className='w-full px-2 text-purple-800 outline outline-[1px] outline-purple-800 rounded-md'/>
@@ -41,7 +42,7 @@ const Page = () => {
             <section className='bg-white  border border-purple-100 drop-shadow-md rounded-md p-4 text-purple-800 w-full'>
                 {isLoading?<PacmanLoader color='rgb(88 28 135 / var(--tw-text-opacity, 1))'/>:""}
                 <div className='gap-2 flex flex-wrap justify-center gap-2 '>
-                    {products.map((product)=><ProductsCard product={product} key={product.id} />)}
+                    {products.map((product)=><ProductsCard setShowListingForm={setShowListingForm} setEditListingId={setEditListingId} product={product} key={product.id} />)}
                 </div>
             </section>
         </div>

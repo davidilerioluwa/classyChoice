@@ -22,13 +22,14 @@ const Navbar = () => {
   useEffect(()=>{
     (async function name() {
       const userSession= await getUserSession()
-      setLoggedIn(userSession.id)
+      
       const response = await fetch(`/api/profile/`,{headers:{
         id: userSession.id
       }})
       
       const res = await response.json()
       state.user=res.user
+      setLoggedIn(res.user)
       console.log(res);
       state.userId=(res.user.id); 
     })()

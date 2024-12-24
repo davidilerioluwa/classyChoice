@@ -1,11 +1,11 @@
 import mongoose,{Schema, Document } from "mongoose";
 
 export interface iProduct extends Document {
-    title?: string,
-    description?: string,
-    price?: number,
-    category?:string,
-    images?:Array<{url?:string,assetId?:string}>
+    title: string,
+    description: string,
+    price: number,
+    category:string,
+    images:Array<{url:string,assetId:string}>
 }
 
 const productSchema: Schema= new mongoose.Schema({

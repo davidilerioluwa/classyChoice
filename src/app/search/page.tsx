@@ -7,11 +7,15 @@ import { state } from '@/store/state'
 import PacmanLoader from "react-spinners/PacmanLoader"
 import { HiAdjustmentsHorizontal } from "react-icons/hi2";
 import Search from '../components/Search'
+import CreateNewListingForm from '../components/CreateNewListingForm'
 
 const Page = () => {
     const [products,setProducts]=useState<Array<iProduct>>([])
     const [isLoading,setIsLoading]= useState(true)
     const [showSearch,setShowSearch]=useState(false)
+    const [showListingForm, setShowListingForm]=useState(false) 
+    const [EditListingId,setEditListingId]=useState("")
+    
     const snap=useSnapshot(state)
     useEffect(()=>{
         (async  function getProducts(){
@@ -40,6 +44,7 @@ const Page = () => {
       },[snap.filter])
   return (
     <div className='pt-24 px-4 lg:px-6 py-4'>
+      {showListingForm?<CreateNewListingForm setShowListingForm={setShowListingForm} EditListingId={EditListingId}/>:""}
         {showSearch?<Search setShowSearch={setShowSearch}/>:""}
         <div className='w-full flex gap-2 mb-4 '>
                         <input type='text' className='w-full px-2 text-purple-900 outline outline-[1px] outline-purple-900 rounded-md'/>
@@ -49,7 +54,7 @@ const Page = () => {
         <div className=' bg-white drop-shadow-lg w-full rounded-md p-4'>
             <span className='font-bold text-sm py-2 mb-4'>{products.length?products.length+" results":""}</span>
                 <div >
-                    {isLoading?<PacmanLoader color='rgb(88 28 135 / var(--tw-text-opacity, 1))'/>:<div className='flex flex-wrap items-center justify-center gap-2 md:gap-4'>{products.length?products.map((product)=><ProductsCard product={product} key={product.id}/>):"No Items Found, Please Try a new search"}</div>}
+                    {isLoading?<PacmanLoader color='rgb(88 28 135 / var(--tw-text-opacity, 1))'/>:<div className='flex flex-wrap items-center justify-center gap-2 md:gap-4'>{products.length?products.map((product)=><ProductsCard setEditListingId={setEditListingId} setShowListingForm={setShowListingForm} product={product} key={product.id}/>):"No Items Found, Please Try a new search"}</div>}
                 </div>
         </div>
     </div>
