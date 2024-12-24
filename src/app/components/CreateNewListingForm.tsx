@@ -121,11 +121,12 @@ const CreateNewListingForm = ({setShowListingForm,EditListingId}:{setShowListing
   console.log(files);
   }
   const deleteOldUrl=(assetId:string)=>{
-    const filtered= oldUrls.filter((Url,Index)=>Url.assetId!==assetId)
+    const filtered= oldUrls.filter((Url)=>Url.assetId!==assetId)
     setOldUrls(filtered)
     const newDeleted= deletedUrls
     newDeleted.push(assetId)
     console.log(newDeleted);
+    if(false){setDeletedUrls([])}
     
   }
   const getListingDetails=async()=>{

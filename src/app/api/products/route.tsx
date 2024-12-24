@@ -172,6 +172,7 @@ export async function PATCH(req:Request) {
                     }
                     
                 const updatedListing=await Product.findOneAndUpdate({_id:id},{...newListing})
+                if(updatedListing){}
                 
             } catch (err) {
                 console.error("Upload failed:", err);
