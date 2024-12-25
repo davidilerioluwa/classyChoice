@@ -19,6 +19,7 @@ cloudinary.config({
         const description= formData.get("description")
         const category= formData.get("category")
         const price= formData.get("price")
+        const subCategory=formData.get("subCategory")
         const imageUrls: Array<Url>=[]
         const files= formData.getAll("files") as Array<Blob> | Array<null>
         
@@ -47,6 +48,7 @@ cloudinary.config({
                         title:title,
                         description:description,
                         category:category,
+                        subCategory:subCategory,
                         price:Number(price),
                         images: imageUrls
                         })
@@ -121,7 +123,7 @@ export async function PATCH(req:Request) {
         const oldImages= formData.getAll("oldUrls")
         const oldImagesParsed= oldImages.map((img)=>JSON.parse(String(img)))
         const deletedUrls= formData.getAll("deletedUrls")
-        
+        const subCategory= formData.get("subCategory")
         const imageUrls: Array<Url>=[]
         
         imageUrls.push(...oldImagesParsed)
@@ -167,6 +169,7 @@ export async function PATCH(req:Request) {
                     title:title,
                     description:description,
                     category:category,
+                    subCategory:subCategory,
                     price:Number(price),
                     images: imageUrls
                     }

@@ -8,6 +8,7 @@ import PacmanLoader from "react-spinners/PacmanLoader"
 import { HiAdjustmentsHorizontal } from "react-icons/hi2";
 import Search from '../components/Search'
 import CreateNewListingForm from '../components/CreateNewListingForm'
+import { toast } from 'sonner'
 
 const Page = () => {
     const [products,setProducts]=useState<Array<iProduct>>([])
@@ -15,8 +16,34 @@ const Page = () => {
     const [showSearch,setShowSearch]=useState(false)
     const [showListingForm, setShowListingForm]=useState(false) 
     const [EditListingId,setEditListingId]=useState("")
+        const [deleteListingId,setDeleteListingId]=useState("")
+          const [showAreYouSure, setShowAreYouSure] = useState (false);
     
     const snap=useSnapshot(state)
+    const deleteProduct=async ()=>{
+      toast("loading")
+      const response= await fetch("/api/products",{
+        method:"PUT",
+        body:JSON.stringify(deleteListingId)
+      })
+      const res=await response.json()
+      location.reload()
+      if(res.message=="sucessfully deleted"){
+        toast.success("Item has been sucessfully deleted")
+      }
+    }
+  const AreYouSure=({setShowAreYouSure}:{setShowAreYouSure:React.Dispatch<React.SetStateAction<boolean>>})=>{
+      return(
+      <div className={`fixed top-0 w-screen h-screen flex items-center justify-center bg-opacity-50 bg-black z-50 left-0`}>
+        <div className='w-fit text-sm sm:text-md p-4 sm:p-8 bg-white rounded-md flex flex-col gap-4 justify-center items-center'>
+          <p>Are You Sure You Want To Delete This Listing</p>
+          <div className='flex w-full  justify-between'>
+              <button onClick={()=>deleteProduct()} className=' px-12 py-1.5  bg-green-800 rounded-md text-white'>Yes</button>
+              <button onClick={()=>setShowAreYouSure(false)} className=' px-12 py-1.5  bg-red-600 rounded-md text-white'>No</button>
+          </div>
+        </div>
+      </div>)
+    }
     useEffect(()=>{
         (async  function getProducts(){
           const filter= snap.filter
@@ -44,6 +71,7 @@ const Page = () => {
       },[snap.filter])
   return (
     <div className='pt-24 px-4 lg:px-6 py-4'>
+       {showAreYouSure && <AreYouSure setShowAreYouSure={setShowAreYouSure}/> }
       {showListingForm?<CreateNewListingForm setShowListingForm={setShowListingForm} EditListingId={EditListingId}/>:""}
         {showSearch?<Search setShowSearch={setShowSearch}/>:""}
         <div className='w-full flex gap-2 mb-4 '>
@@ -54,7 +82,7 @@ const Page = () => {
         <div className=' bg-white drop-shadow-lg w-full rounded-md p-4'>
             <span className='font-bold text-sm py-2 mb-4'>{products.length?products.length+" results":""}</span>
                 <div >
-                    {isLoading?<PacmanLoader color='rgb(88 28 135 / var(--tw-text-opacity, 1))'/>:<div className='flex flex-wrap items-center justify-center gap-2 md:gap-4'>{products.length?products.map((product)=><ProductsCard setEditListingId={setEditListingId} setShowListingForm={setShowListingForm} product={product} key={product.id}/>):"No Items Found, Please Try a new search"}</div>}
+                    {isLoading?<PacmanLoader color='rgb(88 28 135 / var(--tw-text-opacity, 1))'/>:<div className='flex flex-wrap items-center justify-center gap-2 md:gap-4'>{products.length?products.map((product)=><ProductsCard setShowAreYouSure={setShowAreYouSure} setDeleteListingId={setDeleteListingId} setEditListingId={setEditListingId} setShowListingForm={setShowListingForm} product={product} key={product.id}/>):"No Items Found, Please Try a new search"}</div>}
                 </div>
         </div>
     </div>

@@ -15,6 +15,7 @@ const  Search: React.FC<ChildProps> =({setShowSearch})  =>{
   const [startingAmount,setStartingAmount]=useState(0)
   const [highestAmount,setHighestAmount]=useState(10000000)
   const [category,setCategory]=useState("")
+  const [subCategory,setSubCategory]=useState("")
 
 const search=async (e:React.MouseEvent<HTMLButtonElement, MouseEvent>)=>{
   e.preventDefault()
@@ -23,7 +24,8 @@ const search=async (e:React.MouseEvent<HTMLButtonElement, MouseEvent>)=>{
       searchQuery:searchQuery,
       minAmount:startingAmount,
       maxAmount:highestAmount,
-      category:category
+      category:category,
+      subCategory:subCategory
     }
     
  router.push("/search")
@@ -62,7 +64,7 @@ const search=async (e:React.MouseEvent<HTMLButtonElement, MouseEvent>)=>{
                   <div className="flex relative rounded-md justify-between">
                     <select onChange={(e)=>setCategory(e.target.value)} className="appearance-none  outline-none w-full  border border-purple-800 p-2 rounded-md text-sm">
                     <option className="hover:bg-purple-800 hover:text-white" value={""} >All</option>
-                      {categories.map((category)=><option className="hover:bg-purple-800 hover:text-white" value={category} key={category}>{category}</option>)}
+                      {categories.map((category)=><option className="hover:bg-purple-800 hover:text-white" value={category.mainCategory} key={category.mainCategory}>{category.mainCategory}</option>)}
                     </select>
                     <span className="absolute right-2 flex items-center top-2 rounded-md bg-purple-800 p-1 text-white"><BsCaretDown/></span>
                   </div>

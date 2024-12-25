@@ -4,13 +4,43 @@ import ProductsCard from './ProductsCard'
 import { iProduct } from '../lib/models/Product'
 import { categories } from '@/store/constants'
 import PacmanLoader from "react-spinners/PacmanLoader"
+import { toast } from 'sonner'
+import CreateNewListingForm from './CreateNewListingForm'
 
 
 
 const HomepageProducts = () => {
-    const [active,setActive]=useState(categories[0])
+    const [active,setActive]=useState(categories[0].mainCategory)
     const [products,setProducts]=useState<Array<iProduct>>([])
     const [isLoading,setIsLoading]= useState(true)
+    const [showListingForm,setShowListingForm]= useState(false)
+    const [EditListingId,setEditListingId]=useState("")
+    const [deleteListingId,setDeleteListingId]=useState("")
+          const [showAreYouSure, setShowAreYouSure] = useState (false);
+          const deleteProduct=async ()=>{
+            toast("loading")
+            const response= await fetch("/api/products",{
+              method:"PUT",
+              body:JSON.stringify(deleteListingId)
+            })
+            const res=await response.json()
+            location.reload()
+            if(res.message=="sucessfully deleted"){
+              toast.success("Item has been sucessfully deleted")
+            }
+          }
+        const AreYouSure=({setShowAreYouSure}:{setShowAreYouSure:React.Dispatch<React.SetStateAction<boolean>>})=>{
+            return(
+            <div className={`fixed top-0 w-screen h-screen flex items-center justify-center bg-opacity-50 bg-black z-50 left-0`}>
+              <div className='w-fit text-sm sm:text-md p-4 sm:p-8 bg-white rounded-md flex flex-col gap-4 justify-center items-center'>
+                <p>Are You Sure You Want To Delete This Listing</p>
+                <div className='flex w-full  justify-between'>
+                    <button onClick={()=>deleteProduct()} className=' px-12 py-1.5  bg-green-800 rounded-md text-white'>Yes</button>
+                    <button onClick={()=>setShowAreYouSure(false)} className=' px-12 py-1.5  bg-red-600 rounded-md text-white'>No</button>
+                </div>
+              </div>
+            </div>)
+          }
     useEffect(()=>{
       (async  function getProducts(){
         const filter= {category:active}
@@ -38,17 +68,19 @@ const HomepageProducts = () => {
     },[active])
   return (
     <section className='w-screen '>
+       {showAreYouSure && <AreYouSure setShowAreYouSure={setShowAreYouSure}/> }
+       {showListingForm?<CreateNewListingForm EditListingId={EditListingId} setShowListingForm={setShowListingForm}/>:""}
         <div className='flex flex-col items-center justify-center '>
           <div className='flex flex-wrap justify-center items-center gap-6 text-sm  py-2 px-2 rounded-md mt-4 mx-4 bg-gray-200 rounded-md'>
-             {categories.map((category)=><button key={category} className={`cursor-pointer text-purple-900 p-1  ${active===category?" font-bold drop-shadow-md bg-white rounded-md":""}`} onClick={()=>setActive(category)}>{category}</button>)}
+             {categories.map((category)=><button key={category.mainCategory} className={`cursor-pointer text-purple-900 p-1  ${active===category.mainCategory?" font-bold drop-shadow-md bg-white rounded-md":""}`} onClick={()=>setActive(category.mainCategory)}>{category.mainCategory}</button>)}
           </div>
           <div className='flex gap-2 py-4'>
-              {categories.map((category)=><span className={`cursor-pointer h-4 w-4 rounded-full ${active===category?"bg-purple-800":"border border-purple-800"}`} key={category} onClick={()=>setActive(category)}></span>)}
+              {categories.map((category)=><span className={`cursor-pointer h-4 w-4 rounded-full ${active===category.mainCategory?"bg-purple-800":"border border-purple-800"}`} key={category.mainCategory} onClick={()=>setActive(category.mainCategory)}></span>)}
           </div>
         </div>
         {isLoading?<div className='flex justify-center'><PacmanLoader color='rgb(88 28 135 / var(--tw-text-opacity, 1))'/></div>:
         <div className='flex flex-wrap md:gap-4 justify-center p-1 md:p-4 bg-gray-100'>
-            {products.length?products.map((product)=><ProductsCard product={product} key={product.id}/>):"No Items Found"}
+            {products.length?products.map((product)=><ProductsCard setDeleteListingId={setDeleteListingId} setEditListingId={setEditListingId} setShowAreYouSure={setShowAreYouSure} setShowListingForm={setShowListingForm} product={product} key={product.id}/>):"No Items Found"}
         </div>}
       </section>
   )

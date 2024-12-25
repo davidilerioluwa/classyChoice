@@ -5,6 +5,7 @@ export interface iProduct extends Document {
     description: string,
     price: number,
     category:string,
+    subCategory:string
     images:Array<{url:string,assetId:string}>
 }
 
@@ -24,6 +25,10 @@ const productSchema: Schema= new mongoose.Schema({
     category: {
         type: String,
         required: false
+    },
+    subCategory:{
+        type:String,
+        required:false
     },
     images: {
         type: Array<string>,

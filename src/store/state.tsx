@@ -8,7 +8,8 @@ type state = {
         searchQuery:string,
         minAmount:number,
         maxAmount:number,
-        category:string
+        category:string,
+        subCategory:string
     }
 }
 export const state = proxy<state>({
@@ -17,6 +18,7 @@ export const state = proxy<state>({
         searchQuery:"",
         minAmount:0,
         maxAmount:10000000,
-        category:""
+        category:"",
+        subCategory:""
     }
 })

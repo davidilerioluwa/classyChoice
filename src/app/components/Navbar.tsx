@@ -64,13 +64,14 @@ const CategoriesDropdown=()=>{
       category:category,
       maxAmount:0,
       minAmount:Infinity,
-      searchQuery:""
+      searchQuery:"",
+      subCategory:""
     }
     router.push("/search")
 }
 return(
 <div className='absolute top-8 left-[-30px] w-fit bg-white p-4 rounded-md flex flex-col drop-shadow-md text-sm'>
-  {categories.map((category)=><button key={category} onClick={()=>{navigateToCategories(category)}} className='p-2 text-left  text-nowrap hover:drop-shadow-lg rounded-md bg-white'>{category}</button>)}  
+  {categories.map((category)=><button key={category.mainCategory} onClick={()=>{navigateToCategories(category.mainCategory)}} className='p-2 text-left  text-nowrap hover:drop-shadow-lg rounded-md bg-white'>{category.mainCategory}{category.subCategories.length?">":""}</button>)}  
 </div>
 )
 }

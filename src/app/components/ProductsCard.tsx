@@ -4,11 +4,12 @@ import { state } from '@/store/state';
 import { useSnapshot } from 'valtio';
 import { toast } from 'sonner';
 
-const ProductsCard = ({product,setEditListingId,setShowListingForm}:{product:iProduct,setEditListingId?:React.Dispatch<React.SetStateAction<string>>,setShowListingForm?:React.Dispatch<React.SetStateAction<boolean>>}) => {
+const ProductsCard = ({product,setEditListingId,setShowListingForm,setDeleteListingId,setShowAreYouSure}:{product:iProduct,setEditListingId:React.Dispatch<React.SetStateAction<string>>,setShowListingForm:React.Dispatch<React.SetStateAction<boolean>>,setDeleteListingId:React.Dispatch<React.SetStateAction<string>>,setShowAreYouSure:React.Dispatch<React.SetStateAction<boolean>>}) => {
   const snap=useSnapshot(state)
   const [disableAdd,setDisableAdd]=useState(true)
   const [showEditMenu,setShowEditMenu]=useState(false)
   const [hideCard,setHideCard]=useState(false)
+
   
   const AddProductToCart=async ()=>{
     setDisableAdd(true)
@@ -47,24 +48,14 @@ const ProductsCard = ({product,setEditListingId,setShowListingForm}:{product:iPr
     }
   }
   
-  const deleteProduct=async ()=>{
-    toast("loading")
-    const response= await fetch("/api/products",{
-      method:"PUT",
-      body:JSON.stringify(product._id)
-    })
-    const res=await response.json()
-    if(res.message=="sucessfully deleted"){
-      toast.success("Item has been sucessfully deleted")
-      setHideCard(true)
-    }
-  }
+  
+
   useEffect(()=>{
     CheckIfProductAlreadyInCart()
   },[])
+  
   return (
     <div className={`bg-white drop-shadow-md p-3 rounded-md  flex flex-col gap-0.5 cursor-pointer ${hideCard?"hidden":""}`}>
-        
         <img src={product.images?product.images[0].url:""} className='w-32 md:w-60 h-32 md:h-60 bg-white drop-shadow-lg m-0 rounded-md object-cover'/>
         <p className='font-bold text-purple-800 mt-2 hover:text-purple-800 '>{product.title}</p>
         <p className='text-purple-800 mb-2'>₦{product.price}</p>
@@ -84,7 +75,10 @@ const ProductsCard = ({product,setEditListingId,setShowListingForm}:{product:iPr
                     setShowListingForm(true)
                   }
                 }}>Edit</button>
-                <button className='bg-white rounded-md p-1 hover:drop-shadow-lg' onClick={()=>deleteProduct()}>Delete</button>
+                <button className='bg-white rounded-md p-1 hover:drop-shadow-lg' onClick={()=>{
+                  setShowAreYouSure(true)
+                  setDeleteListingId(String(product._id))
+                }}>Delete</button>
             </div>
             :""}
           </div>
