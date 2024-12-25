@@ -31,7 +31,7 @@ export const options: NextAuthOptions={
               
               }else{
                   const newUser =new User({name:profile.name,email:profile.email,accountType:"user"})
-                  newUser.save();
+                 await newUser.save();
                   
                   
               }
