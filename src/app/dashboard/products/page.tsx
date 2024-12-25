@@ -21,17 +21,6 @@ const Page = () => {
       const [showAreYouSure, setShowAreYouSure] = useState (false);
         const snap=useSnapshot(state)
     console.log(products);
-    async function  getProducts(){
-        try{
-            const response= await fetch("/api/products")
-            const products=await response.json()
-            {products.length?setProducts(products):setProducts([])}
-            setIsLoading(false)
-        }catch(error){
-            console.log(error);
-            
-        }
-    }
     const deleteProduct=async ()=>{
         toast("loading")
         const response= await fetch("/api/products",{

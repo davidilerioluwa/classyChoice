@@ -18,6 +18,7 @@ const  Search: React.FC<ChildProps> =({setShowSearch})  =>{
   const [subCategory,setSubCategory]=useState("")
 
 const search=async (e:React.MouseEvent<HTMLButtonElement, MouseEvent>)=>{
+  if(false){setSubCategory("")}
   e.preventDefault()
   
    state.filter={
