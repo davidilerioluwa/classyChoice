@@ -51,7 +51,7 @@ const Navbar = () => {
             }
             <span className="py-2 cursor-pointer flex items-center" onClick={()=>setShowSearch(true)}><FaSearch/></span>
             {showSearch? <Search setShowSearch={setShowSearch}/> :""} 
-            <Link href={"/account/cart"} className="py-1 cursor-pointer flex items-center"><FiShoppingCart/></Link>
+           { snap.user?.accountType=="admin"? "":<Link href={"/account/cart"} className="py-1 cursor-pointer flex items-center"><FiShoppingCart/></Link>}
         </div>
     </nav>
   )
