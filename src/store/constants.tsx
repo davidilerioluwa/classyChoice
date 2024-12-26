@@ -6,19 +6,19 @@ type iCategories={
 export const categories: Array<iCategories>= [
     {
         mainCategory:"Exercise And Fitness",
-        subCategories:[]
+        subCategories:["Sport and Exercise","Waist Trainers and Body Shapers"]
     },
     {
         mainCategory:"Fashion",
-        subCategories:["men","women","children"]
+        subCategories:["Men","Women","Children"]
     },
     {
         mainCategory:"Haircare",
-        subCategories:[]
+        subCategories:["Clippers","Hair Accesories","Hair Dryers","Hair Straightners"]
     },
     {
         mainCategory:"Home and Kitchen",
-        subCategories:[]
+        subCategories:["Appliances","Cleaners","Home","Kitchen"]
     },
     {
         mainCategory:"Phones and Laptop Accesories",
@@ -26,11 +26,15 @@ export const categories: Array<iCategories>= [
     },
     {
         mainCategory:"Health and Beauty",
-        subCategories:[]
+        subCategories:["Herbal Tea","Oils Serums and Organics","Toothpaste and ToothCare"]
     },
     {
         mainCategory:"Electronics",
         subCategories:[]
+    },
+    {
+        mainCategory:"Kiddies",
+        subCategories:["Accesories","Back to School","Clothes","Shoes"]
     },
     {
         mainCategory:"Others",

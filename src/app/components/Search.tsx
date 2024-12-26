@@ -2,7 +2,7 @@
 import { categories } from "@/store/constants";
 import { state } from "@/store/state";
 import { useRouter } from "next/navigation";
-import React from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
 import {BsCaretDown } from "react-icons/bs";
 
@@ -16,6 +16,7 @@ const  Search: React.FC<ChildProps> =({setShowSearch})  =>{
   const [highestAmount,setHighestAmount]=useState(10000000)
   const [category,setCategory]=useState("")
   const [subCategory,setSubCategory]=useState("")
+  const [subCategories,setSubCategories]=useState <Array<string>> ([])
 
 const search=async (e:React.MouseEvent<HTMLButtonElement, MouseEvent>)=>{
   if(false){setSubCategory("")}
@@ -32,9 +33,14 @@ const search=async (e:React.MouseEvent<HTMLButtonElement, MouseEvent>)=>{
  router.push("/search")
   setShowSearch(false)
 }
-  
+   useEffect(()=>{
+     setSubCategories(categories.find((Category)=>Category.mainCategory==category)?.subCategories as string[])
+    },[category])
+    useEffect(()=>{
+      {subCategories?.length?setSubCategory(subCategories[0]):setSubCategory("")}
+    },[subCategories])
   return (
-    <section className="w-full bg-lgray flex flex-col gap-1 absolute  left-[-100px] z-50">
+    <section className="w-full bg-lgray flex flex-col gap-1 absolute  left-[-100px] z-50 text-purple-900">
         <div className={`fixed flex items-center justify-center h-screen w-screen bg-black top-0 left-0 z-40 p-4`}
       style={{ backgroundColor: 'rgba(128, 128, 128, 0.7)' }}
       >
@@ -70,6 +76,16 @@ const search=async (e:React.MouseEvent<HTMLButtonElement, MouseEvent>)=>{
                     <span className="absolute right-2 flex items-center top-2 rounded-md bg-purple-800 p-1 text-white"><BsCaretDown/></span>
                   </div>
                 </div>
+                 {subCategories?.length?
+                            <div className='flex flex-col gap-1 w-1/2'>
+                                <label>Sub-Category</label>
+                                <div className="flex relative rounded-md justify-between">
+                                    <select value={subCategory} onChange={(e)=>setSubCategory(e.target.value)} className="appearance-none  outline-none w-full  border border-purple-800 p-2 rounded-md text-sm">
+                                    {subCategories.map((Category,index)=><option key={index} value={Category}>{Category}</option>)}
+                                    </select>
+                                    <span className="absolute right-2 flex items-center top-2 rounded-md bg-purple-800 p-1 text-white"><BsCaretDown/></span>
+                                </div>
+                            </div>:""}
               </div>
               <button className="bg-purple-800 text-white rounded-md py-2 mt-2" onClick={(e)=>search(e)}>Search</button>
           </form>
