@@ -127,22 +127,27 @@ const CartItem = ({cartItem,getCart,AddToTotalAmount,setPaystackButton}:{cartIte
       },[cartItem])
     
   return (
-    <div  key={cartItem.id} className='px-2 py-2 pr-4 w-fit min-w-full md:w-full grid grid-cols-12 gap-2 justify-between items-center border border-purple-100 rounded-md text-sm hover:bg-purple-900 hover:text-white cursor-pointer'>
+    <div  key={cartItem.id} className='px-2 py-2 pr-4 w-fit min-w-full md:w-full flex md:grid grid-cols-12 gap-2 justify-between items-center border border-purple-100 rounded-md text-sm hover:bg-purple-900 hover:text-white cursor-pointer'>
                                 <div className='h-full col-span-6'>
                                     <div className='flex gap-2 items-center h-full'>
-                                        <img  src={imageUrl} alt="My Image Description" className='w-20 h-20 rounded-md border-2' width={20} height={20}/>
-                                        <span className='text-sm'>{product?product.title:"loading"}</span>
+                                        <img style={{ width: '80px', height: '80px' }}  src={imageUrl} alt="My Image Description" className='w-20 h-20 rounded-md border-2'/>
+                                        <span className=' hidden md:flex font-bold'>{product?product.title:"loading"}</span>
                                     </div>
                                 </div>
-                                <div className=' h-full col-span-3' > 
-                                <div className='flex items-center justify-center gap-4 h-full'>
-                                        <div className='flex justify-center items-center bg-purple-100 text-purple-900 text-lg font-bold h-6 w-6 cursor-pointer rounded-sm ' onClick={()=>reduceQuantity()}> <span>-</span> </div>
-                                        <div className='flex justify-center items-center  h-4 w-4'> <span>{cartItem.quantity}</span> </div>
-                                        <div className='flex justify-center items-center bg-purple-100 text-purple-900 text-lg font-bold h-6 w-6 cursor-pointer rounded-sm ' onClick={()=>increaseQuantity()}> <span>+</span> </div> 
-                                </div>
-                                </div>
-                                <div className='col-span-2 text-center'>{product?product.price:""}</div>
-                                <div className='col-span-1 text-right' onClick={()=>removeFromCart()}>remove</div>
+                               <div className='flex flex-col sm:flex-row sm:items-center  gap-2 sm:gap-20 col-span-5 md:gap-0 justify-between items-start'>
+                                    <span className='text-sm font-bold md:hidden'>{product?product.title:"loading"}</span>
+                                    <div className='col-span-5 flex flex-col  gap-2 md:w-full  md:grid grid-cols-5'>
+                                        <div className=' h-full col-span-3' > 
+                                            <div className='flex items-center justify-center gap-4 h-full'>
+                                                    <div className='flex justify-center items-center bg-purple-100 text-purple-900 text-lg font-bold h-6 w-6 cursor-pointer rounded-sm ' onClick={()=>reduceQuantity()}> <span>-</span> </div>
+                                                    <div className='flex justify-center items-center  h-4 w-4'> <span>{cartItem.quantity}</span> </div>
+                                                    <div className='flex justify-center items-center bg-purple-100 text-purple-900 text-lg font-bold h-6 w-6 cursor-pointer rounded-sm ' onClick={()=>increaseQuantity()}> <span>+</span> </div> 
+                                            </div>
+                                        </div>
+                                        <div className='col-span-2 text-left md:text-center'>₦{product?product.price:""}</div>
+                                    </div>
+                               </div>
+                                <div className='col-span-1 text-right ' onClick={()=>removeFromCart()}>remove</div>
     </div>
   )
 }

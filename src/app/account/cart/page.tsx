@@ -114,8 +114,8 @@ const Page = () => {
             <h1 className='font-bold p-2 text-lg text-purple-900 mb-2'>Shopping Cart ({cart.length})</h1>
             <div className='w-full flex flex-col md:flex-row items-center md:items-start  gap-4 h-full pb-12'>
                 <section className='  bg-white border border-purple-100  drop-shadow-md rounded-md p-2 lg:p-4 text-purple-900 w-full overflow-x-auto'>
-                    {cart.length?<div className='gap-2 flex flex-col gap-2 w-[620px] md:w-full'>
-                        <div className='font-bold  grid grid-cols-12  justify-between  p-3 px-6 '>
+                    {cart.length?<div className='gap-2 flex flex-col gap-2  md:w-full'>
+                        <div className='font-bold  hidden md:grid grid-cols-12  justify-between  p-3 px-6 hidden md:'>
                             <span className='col-span-6'>Product</span>
                             <span className='col-span-3 text-center'>Quantity</span>
                             <span className='col-span-2 text-center'>Price</span>
