@@ -2,7 +2,7 @@ import React, { ChangeEvent, Dispatch, SetStateAction,useEffect,useState } from 
 import { categories } from '@/store/constants'
 import { BsCaretDown } from 'react-icons/bs'
 import { toast } from 'sonner'
-import Product, { iProduct } from '../lib/models/Product'
+import { iProduct } from '../lib/models/Product'
 import PacmanLoader from 'react-spinners/PacmanLoader'
 
 const CreateNewListingForm = ({setShowListingForm,EditListingId}:{setShowListingForm:Dispatch<SetStateAction<boolean>>,EditListingId?:string}) => {

@@ -79,7 +79,6 @@ const Page = () => {
         }else{
             setCart([])
         }  
-        console.log(process.env.k);
         
              
      }
