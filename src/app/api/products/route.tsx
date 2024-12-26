@@ -20,6 +20,8 @@ cloudinary.config({
         const category= formData.get("category")
         const price= formData.get("price")
         const subCategory=formData.get("subCategory")
+        const quantityType=formData.get("quantityType")
+        const unitsAvailable=formData.get("unitsAvailable")
         const imageUrls: Array<Url>=[]
         const files= formData.getAll("files") as Array<Blob> | Array<null>
         
@@ -49,6 +51,8 @@ cloudinary.config({
                         description:description,
                         category:category,
                         subCategory:subCategory,
+                        quantityType:quantityType,
+                        unitsAvailable:unitsAvailable,
                         price:Number(price),
                         images: imageUrls
                         })
@@ -124,6 +128,8 @@ export async function PATCH(req:Request) {
         const oldImagesParsed= oldImages.map((img)=>JSON.parse(String(img)))
         const deletedUrls= formData.getAll("deletedUrls")
         const subCategory= formData.get("subCategory")
+        const quantityType=formData.get("quantityType")
+        const unitsAvailable=formData.get("unitsAvailable")
         const imageUrls: Array<Url>=[]
         
         imageUrls.push(...oldImagesParsed)
@@ -170,8 +176,10 @@ export async function PATCH(req:Request) {
                     description:description,
                     category:category,
                     subCategory:subCategory,
+                    quantityType:quantityType,
                     price:Number(price),
-                    images: imageUrls
+                    images: imageUrls,
+                    unitsAvailable:unitsAvailable
                     }
                     
                 const updatedListing=await Product.findOneAndUpdate({_id:id},{...newListing})

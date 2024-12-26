@@ -6,9 +6,7 @@ import CartItem from '@/app/components/CartItem';
 import { useSnapshot } from 'valtio';
 import { state } from '@/store/state';
 import dynamic from 'next/dynamic';
-
-// Dynamically import PacmanLoader with { ssr: false } to prevent server-side rendering
-const PacmanLoader = dynamic(() => import("react-spinners/PacmanLoader"), { ssr: false });
+import PacmanLoader from 'react-spinners/PacmanLoader';
 const PaystackButton = dynamic(() => import('react-paystack').then(mod => mod.PaystackButton), { ssr: false });
 
 export interface iCheckoutDetails {
@@ -24,7 +22,8 @@ const Page = () => {
     const [showPaystackButton,setPaystackButton]=useState(true)
     const snap=useSnapshot(state)
     const email=snap.user?snap.user.email:"no email"
-    const publicKey= String(process.env.paystack_publicKey)
+    const publicKey= String(process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY)
+    
     const postToProducts=async (x:unknown)=>{
         console.log(x);
         
@@ -79,7 +78,10 @@ const Page = () => {
             setCart(cart)
         }else{
             setCart([])
-        }       
+        }  
+        console.log(process.env.k);
+        
+             
      }
      const AddToTotalAmount=(newItem:iCheckoutDetails)=>{
         const newAmount= checkoutDetails
@@ -106,11 +108,10 @@ const Page = () => {
     <>
     {isLoading?
     <div className='flex h-screen w-screen items-center justify-center'>
-        <PacmanLoader color='rgb(88 28 135 / var(--tw-text-opacity, 1))'/>
-    </div>
+        <PacmanLoader color='rgb(88 28 135 / var(--tw-text-opacity, 1))' />
+    </div> 
     :
         <div className='lg:h-screen h-full p-2 pt-24 lg:p-8 lg:pt-24 bg-white'>
-                
             <h1 className='font-bold p-2 text-lg text-purple-900 mb-2'>Shopping Cart ({cart.length})</h1>
             <div className='w-full flex flex-col md:flex-row items-center md:items-start  gap-4 h-full pb-12'>
                 <section className='  bg-white border border-purple-100  drop-shadow-md rounded-md p-2 lg:p-4 text-purple-900 w-full overflow-x-auto'>

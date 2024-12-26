@@ -2,7 +2,7 @@ import React, { ChangeEvent, Dispatch, SetStateAction,useEffect,useState } from 
 import { categories } from '@/store/constants'
 import { BsCaretDown } from 'react-icons/bs'
 import { toast } from 'sonner'
-import { iProduct } from '../lib/models/Product'
+import Product, { iProduct } from '../lib/models/Product'
 import PacmanLoader from 'react-spinners/PacmanLoader'
 
 const CreateNewListingForm = ({setShowListingForm,EditListingId}:{setShowListingForm:Dispatch<SetStateAction<boolean>>,EditListingId?:string}) => {
@@ -17,6 +17,8 @@ const CreateNewListingForm = ({setShowListingForm,EditListingId}:{setShowListing
   const [urls,setUrls]= useState<Array<string>>([])
   const [oldUrls,setOldUrls]=useState <Array<{url:string,assetId:string}>>([])
   const [deletedUrls,setDeletedUrls]=useState<Array<string>>([])
+  const [QuantityType,setQuantityType]=useState("Limited Quantity")
+  const [unitsAvailable,setUnitsAvailable]=useState(0)
   const  addNewFile= (e:ChangeEvent<HTMLInputElement>)=>{
     const formData= new FormData()
     const newFilesArray=files
@@ -47,6 +49,8 @@ const CreateNewListingForm = ({setShowListingForm,EditListingId}:{setShowListing
     formData.append("category",category)
     formData.append("price",price)
     formData.append("subCategory",subCategory)
+    formData.append("quantityType",QuantityType)
+    formData.append("unitsAvailable",String(unitsAvailable))
     console.log(files);
     
     console.log(formData.getAll("files"));
@@ -88,6 +92,9 @@ const CreateNewListingForm = ({setShowListingForm,EditListingId}:{setShowListing
     formData.append("category",category)
     formData.append("price",price)
     formData.append("subCategory",subCategory)
+    formData.append("quantityType",QuantityType)
+    formData.append("unitsAvailable",String(unitsAvailable))
+    formData
    oldUrls.map((oldImg)=> formData.append("oldUrls",JSON.stringify({url:oldImg.url,assetId:oldImg.assetId})))
    deletedUrls.map((assetId)=> formData.append("deletedUrls",assetId))
 
@@ -150,7 +157,10 @@ const CreateNewListingForm = ({setShowListingForm,EditListingId}:{setShowListing
             const products:iProduct = res[0]
             setTitle(products.title)
             setCategory(products.category)
+            setSubCategory(products.subCategory)
             setDescription(products.description)
+            setQuantityType(products.quantityType)
+            setUnitsAvailable(products.unitsAvailable)
             setPrice(String(products.price))
             setOldUrls(products.images)
           }
@@ -213,6 +223,23 @@ const CreateNewListingForm = ({setShowListingForm,EditListingId}:{setShowListing
                     <span className="absolute right-2 flex items-center top-2 rounded-md bg-purple-800 p-1 text-white"><BsCaretDown/></span>
                 </div>
             </div>:""}
+            <div className='flex flex-col gap-2'>
+                <label>Quantity Type</label>
+                <div className="flex relative rounded-md justify-between">
+                    <select value={QuantityType} onChange={(e)=>setQuantityType(e.target.value)} className="appearance-none  outline-none w-full  border border-purple-800 p-2 py-3 rounded-md text-sm">
+                    <option value={"UnLimited Quantity"}>UnLimited Quantity</option>
+                      <option value={"Limited Quantity"}>Limited Quantity</option>
+                    </select>
+                    <span className="absolute right-2 flex items-center top-2 rounded-md bg-purple-800 p-1 text-white"><BsCaretDown/></span>
+                </div>
+            </div>
+            {QuantityType=="Limited Quantity"?
+            <div className='flex flex-col gap-2'>
+              <label>Units Available</label>
+              <input value={unitsAvailable} onChange={(e)=>setUnitsAvailable(Number(e.target.value))} type='number' className='px-2 py-2 text-purple-800 outline outline-[1px] outline-purple-800 rounded-md'/>
+            </div>
+              :""
+            }
             <div>
                 <div className='mb-2'>Pictures</div>
                 <div className='flex items-center justify-center flex-wrap gap-2 mb-20'>
