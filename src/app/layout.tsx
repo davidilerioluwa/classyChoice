@@ -17,8 +17,8 @@ const geistMono = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "JENS LIP CARE",
-  description: "A Premium lip care producs ecommerce platform home page",
+  title: "Classy Choice Varieties Store",
+  description: "An Ecommerce Store that contains everything you need",
 };
 
 export default function RootLayout({
