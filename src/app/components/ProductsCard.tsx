@@ -18,7 +18,8 @@ const ProductsCard = ({product,setEditListingId,setShowListingForm,setDeleteList
         body:JSON.stringify({
           productId:productId,
           quantity:"1",
-          userId:snap.user?._id
+          userId:snap.user?._id,
+          title: product.title
         }),
         method:"POST"
       })

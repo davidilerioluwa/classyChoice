@@ -36,7 +36,7 @@ const Navbar = () => {
   },[snap.userId])
   
   return (
-    <nav className='flex fixed z-30 top-0  justify-between w-screen pl-2 pr-6 md:px-16 py-2 text-lg text-purple-800 bg-white drop-shadow-lg'>
+    <nav className='flex fixed z-30 top-0  justify-between w-screen pl-4 pr-6 md:px-16 py-2 md:text-lg text-purple-800 bg-white drop-shadow-lg'>
         <div className="flex gap-3 md:gap-4     ">
            <Link href="/" className="hover:underline py-2">Home</Link>
            <div className="py-2 cursor-pointer relative" onMouseEnter={()=> setShowCategoriesDropdown(true)} onMouseLeave={()=> setShowCategoriesDropdown(false)} onClick={()=> setShowCategoriesDropdown(!showCategoriesDropdown)}>

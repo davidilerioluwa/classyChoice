@@ -7,7 +7,8 @@ export async function POST(req:Request) {
         
         
         
-        const products= await Product.find(filter)  
+        const products= await Product.find(filter)
+        if(!products) return  Response.json([])
           
        return Response.json(products)
         

@@ -4,6 +4,7 @@ export interface iCart extends Document {
     productId?: string,
     quantity?: string,
     userId?:string
+    title:string
 }
 
 const cartSchema: Schema= new mongoose.Schema({
@@ -16,6 +17,10 @@ const cartSchema: Schema= new mongoose.Schema({
         required: false
     },
     userId:{
+        type:String,
+        required:false
+    },
+    title:{
         type:String,
         required:false
     }
