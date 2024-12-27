@@ -9,7 +9,7 @@ const CartItem = ({cartItem,getCart,AddToTotalAmount,setPaystackButton}:{cartIte
     
     const [product,setProduct]= useState<iProduct>()
     const imageUrl=(product?(product.images?product.images[0].url:"loading"):"");
-
+    console.log(Number(product?.unitsAvailable)>=Number(cartItem.quantity)) 
     const reduceQuantity=async ()=>{
     toast("updating your cart")
     // disable payment button 
@@ -137,11 +137,13 @@ const CartItem = ({cartItem,getCart,AddToTotalAmount,setPaystackButton}:{cartIte
                                <div className='flex flex-col sm:flex-row sm:items-center  gap-2 sm:gap-20 col-span-5 md:gap-0 justify-between items-start'>
                                     <span className='text-sm font-bold md:hidden'>{product?product.title:"loading"}</span>
                                     <div className='col-span-5 flex flex-col  gap-2 md:w-full  md:grid grid-cols-5'>
+                                    {product?.quantityType=="Limited Quantity"?<div className=' md:hidden'>{product?.unitsAvailable} Units left</div>:""}
                                         <div className=' h-full col-span-3' > 
-                                            <div className='flex items-center justify-center gap-4 h-full'>
+                                            <div className='flex relative items-center justify-center gap-4 h-full'>
+                                                    {product?.quantityType=="Limited Quantity"?<div className='hidden md:absolute top-[-25px]'>{product?.unitsAvailable} Units left</div>:""}
                                                     <div className='flex justify-center items-center bg-purple-100 text-purple-900 text-lg font-bold h-6 w-6 cursor-pointer rounded-sm ' onClick={()=>reduceQuantity()}> <span>-</span> </div>
                                                     <div className='flex justify-center items-center  h-4 w-4'> <span>{cartItem.quantity}</span> </div>
-                                                    <div className='flex justify-center items-center bg-purple-100 text-purple-900 text-lg font-bold h-6 w-6 cursor-pointer rounded-sm ' onClick={()=>increaseQuantity()}> <span>+</span> </div> 
+                                                    <div className='flex justify-center items-center bg-purple-100 text-purple-900 text-lg font-bold h-6 w-6 cursor-pointer rounded-sm ' onClick={()=>increaseQuantity()}> <button disabled={(product?.quantityType=="Limited Quantity" && product?.unitsAvailable>=Number(cartItem.quantity))}>+</button> </div> 
                                             </div>
                                         </div>
                                         <div className='col-span-2 text-left md:text-center'>₦{product?product.price:""}</div>
