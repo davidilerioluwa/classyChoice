@@ -10,8 +10,6 @@ cloudinary.config({
     url?: string,
     assetId?:string
   }
-  import { v2 as cloudinary } from "cloudinary";
-  import Product from "@/app/lib/models/Product";
   
   export async function POST(req: Request) {
       const formData = await req.formData();
@@ -34,11 +32,11 @@ cloudinary.config({
               if (!file) return null;
   
               const buffer = Buffer.from(await file.arrayBuffer());
-  
+              const base64String = `data:${file.type};base64,${buffer.toString("base64")}`;
               return new Promise<Url>((resolve, reject) => {
                   // Use cloudinary.uploader.upload instead of upload_stream
                   cloudinary.uploader.upload(
-                      String(buffer),
+                      base64String,
                       { folder: "JENS" },
                       (err, res) => {
                           if (err) {
