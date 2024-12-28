@@ -68,6 +68,8 @@ const CreateNewListingForm = ({setShowListingForm,EditListingId}:{setShowListing
         }
   
         const data = await response.json();
+        console.log(data);
+        
         if(data){
           toast.success(data.message)
           console.log(data);
@@ -123,7 +125,7 @@ const CreateNewListingForm = ({setShowListingForm,EditListingId}:{setShowListing
       } catch (error) {
         console.error('Error:', error);
         toast.error("something went wrong please try again")
-        console.log();
+        console.log(error);
         
       }
   }

@@ -64,17 +64,12 @@ cloudinary.config({
   
           await newProductItem.save();
   
-          return new Response(
-              JSON.stringify({ message: "New Item has been successfully created", title:title,newPorduct:newProductItem }),
-              { status: 200 }
-          );
+          return Response.json({ message: "New Item has been successfully created", title:title,newPorduct:newProductItem })
       } catch (error: unknown) {
-          return new Response(
-              JSON.stringify({
-                  message: "Something Went Wrong Please Try Again",
-                  error:error,
-              }),
-          );
+          return Response.json({
+            message: "Something Went Wrong Please Try Again",
+            error:error,
+        })
       }
   }
   
