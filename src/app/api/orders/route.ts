@@ -23,8 +23,6 @@ export async function PUT (req:Request){
         const newOrder= new Order(order)
         newOrder.orderId=randomNumber
         newOrder.save()
-        console.log(newOrder);
-        
         const deletedCart= await Cart.deleteMany({userId:order.userId})
         if(deletedCart){
             return  Response.json({

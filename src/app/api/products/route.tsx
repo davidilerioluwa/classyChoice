@@ -24,9 +24,6 @@ cloudinary.config({
         const unitsAvailable=formData.get("unitsAvailable")
         const imageUrls: Array<Url>=[]
         const files= formData.getAll("files") as Array<Blob> | Array<null>
-        
-        console.log("image:",imageUrls);
-        
         files.forEach(async (file)=>{
 
             const buffer=file? Buffer.from(await file.arrayBuffer()):null
@@ -57,7 +54,7 @@ cloudinary.config({
                         images: imageUrls
                         })
                         newProductItem.save()
-                        console.log(newProductItem);
+                        console.log("new Item: ",newProductItem);
                         clearTimeout(interval)
             }
             

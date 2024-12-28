@@ -12,7 +12,8 @@ export interface iOrder extends Document {
     _id: string,
     status:string,
     amount: number,
-    orderId:string
+    orderId:string,
+    note:string
 }
 
 const orderSchema: Schema= new mongoose.Schema({
@@ -39,7 +40,12 @@ const orderSchema: Schema= new mongoose.Schema({
     orderId:{
         type: String,
         required: true
-    }
+    },
+    
+    note:{
+        type:String,
+        required:false
+    },
 
 })
 

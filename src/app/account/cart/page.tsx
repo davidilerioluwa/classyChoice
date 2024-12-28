@@ -21,6 +21,7 @@ const Page = () => {
     const [totalAmount,setTotalAmount]= useState<number>(0)
     const [checkoutDetails,setCheckoutDetails]= useState<Array<iCheckoutDetails>>([])
     const [showPaystackButton,setPaystackButton]=useState(true)
+    const [note,setNote]=useState("")
     const snap=useSnapshot(state)
     const email=snap.user?snap.user.email:"no email"
     const publicKey= String(process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY)
@@ -58,7 +59,8 @@ const Page = () => {
             time: date,
             status:"Paid",
             userId:snap.user?snap.user._id:"nil",
-            amount:totalAmount
+            amount:totalAmount,
+            note:note
         }
         
         const response= await fetch("/api/orders",{
@@ -68,6 +70,9 @@ const Page = () => {
         const res=await response.json()
         if(res.message=="sucessful"){
             toast.success("Order Sucessfully Paid")
+            getCart()
+        }else{
+            toast.error("Something Went Wrong")
             getCart()
         }
         console.log(res);
@@ -150,6 +155,10 @@ const Page = () => {
                     <div  className='flex justify-between'>
                         <span className='font-bold text-purple-900'>Total:</span>
                         <span className='text-purple-900 font-bold'>₦{totalAmount}</span>
+                    </div>
+                    <div>
+                        <label className='font-bold text-purple-900 text-sm'>Enter Note To pass on To Seller: </label>
+                        <textarea value={note} onChange={(e)=>setNote(e.target.value)} className='w-full px-2 mt-2 text-purple-900 outline outline-[1px] outline-purple-900 rounded-md'/>
                     </div>
                     </div>
                     <PaystackButton
