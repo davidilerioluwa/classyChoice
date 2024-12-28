@@ -32,6 +32,7 @@ cloudinary.config({
             
             const stream = cloudinary.uploader.upload_stream({folder:"JENS"},(err,res)=>{
                 console.log(res);
+                console.log(err);
                 
             imageUrls.push({
                 url:res?.url,
