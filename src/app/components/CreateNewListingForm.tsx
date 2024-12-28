@@ -4,6 +4,7 @@ import { BsCaretDown } from 'react-icons/bs'
 import { toast } from 'sonner'
 import { iProduct } from '../lib/models/Product'
 import PacmanLoader from 'react-spinners/PacmanLoader'
+import Loading from './Loading'
 
 const CreateNewListingForm = ({setShowListingForm,EditListingId}:{setShowListingForm:Dispatch<SetStateAction<boolean>>,EditListingId?:string}) => {
   const [files,setFiles]= useState<Array<File>>([])
@@ -39,6 +40,7 @@ const CreateNewListingForm = ({setShowListingForm,EditListingId}:{setShowListing
     
   }
   const CreateNewListing = async (e:React.FormEvent<HTMLFormElement>)=>{
+    setIsLoading(true)
     const formData = new FormData();
     e.preventDefault()
     files.forEach(file => {
@@ -62,7 +64,7 @@ const CreateNewListingForm = ({setShowListingForm,EditListingId}:{setShowListing
           method: 'POST',
           body: formData,
         });
-  
+        setIsLoading(false)
         if (!response.ok) {
           throw new Error('Failed to send data');
         }
@@ -86,6 +88,7 @@ const CreateNewListingForm = ({setShowListingForm,EditListingId}:{setShowListing
   }
   const updateListing= async(e:React.FormEvent<HTMLFormElement>)=>{
     e.preventDefault()
+    setIsLoading(true)
     const formData = new FormData();
     files.forEach(file => {
         formData.append("files",file)
@@ -117,6 +120,7 @@ const CreateNewListingForm = ({setShowListingForm,EditListingId}:{setShowListing
         });
   
         const data = await response.json();
+        setIsLoading(false)
         if(data){
           toast.success(data.message)
           location.reload()
@@ -192,6 +196,7 @@ const CreateNewListingForm = ({setShowListingForm,EditListingId}:{setShowListing
     return (
 
     <div className='bg-black z-50 top-0 left-0 bg-opacity-50 fixed flex justify-center items-center h-screen w-screen md:py-40 p-10 md:p-20'>
+        {isLoading?<Loading/>:""}
         <div className='bg-white rounded-md p-4 w-96 h-full md:h-screen  relative overflow-y-auto'>
             <span onClick={()=>setShowListingForm(false)} className='absolute top-2 right-2 px-3  pb-1 rounded-md cursor-pointer text-xl  text-red-800 border border-red-800 '>x</span>
             <h1 className='text-lg text-center mt-2 font-bold text-purple-800 w-full '>Create New Listing</h1>
