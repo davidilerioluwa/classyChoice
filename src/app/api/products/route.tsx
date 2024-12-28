@@ -10,81 +10,84 @@ cloudinary.config({
     url?: string,
     assetId?:string
   }
-export async function POST(req: Request) {
-    const formData = await req.formData();
-    const title = formData.get("title");
-    try {
-        const description = formData.get("description");
-        const category = formData.get("category");
-        const price = formData.get("price");
-        const subCategory = formData.get("subCategory");
-        const quantityType = formData.get("quantityType");
-        const unitsAvailable = formData.get("unitsAvailable");
-        const files = formData.getAll("files") as Array<Blob | null>;
-
-        await new Promise(resolve => setTimeout(resolve, 2000));
-        // Convert the file uploads into promises
-        const uploadPromises = files.map(async (file) => {
-            if (!file) return null;
-
-            const buffer = Buffer.from(await file.arrayBuffer());
-            return new Promise<Url>((resolve, reject) => {
-                const stream = cloudinary.uploader.upload_stream(
-                    { folder: "JENS" },
-                    (err, res) => {
-                        if (err) {
-                            // console.error("Cloudinary upload error:", err);
-                            reject(err);
-                            console.log(err);
-                            
-                        } else {
-                            // console.log("Cloudinary upload response:", res);
-                            console.log(res);
-                            
-                            const newUrl = {
-                                url: res?.url,
-                                assetId: res?.public_id,
-                            };
-                            resolve(newUrl);
-                        }
-                    }
-                );
-
-                stream.write(buffer);
-                stream.end();
-            });
-        });
-
-        // Wait for all uploads to finish and filter out null results
-        const uploadedImages = await Promise.all(uploadPromises);
-        const validImages = uploadedImages.filter((image): image is Url => image !== null);
-
-        // Save the product only after all uploads are complete
-        const newListing = new Product({
-            title,
-            description,
-            category,
-            subCategory,
-            quantityType,
-            price: Number(price),
-            images: validImages,
-            unitsAvailable,
-        });
-        await newListing.save();
-
-        console.log("final images:", validImages);
-
-        return Response.json({
-            message: "Successfully created",
-        });
-    } catch (error: unknown) {
-        console.error("Error in POST handler:", error);
-        return Response.json({
-            message: "Something went wrong, please try again",
-            error,
-        });
-    }
-}
+  import { v2 as cloudinary } from "cloudinary";
+  import Product from "@/app/lib/models/Product";
+  
+  export async function POST(req: Request) {
+      const formData = await req.formData();
+      const title = formData.get("title");
+  
+      try {
+          const description = formData.get("description");
+          const category = formData.get("category");
+          const price = formData.get("price");
+          const subCategory = formData.get("subCategory");
+          const quantityType = formData.get("quantityType");
+          const unitsAvailable = formData.get("unitsAvailable");
+          const files = formData.getAll("files") as Array<Blob | null>;
+  
+          // Add a delay if needed
+          await new Promise(resolve => setTimeout(resolve, 2000));
+  
+          // Convert the file uploads into promises
+          const uploadPromises = files.map(async (file) => {
+              if (!file) return null;
+  
+              const buffer = Buffer.from(await file.arrayBuffer());
+  
+              return new Promise<Url>((resolve, reject) => {
+                  // Use cloudinary.uploader.upload instead of upload_stream
+                  cloudinary.uploader.upload(
+                      String(buffer),
+                      { folder: "JENS" },
+                      (err, res) => {
+                          if (err) {
+                              reject(err);
+                              console.log("Cloudinary upload error:", err);
+                          } else {
+                              console.log("Cloudinary upload response:", res);
+                              const newUrl = {
+                                  url: res?.url,
+                                  assetId: res?.public_id,
+                              };
+                              resolve(newUrl);
+                          }
+                      }
+                  );
+              });
+          });
+  
+          // Wait for all uploads to finish and filter out null results
+          const uploadedImages = await Promise.all(uploadPromises);
+          const validImages = uploadedImages.filter((image): image is Url => image !== null);
+  
+          // Save the product only after all uploads are complete
+          const newListing = new Product({
+              title,
+              description,
+              category,
+              subCategory,
+              quantityType,
+              price: Number(price),
+              images: validImages,
+              unitsAvailable,
+          });
+          await newListing.save();
+  
+          console.log("final images:", validImages);
+  
+          return Response.json({
+              message: "Successfully created",
+          });
+      } catch (error: unknown) {
+          console.error("Error in POST handler:", error);
+          return Response.json({
+              message: "Something went wrong, please try again",
+              error,
+          });
+      }
+  }
+  
 
 
 export async function GET() {
