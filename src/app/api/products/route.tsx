@@ -10,69 +10,66 @@ cloudinary.config({
     url?: string,
     assetId?:string
   }
-  export async function POST(req: Request) {
-      try {
-          const formData = await req.formData();
-          const title = formData.get("title");
-          const description = formData.get("description");
-          const category = formData.get("category");
-          const price = formData.get("price");
-          const subCategory = formData.get("subCategory");
-          const quantityType = formData.get("quantityType");
-          const unitsAvailable = formData.get("unitsAvailable");
-  
-          // Retrieve files
-          const files = formData.getAll("files") as Array<Blob | null>;
-  
-          // Upload files to Cloudinary
-          const uploadPromises = files.map(async (file) => {
-              if (!file) return null;
-  
-              const buffer = Buffer.from(await file.arrayBuffer());
-              return new Promise<{ url: string; assetId: string }>((resolve, reject) => {
-                  const stream = cloudinary.uploader.upload_stream(
-                      { folder: "JENS" },
-                      (err, res) => {
-                          if (err) return reject(err);
-                          if (res) {
-                              resolve({
-                                  url: res.url,
-                                  assetId: res.public_id,
-                              });
-                          }
-                      }
-                  );
-                  stream.write(buffer);
-                  stream.end();
-              });
-          });
-  
-          // Wait for all uploads to complete
-          const imageUrls = (await Promise.all(uploadPromises)).filter((url) => url !== null);
-  
-          // Create and save the new product
-          const newProductItem = new Product({
-              title,
-              description,
-              category,
-              subCategory,
-              quantityType,
-              unitsAvailable,
-              price: Number(price),
-              images: imageUrls,
-          });
-  
-          await newProductItem.save();
-  
-          return Response.json({ message: "New Item has been successfully created", title:title})
-      } catch (error: unknown) {
-          return Response.json({
-            message: "Something Went Wrong Please Try Again",
-            error:error,
+ export  async function POST(req:Request){
+    const formData=await req.formData()
+    const title=formData.get("title")
+    try{
+      
+       
+        const description= formData.get("description")
+        const category= formData.get("category")
+        const price= formData.get("price")
+        const subCategory=formData.get("subCategory")
+        const quantityType=formData.get("quantityType")
+        const unitsAvailable=formData.get("unitsAvailable")
+        const imageUrls: Array<Url>=[]
+        const files= formData.getAll("files") as Array<Blob> | Array<null>
+        
+        console.log("image:",imageUrls);
+        
+        files.forEach(async (file)=>{
+
+            const buffer=file? Buffer.from(await file.arrayBuffer()):null
+            const stream = cloudinary.uploader.upload_stream({folder:"JENS"},(err,res)=>{
+            imageUrls.push({
+                url:res?.url,
+                assetId:res?.public_id,
+            })
+            imageUrls
         })
-      }
-  }
-  
+            stream.write(buffer)
+            stream.end()
+            
+        })
+    
+    const interval= setInterval(()=>{
+            if(imageUrls.length==files.length){
+                console.log(imageUrls);
+                
+                        const newProductItem=new Product({
+                        title:title,
+                        description:description,
+                        category:category,
+                        subCategory:subCategory,
+                        quantityType:quantityType,
+                        unitsAvailable:unitsAvailable,
+                        price:Number(price),
+                        images: imageUrls
+                        })
+                        newProductItem.save()
+                        console.log(newProductItem);
+                        clearTimeout(interval)
+            }
+            
+        },100)
+        return Response.json({message:"New Item has been sucessfully created",title:title})
+    }catch(error:unknown){
+        return Response.json({
+            message:"Something Went Wrong Please Try Again",
+            error:error
+        })
+    }
+}
 
 export async function GET() {
     await dbConnect();
