@@ -3,7 +3,7 @@ import Order from "@/app/lib/models/Orders"
 export async function PUT (req:Request){
     async function generateUniqueRandomNumber() {
         const MIN = 1;
-        const MAX = 5;
+        const MAX = 9999999;
       
         while (true) {
           // Generate a random number and pad it to 7 digits

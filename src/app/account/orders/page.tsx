@@ -39,14 +39,17 @@ const Page = () => {
             return(<section key={order._id} className='bg-white text-xs  border border-purple-100 drop-shadow-md rounded-md p-4 text-purple-800 w-full'>
                 <div className='gap-2 flex flex-col gap-2 '>
                 <div className='flex flex-col gap-2 lg:h-64 xl:h-80 overflow-y-auto '>
-                        <div className='w-full justify-between flex gap-2  items-center p-4  rounded-md border bg-purple-800 text-white'>    
-                            <button className='text-white bg-green-800 rounded-md px-4 py-1.5'>{order.status}</button>
-                            <span className='w-20 md:w-fit'>{date}</span>
-                           
-                            <div className='flex gap-1 flex-col md:flex-row'>
-                                <span className='font-bold'>Total Amount:</span>
-                                <span>{order.amount}</span>
-                            </div>   
+                        <div className='w-full  flex flex-col gap-2  items-center p-4  rounded-md border bg-purple-800 text-white'>
+                            <span className='w-full text-left font-bold'>Order Id: {order.orderId}</span>    
+                            <div className='flex gap-2 justify-between w-full'>
+                                <button className='text-white bg-green-800 rounded-md px-4 py-1.5'>{order.status}</button>
+                                <span className='w-20 md:w-fit'>{date}</span>
+                            
+                                <div className='flex gap-1 flex-col md:flex-row'>
+                                    <span className='font-bold'>Total Amount:</span>
+                                    <span>{order.amount}</span>
+                                </div>  
+                            </div> 
                         </div>
                         {order.items.map((item)=><OrderItem key={item.productId} item={item}/>)}
                     </div>

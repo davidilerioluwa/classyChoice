@@ -4,10 +4,6 @@ const OrderItem = ({item}:{item:product}) => {
 
   return (
     <div className='flex  flex-col md:flex-row  items-start md:items-center justify-between md:gap-6 rounded-md  hover:bg-purple-800 hover:text-white px-2 py-1 md:px-6 md:py-2 border border-purple-100 gap-2'>
-                             <div className='col-span-2 flex md:flex-col lg:flex-col  items-center justify-start gap-2 text-xs md:text-sm'>
-                                    <div className='font-bold '>Order Id:</div>
-                                    <div className=' '>{item.productId}</div>
-                            </div>
                             <div key={item.productId} className='flex   sm:grid grid-cols-12 gap-2  w-full justify-between items-center  rounded-md text-sm  cursor-pointer'>
                                 <div className='h-full col-span-6'>
                                     <div className='flex gap-2 items-center h-full'>
