@@ -25,9 +25,6 @@ cloudinary.config({
           const unitsAvailable = formData.get("unitsAvailable");
           const files = formData.getAll("files") as Array<Blob | null>;
   
-          // Add a delay if needed
-          await new Promise(resolve => setTimeout(resolve, 2000));
-  
           // Convert the file uploads into promises
           const uploadPromises = files.map(async (file) => {
               if (!file) return null;
