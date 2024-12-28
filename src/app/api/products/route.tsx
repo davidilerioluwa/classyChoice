@@ -2,9 +2,9 @@ import {v2 as cloudinary} from "cloudinary"
 import Product from "@/app/lib/models/Product";
 import dbConnect from "@/app/lib/DBconnect";
 cloudinary.config({
-    cloud_name: String(process.env.CLOUDINARY_CLOUD_NAME),
-    api_key: String(process.env.CLOUDINARY_API_KEY),
-    api_secret: String(process.env.CLOUDINARY_API_SECRET),
+    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+    api_key: process.env.CLOUDINARY_API_KEY,
+    api_secret: process.env.CLOUDINARY_API_SECRET,
     secure:true
   });
   interface Url{
