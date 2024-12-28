@@ -33,8 +33,12 @@ cloudinary.config({
                 const stream = cloudinary.uploader.upload_stream(
                     { folder: "JENS" },
                     (err, res) => {
+                        console.log(err);
+                        console.log(res);
+                        
                         if (err) {
                             reject(err);
+                            
                         } else {
                             const newUrl = {
                                 url: res?.url,
