@@ -65,7 +65,7 @@ cloudinary.config({
                         quantityType:quantityType,
                         unitsAvailable:unitsAvailable,
                         price:Number(price),
-                        images: imageUrls
+                        images: uploadedImages
                         })
                         newProductItem.save()
                         console.log(newProductItem);
