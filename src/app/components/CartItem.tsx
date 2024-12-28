@@ -112,16 +112,11 @@ const CartItem = ({cartItem,getCart,AddToTotalAmount,setPaystackButton}:{cartIte
               }
             )
                     const products=await response.json()
+                    setProduct(products[0])
                     setIsLoading(false)
-                    const checkoutDetails={
-                        cartId:String(cartItem._id),
-                        price:products[0].price*Number(cartItem.quantity)
-                        }
-                        if((product?.quantityType=="UnLimited Quantity") || Number(product?.unitsAvailable)>0 ){
-                            AddToTotalAmount(checkoutDetails)
-                        }
+                       
                         
-                        setProduct(products[0])
+                        
                         
             
         }catch{
@@ -131,16 +126,27 @@ const CartItem = ({cartItem,getCart,AddToTotalAmount,setPaystackButton}:{cartIte
     useEffect(()=>{
         getProducts()
       },[cartItem])
+      useEffect(()=>{
+        if((product?.quantityType=="UnLimited Quantity") || Number(product?.unitsAvailable)>0 ){
+            const checkoutDetails={
+                cartId:String(cartItem._id),
+                price:Number(product?.price)*Number(cartItem.quantity)
+                }
+                console.log(cartItem.quantity);
+                
+            AddToTotalAmount(checkoutDetails)
+        }
+      },[product])
     
   return (
     <div  key={cartItem.id} className='px-2 py-2 pr-4 w-fit min-w-full md:w-full flex md:grid grid-cols-12 gap-2 justify-between items-center border border-purple-100 rounded-md text-sm hover:bg-purple-900 hover:text-white cursor-pointer'>
-                                <div className='h-full col-span-6'>
-                                    <div className='flex gap-2 items-center h-full w-20 sm:w-fit'>
+                                <div className='h-full col-span-6 '>
+                                    <div className='flex gap-2 items-center h-full w-20 sm:w-60'>
                                         <img style={{ width: '80px', height: '80px' }}  src={(!isLoading && (product==undefined))?"outOfStock.jpeg":imageUrl} alt={(!isLoading && product==undefined)?"outOfStock.jpeg":"Item"}className='w-20 h-20 rounded-md border-2'/>
-                                        <span className=' hidden sm:flex font-bold'>{product?product.title:"loading"}</span>
+                                        <span className=' hidden sm:flex font-bold '>{product?product.title:"loading"}</span>
                                     </div>
                                 </div>
-                               <div className='w-full sm:w-fit ml-2 md:ml-0  flex flex-col sm:flex-row sm:items-center  gap-2 sm:gap-20 col-span-5 sm:gap-0 justify-between items-start'>
+                               <div className='w-full  ml-2 md:ml-0 flex flex-col sm:flex-row sm:items-center  gap-2 sm:gap-20 col-span-5 sm:gap-0 justify-between items-start'>
                                     <span className='text-sm font-bold sm:hidden'>{product?product.title:"loading"}</span>
                                     <div className='col-span-5 flex flex-col  gap-2 md:w-full  md:grid grid-cols-5'>
                                     {product?.quantityType=="Limited Quantity"?<div className=' md:hidden'>{product?.unitsAvailable} Units left</div>:""}
@@ -149,7 +155,7 @@ const CartItem = ({cartItem,getCart,AddToTotalAmount,setPaystackButton}:{cartIte
                                             <div className='flex relative items-center justify-center gap-4 h-full'>
                                                     {product?.quantityType=="Limited Quantity" ?<div className='hidden md:flex md:absolute top-[-25px]'>{product?.unitsAvailable} Units left</div>:""} 
                                                     <div className='flex justify-center items-center bg-purple-100 text-purple-900 text-lg font-bold h-6 w-6 cursor-pointer rounded-sm ' onClick={()=>reduceQuantity()}> <span>-</span> </div>
-                                                    <div className='flex justify-center items-center  h-4 w-4'> <span>{product?.unitsAvailable?cartItem.quantity:""}</span> </div>
+                                                    <div className='flex justify-center items-center  h-4 w-4'> <span>{cartItem.quantity}</span> </div>
                                                     <div className='flex justify-center items-center bg-purple-100 text-purple-900 text-lg font-bold h-6 w-6 cursor-pointer rounded-sm ' onClick={()=>increaseQuantity()}> <button disabled={(product?.quantityType=="Limited Quantity" && product?.unitsAvailable<=Number(cartItem.quantity))}>+</button> </div> 
                                             </div>:!isLoading?<span className='text-red-600'>Out of Stock</span>:""}
                                         </div>

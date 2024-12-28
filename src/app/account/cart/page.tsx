@@ -7,6 +7,7 @@ import { useSnapshot } from 'valtio';
 import { state } from '@/store/state';
 import dynamic from 'next/dynamic';
 import PacmanLoader from 'react-spinners/PacmanLoader';
+import { toast } from 'sonner';
 const PaystackButton = dynamic(() => import('react-paystack').then(mod => mod.PaystackButton), { ssr: false });
 
 export interface iCheckoutDetails {
@@ -40,7 +41,6 @@ const Page = () => {
                         }
                     )
                     const products=await response.json()
-                    console.log(products[0]);
                     const  title= products[0].title
                     const price= products[0].price
                     return({title:title,price:price})
@@ -66,6 +66,10 @@ const Page = () => {
             body:JSON.stringify(order)
         })
         const res=await response.json()
+        if(res.message=="sucessful"){
+            toast.success("Order Sucessfully Paid")
+            getCart()
+        }
         console.log(res);
         
     }

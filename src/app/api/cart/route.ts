@@ -6,6 +6,7 @@ export async function POST(req: NextRequest){
     const response= await new Response(req.body).json()
     const productId= response.productId
     const quantity= response.quantity
+    const title=response.title
     // const userSession= await getUserSession()
     const userId= response.userId
     await dbConnect();
@@ -14,7 +15,8 @@ export async function POST(req: NextRequest){
        const newCart= new Cart({
         productId:productId,
         quantity: quantity,
-        userId:userId
+        userId:userId,
+        title:title
        })
           newCart.save()
           console.log(newCart);
