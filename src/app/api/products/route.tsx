@@ -24,23 +24,15 @@ cloudinary.config({
         const unitsAvailable=formData.get("unitsAvailable")
         const imageUrls: Array<Url>=[]
         const files= formData.getAll("files") as Array<Blob> | Array<null>
-        
-        console.log(title);
-        console.log(price);
-        console.log(subCategory);
-        console.log(quantityType);
-        
-        
-        
-        
-        console.log(files);
-        
-        
         files.forEach(async (file)=>{
             console.log(file);
             
             const buffer=file? Buffer.from(await file.arrayBuffer()):null
+            console.log(buffer);
+            
             const stream = cloudinary.uploader.upload_stream({folder:"JENS"},(err,res)=>{
+                console.log(res);
+                
             imageUrls.push({
                 url:res?.url,
                 assetId:res?.public_id,
