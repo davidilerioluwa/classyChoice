@@ -78,24 +78,17 @@ export async function POST(req: Request): Promise<Response> {
 
         await newProductItem.save();
 
-        return new Response(
-            JSON.stringify({
+        return  Response.json({
                 message: "New Item has been successfully created",
                 title,
-                newProduct: newProductItem,
-            }),
-            { status: 200, headers: { "Content-Type": "application/json" } }
-        );
+            })
     } catch (error: unknown) {
         console.error("Error in API handler:", error);
 
-        return new Response(
-            JSON.stringify({
+        return  Response.json({
                 message: "Something Went Wrong Please Try Again",
                 error: error instanceof Error ? error.message : "Unknown error",
-            }),
-            { status: 500, headers: { "Content-Type": "application/json" } }
-        );
+            })
     }
 }
 
