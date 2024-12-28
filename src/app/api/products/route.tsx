@@ -10,103 +10,78 @@ cloudinary.config({
     url?: string,
     assetId?:string
   }
- export  async function POST(req:Request){
-    const formData=await req.formData()
-    const title=formData.get("title")
-    try{
-      
-       
-        const description= formData.get("description")
-        const category= formData.get("category")
-        const price= formData.get("price")
-        const subCategory=formData.get("subCategory")
-        const quantityType=formData.get("quantityType")
-        const unitsAvailable=formData.get("unitsAvailable")
-        const imageUrls: Array<Url>=[]
-        const files= formData.getAll("files") as Array<Blob> | Array<null>
+export async function POST(req: Request) {
+    const formData = await req.formData();
+    const title = formData.get("title");
+    try {
+        const description = formData.get("description");
+        const category = formData.get("category");
+        const price = formData.get("price");
+        const subCategory = formData.get("subCategory");
+        const quantityType = formData.get("quantityType");
+        const unitsAvailable = formData.get("unitsAvailable");
+        const imageUrls: Array<Url> = [];
+        const files = formData.getAll("files") as Array<Blob | null>;
+
+        // Convert the file uploads into promises
         const uploadPromises = files.map(async (file) => {
-            if (!file) return;
-        
+            if (!file) return null;
+
             const buffer = Buffer.from(await file.arrayBuffer());
-        
-            return new Promise((resolve, reject) => {
+            return new Promise<Url>((resolve, reject) => {
                 const stream = cloudinary.uploader.upload_stream(
                     { folder: "JENS" },
                     (err, res) => {
-                        console.log(err);
-                        console.log(res);
-                        
                         if (err) {
+                            console.error("Cloudinary upload error:", err);
                             reject(err);
-                            
                         } else {
+                            console.log("Cloudinary upload response:", res);
                             const newUrl = {
                                 url: res?.url,
                                 assetId: res?.public_id,
                             };
-                            imageUrls.push(newUrl);
                             resolve(newUrl);
                         }
                     }
                 );
-        
+
                 stream.write(buffer);
                 stream.end();
             });
         });
 
-       
-    
-    // const interval= setInterval(()=>{
-    //         if(imageUrls.length==files.length){
-    //             console.log(imageUrls);
-                
-    //                     const newProductItem=new Product({
-    //                     title:title,
-    //                     description:description,
-    //                     category:category,
-    //                     subCategory:subCategory,
-    //                     quantityType:quantityType,
-    //                     unitsAvailable:unitsAvailable,
-    //                     price:Number(price),
-    //                     images: uploadedImages
-    //                     })
-    //                     newProductItem.save()
-    //                     console.log(newProductItem);
-    //                     clearTimeout(interval)
-    //         }
-            
-    //     },100)
-    //     return Response.json({message:"New Item has been sucessfully created",title:title})
-        (async () => {
-            try {
-                 // Wait for all uploads to finish
-                    await Promise.all(uploadPromises);
-                    const newListing=new Product({
-                    title:title,
-                    description:description,
-                    category:category,
-                    subCategory:subCategory,
-                    quantityType:quantityType,
-                    price:Number(price),
-                    images: imageUrls,
-                    unitsAvailable:unitsAvailable
-                    })
-                    newListing.save()
-                
-            } catch (err) {
-                console.error("Upload failed:", err);
-            }
-        })();
-        console.log("final:",imageUrls);
-        return Response.json({message:"sucessfully Created"})
-    }catch(error:unknown){
+        // Wait for all uploads to finish and filter out null results
+        const uploadedImages = await Promise.all(uploadPromises);
+        const validImages = uploadedImages.filter((image): image is Url => image !== null);
+
+        // Save the product only after all uploads are complete
+        const newListing = new Product({
+            title,
+            description,
+            category,
+            subCategory,
+            quantityType,
+            price: Number(price),
+            images: validImages,
+            unitsAvailable,
+        });
+        await newListing.save();
+
+        console.log("final images:", validImages);
+
         return Response.json({
-            message:"Something Went Wrong Please Try Again",
-            error:error
-        })
+            message: "Successfully created",
+        });
+    } catch (error: unknown) {
+        console.error("Error in POST handler:", error);
+        return Response.json({
+            message: "Something went wrong, please try again",
+            error,
+        });
     }
 }
+
 
 export async function GET() {
     await dbConnect();
