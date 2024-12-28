@@ -74,7 +74,6 @@ cloudinary.config({
                   message: "Something Went Wrong Please Try Again",
                   error:error,
               }),
-              { status: 500 }
           );
       }
   }

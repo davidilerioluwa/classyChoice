@@ -168,8 +168,9 @@ const CreateNewListingForm = ({setShowListingForm,EditListingId}:{setShowListing
           }
           
           
-      }catch{
-    
+      }catch(err:unknown){
+        console.log(err);
+        
       }
   }
   useEffect(()=>{
