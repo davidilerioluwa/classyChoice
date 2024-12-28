@@ -26,54 +26,76 @@ cloudinary.config({
         const files= formData.getAll("files") as Array<Blob> | Array<null>
         const uploadPromises = files.map(async (file) => {
             if (!file) return;
-
+        
             const buffer = Buffer.from(await file.arrayBuffer());
-            return new Promise<Url>((resolve, reject) => {
+        
+            return new Promise((resolve, reject) => {
                 const stream = cloudinary.uploader.upload_stream(
                     { folder: "JENS" },
                     (err, res) => {
                         if (err) {
-                            console.error("Cloudinary upload error:", err);
                             reject(err);
                         } else {
-                            console.log("Cloudinary upload response:", res);
                             const newUrl = {
                                 url: res?.url,
                                 assetId: res?.public_id,
                             };
+                            imageUrls.push(newUrl);
                             resolve(newUrl);
                         }
                     }
                 );
+        
                 stream.write(buffer);
                 stream.end();
             });
         });
 
-        // Wait for all uploads to finish
-        const uploadedImages = await Promise.all(uploadPromises);
+       
     
-    const interval= setInterval(()=>{
-            if(imageUrls.length==files.length){
-                console.log(imageUrls);
+    // const interval= setInterval(()=>{
+    //         if(imageUrls.length==files.length){
+    //             console.log(imageUrls);
                 
-                        const newProductItem=new Product({
-                        title:title,
-                        description:description,
-                        category:category,
-                        subCategory:subCategory,
-                        quantityType:quantityType,
-                        unitsAvailable:unitsAvailable,
-                        price:Number(price),
-                        images: uploadedImages
-                        })
-                        newProductItem.save()
-                        console.log(newProductItem);
-                        clearTimeout(interval)
-            }
+    //                     const newProductItem=new Product({
+    //                     title:title,
+    //                     description:description,
+    //                     category:category,
+    //                     subCategory:subCategory,
+    //                     quantityType:quantityType,
+    //                     unitsAvailable:unitsAvailable,
+    //                     price:Number(price),
+    //                     images: uploadedImages
+    //                     })
+    //                     newProductItem.save()
+    //                     console.log(newProductItem);
+    //                     clearTimeout(interval)
+    //         }
             
-        },100)
-        return Response.json({message:"New Item has been sucessfully created",title:title})
+    //     },100)
+    //     return Response.json({message:"New Item has been sucessfully created",title:title})
+        (async () => {
+            try {
+                 // Wait for all uploads to finish
+                    await Promise.all(uploadPromises);
+                    const newListing=new Product({
+                    title:title,
+                    description:description,
+                    category:category,
+                    subCategory:subCategory,
+                    quantityType:quantityType,
+                    price:Number(price),
+                    images: imageUrls,
+                    unitsAvailable:unitsAvailable
+                    })
+                    newListing.save()
+                
+            } catch (err) {
+                console.error("Upload failed:", err);
+            }
+        })();
+        console.log("final:",imageUrls);
+        return Response.json({message:"sucessfully Created"})
     }catch(error:unknown){
         return Response.json({
             message:"Something Went Wrong Please Try Again",
@@ -176,8 +198,6 @@ export async function PATCH(req:Request) {
         (async () => {
             try {
                 await Promise.all(uploadPromises);
-                console.log(deletedUrls);
-                
                 deletedUrls.forEach(async (assetId)=>{
                     const deleted=await cloudinary.uploader.destroy(String(assetId))  
                     console.log("deleted",deleted)
