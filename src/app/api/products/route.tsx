@@ -22,6 +22,7 @@ export async function POST(req: Request) {
         const unitsAvailable = formData.get("unitsAvailable");
         const files = formData.getAll("files") as Array<Blob | null>;
 
+        await new Promise(resolve => setTimeout(resolve, 2000));
         // Convert the file uploads into promises
         const uploadPromises = files.map(async (file) => {
             if (!file) return null;
@@ -32,10 +33,14 @@ export async function POST(req: Request) {
                     { folder: "JENS" },
                     (err, res) => {
                         if (err) {
-                            console.error("Cloudinary upload error:", err);
-                            reject(err);
+                            // console.error("Cloudinary upload error:", err);
+                            // reject(err);
+                            console.log(err);
+                            
                         } else {
-                            console.log("Cloudinary upload response:", res);
+                            // console.log("Cloudinary upload response:", res);
+                            console.log(res);
+                            
                             const newUrl = {
                                 url: res?.url,
                                 assetId: res?.public_id,
