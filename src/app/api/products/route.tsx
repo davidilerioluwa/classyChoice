@@ -10,89 +10,77 @@ cloudinary.config({
     url?: string,
     assetId?:string
   }
+ export  async function POST(req:Request){
+    const formData=await req.formData()
+    const title=formData.get("title")
+    try{
+      
+       
+        const description= formData.get("description")
+        const category= formData.get("category")
+        const price= formData.get("price")
+        const subCategory=formData.get("subCategory")
+        const quantityType=formData.get("quantityType")
+        const unitsAvailable=formData.get("unitsAvailable")
+        const imageUrls: Array<Url>=[]
+        const files= formData.getAll("files") as Array<Blob> | Array<null>
+        const uploadPromises = files.map(async (file) => {
+            if (!file) return;
 
-export async function POST(req: Request): Promise<Response> {
-    try {
-        const formData = await req.formData();
-        const title = formData.get("title") as string;
-        const description = formData.get("description") as string;
-        const category = formData.get("category") as string;
-        const price = formData.get("price") as string;
-        const subCategory = formData.get("subCategory") as string;
-        const quantityType = formData.get("quantityType") as string;
-        const unitsAvailable = formData.get("unitsAvailable") as string;
-
-        // Retrieve files
-        const files = formData.getAll("files") as Array<Blob | null>;
-
-        // Function to upload a single file to Cloudinary
-        const uploadFile = (file: Blob): Promise<Url> => {
-    return new Promise(async (resolve, reject) => {
-        try {
-            // Await the arrayBuffer result
-            const arrayBuffer = await file.arrayBuffer();
-            const buffer = Buffer.from(arrayBuffer);
-            const stream = cloudinary.uploader.upload_stream(
-                { folder: "JENS" },
-                (err, res) => {
-                    if (err) {
-                        console.error("Cloudinary upload error:", err);
-                        return reject(err);
+            const buffer = Buffer.from(await file.arrayBuffer());
+            return new Promise<Url>((resolve, reject) => {
+                const stream = cloudinary.uploader.upload_stream(
+                    { folder: "JENS" },
+                    (err, res) => {
+                        if (err) {
+                            console.error("Cloudinary upload error:", err);
+                            reject(err);
+                        } else {
+                            console.log("Cloudinary upload response:", res);
+                            const newUrl = {
+                                url: res?.url,
+                                assetId: res?.public_id,
+                            };
+                            resolve(newUrl);
+                        }
                     }
-                    if (res) {
-                        console.log("Cloudinary response:", res);
-                        resolve({
-                            url: res.url,
-                            assetId: res.public_id,
-                        });
-                    } else {
-                        reject(new Error("Unexpected Cloudinary response: null or undefined"));
-                    }
-                }
-            );
-            stream.write(buffer);
-            stream.end();
-        } catch (error) {
-            reject(error);
-        }
-    });
-};
-
-
-        // Upload all files
-        const imageUrls: Url[] = await Promise.all(
-            files.map((file) => (file ? uploadFile(file) : Promise.resolve(null)))
-        ).then((results) => results.filter((url): url is Url => url !== null));
-
-        // Create and save the new product
-        const newProductItem = new Product({
-            title,
-            description,
-            category,
-            subCategory,
-            quantityType,
-            unitsAvailable,
-            price: Number(price),
-            images: imageUrls,
+                );
+                stream.write(buffer);
+                stream.end();
+            });
         });
 
-        await newProductItem.save();
-
-        return  Response.json({
-                message: "New Item has been successfully created",
-                title,
-            })
-    } catch (error: unknown) {
-        console.error("Error in API handler:", error);
-
-        return  Response.json({
-                message: "Something Went Wrong Please Try Again",
-                error: error instanceof Error ? error.message : "Unknown error",
-            })
+        // Wait for all uploads to finish
+        const uploadedImages = await Promise.all(uploadPromises);
+    
+    const interval= setInterval(()=>{
+            if(imageUrls.length==files.length){
+                console.log(imageUrls);
+                
+                        const newProductItem=new Product({
+                        title:title,
+                        description:description,
+                        category:category,
+                        subCategory:subCategory,
+                        quantityType:quantityType,
+                        unitsAvailable:unitsAvailable,
+                        price:Number(price),
+                        images: imageUrls
+                        })
+                        newProductItem.save()
+                        console.log(newProductItem);
+                        clearTimeout(interval)
+            }
+            
+        },100)
+        return Response.json({message:"New Item has been sucessfully created",title:title})
+    }catch(error:unknown){
+        return Response.json({
+            message:"Something Went Wrong Please Try Again",
+            error:error
+        })
     }
 }
-
-
 
 export async function GET() {
     await dbConnect();
