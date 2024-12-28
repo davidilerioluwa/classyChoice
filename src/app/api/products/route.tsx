@@ -20,7 +20,6 @@ export async function POST(req: Request) {
         const subCategory = formData.get("subCategory");
         const quantityType = formData.get("quantityType");
         const unitsAvailable = formData.get("unitsAvailable");
-        const imageUrls: Array<Url> = [];
         const files = formData.getAll("files") as Array<Blob | null>;
 
         // Convert the file uploads into promises
