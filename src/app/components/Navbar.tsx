@@ -11,7 +11,7 @@ import { state } from '@/store/state'
 import { signOut } from 'next-auth/react';
 import { categories } from '@/store/constants';
 import { useRouter } from 'next/navigation';
-import { iCart } from '../lib/models/Cart';
+// import { iCart } from '../lib/models/Cart';
 const Navbar = () => {
   
   const snap= useSnapshot(state)
