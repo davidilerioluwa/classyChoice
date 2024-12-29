@@ -15,7 +15,7 @@ return (
           <p className='text-lg md:text-2xl lg:text-3xl font-bold text-white'> Discover Endless Deals And Unbeatable Quality-Everything You Need.</p>
           <Link href={"/search"} className=' border border-white text-white px-4 py-2 rounded-md '>SHOP NOW</Link>
       </div>
-      <div className='absolute top-32 bg-purple-800/80 backdrop-blur-md mx-8 md:hidden rounded-lg shadow-lg border border-white/20 p-8 py-18 z-10 flex flex-col col-span-7 gap-2 md:gap-4 justify-center items-start text-white'>
+      <div className='absolute top-32 bg-purple-800/80 backdrop-blur-md mx-8 md:hidden rounded-lg shadow-lg drop-shadow-md border border-white/20 p-8 py-18 z-10 flex flex-col col-span-7 gap-2 md:gap-4 justify-center items-start text-white'>
           <div className='absolute md:w-1/4 left-0 rounded-md  md:bg-purple-900 z-[-1] h-72 md:h-1/2'></div>
           <p>Shop Smart, Live Better</p>
           <p className='text-lg md:text-3xl font-bold text-white'> Discover Endless Deals And Unbeatable Quality-Everything You Need.</p>
