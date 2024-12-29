@@ -76,7 +76,7 @@ const CreateNewListingForm = ({setShowListingForm,EditListingId}:{setShowListing
           toast.success(data.message)
           console.log(data);
           
-          // location.reload()
+          location.reload()
           
         }
       } catch (error) {

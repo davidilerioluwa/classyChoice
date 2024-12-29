@@ -11,6 +11,7 @@ import { state } from '@/store/state'
 import { signOut } from 'next-auth/react';
 import { categories } from '@/store/constants';
 import { useRouter } from 'next/navigation';
+import { iCart } from '../lib/models/Cart';
 const Navbar = () => {
   
   const snap= useSnapshot(state)
@@ -28,6 +29,13 @@ const Navbar = () => {
       }})
       
       const res = await response.json()
+       const getCart= async ()=>{
+              const response= await fetch("/api/cart")
+              const cart: Array<iCart>= await response.json()
+              if(cart.length){
+                  
+              } 
+          }
       state.user=res.user
       setLoggedIn(res.user)
       console.log(res);
@@ -51,7 +59,7 @@ const Navbar = () => {
             }
             <span className="py-2 cursor-pointer flex items-center" onClick={()=>setShowSearch(true)}><FaSearch/></span>
             {showSearch? <Search setShowSearch={setShowSearch}/> :""} 
-           { snap.user?.accountType=="admin"? "":<Link href={"/account/cart"} className="py-1 cursor-pointer flex items-center"><FiShoppingCart/></Link>}
+           { snap.user?.accountType=="admin"? "":<Link href={"/account/cart"} className="py-1 cursor-pointer flex items-center relative"><FiShoppingCart/><span className='absolute top-[-7px] right-[-17px] text-sm bg-purple-800 text-white rounded-full px-2'>2</span></Link>}
         </div>
     </nav>
   )

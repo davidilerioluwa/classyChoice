@@ -87,10 +87,8 @@ const Page = () => {
             setCart(cart)
         }else{
             setCart([])
-        }  
-        
-             
-     }
+        }       
+    }
      const AddToTotalAmount=(newItem:iCheckoutDetails)=>{
         const newAmount= checkoutDetails
         {!newAmount.find((item)=>item.cartId==newItem.cartId) && newAmount.push(newItem)}
