@@ -29,13 +29,13 @@ const Navbar = () => {
       }})
       
       const res = await response.json()
-       const getCart= async ()=>{
-              const response= await fetch("/api/cart")
-              const cart: Array<iCart>= await response.json()
-              if(cart.length){
+      //  const getCart= async ()=>{
+      //         const response= await fetch("/api/cart")
+      //         const cart: Array<iCart>= await response.json()
+      //         if(cart.length){
                   
-              } 
-          }
+      //         } 
+      //     }
       state.user=res.user
       setLoggedIn(res.user)
       console.log(res);
