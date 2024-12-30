@@ -23,8 +23,11 @@ const Navbar = () => {
     
   useEffect(()=>{
     const user: iUser= JSON.parse(String(localStorage.getItem("user")))
-    if(user){state.user=user}
-    setLoggedIn(String(user._id))
+    if(user){
+      state.user=user
+      setLoggedIn(String(user._id))
+    }
+   
     console.log(user);
     console.log(state.user);
     
