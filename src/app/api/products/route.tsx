@@ -187,7 +187,7 @@ export async function PATCH(req:Request) {
           // Wait for all uploads to finish and filter out null results
                 const uploadedImages = await Promise.all(uploadPromises);
                 const validImages = uploadedImages.filter((image): image is Url => image !== null);
-                const totalImages= validImages.concat(imageUrls)
+                const totalImages= imageUrls.concat(validImages)
                 deletedUrls.forEach(async (assetId)=>{
                     const deleted=await cloudinary.uploader.destroy(String(assetId))  
                     console.log("deleted",deleted)
