@@ -190,7 +190,7 @@ const Page = () => {
                     disabled={!showPaystackButton}
                     />
                     :
-                    <button onClick={(e)=>setShowUpdateProfile(true)} className='bg-purple-900 text-white px-4 py-2 rounded-md w-full'>Update Profile to proceed to Payment</button>
+                    <button onClick={()=>setShowUpdateProfile(true)} className='bg-purple-900 text-white px-4 py-2 rounded-md w-full'>Update Profile to proceed to Payment</button>
                     }
                     
                 </section>
