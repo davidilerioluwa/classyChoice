@@ -9,6 +9,9 @@ const DashboardOrders = ({order}:{order:iOrder}) => {
     const [name,setName]=useState("loading")
     const [email,setEmail]=useState("loading")
     const [phoneNumber,setPhoneNumber]=useState("loading..")
+    const [state,setState]=useState("")
+    const [city,setCity]=useState("")
+    const [address,setAddress]=useState("")
     const [showOrders,setShowOrders]=useState(true)
     const [showDetailsPopup,setShowDetailsPopup]=useState(false)
     console.log(email);
@@ -25,11 +28,14 @@ const DashboardOrders = ({order}:{order:iOrder}) => {
         setName(String(res.user.name)) 
         setEmail(String(res.user.email))
         setPhoneNumber(String(res.user.phoneNumber))
+        setCity(String(res.user.city))
+        setAddress(String(res.user.address))
+        setState(String(res.user.state))
 
       })()
    },[])
     return(
-        showDetailsPopup? <OrderDetails setShowDetailsPopup={setShowDetailsPopup}/>:
+        showDetailsPopup? <OrderDetails note={order.note} state={state} city={city} address={address} name={name} email={email} phoneNumber={phoneNumber} setShowDetailsPopup={setShowDetailsPopup}/>:
     <section key={order.orderId} className='bg-white text-xs md:text-sm  border border-purple-100 drop-shadow-md rounded-md p-4 text-purple-800 w-full'>
         
         <div className='gap-2 flex flex-col gap-2 '>
