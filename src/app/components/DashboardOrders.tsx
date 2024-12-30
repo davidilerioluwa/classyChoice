@@ -11,6 +11,8 @@ const DashboardOrders = ({order}:{order:iOrder}) => {
     const [phoneNumber,setPhoneNumber]=useState("loading..")
     const [showOrders,setShowOrders]=useState(true)
     const [showDetailsPopup,setShowDetailsPopup]=useState(false)
+    console.log(email);
+    
     const userId=order.userId
    useEffect(()=>{
     (async function name() {
