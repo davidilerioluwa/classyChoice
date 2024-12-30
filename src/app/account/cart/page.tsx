@@ -160,7 +160,7 @@ const Page = () => {
                     </div>:"No Items Added To Cart"}
                 </section>
                             {/* checkout */}
-                <section className='w-full md:w-80 bg-white border border-purple-100 flex flex-col items-center drop-shadow-md h-fit rounded-md px-10 py-6'>
+                <section className='w-full md:w-80 lg:w-96 bg-white border border-purple-100 flex flex-col items-center drop-shadow-md h-fit rounded-md px-10 py-6'>
                 <div className='w-full my-4'>
                     <div className='flex justify-between'>
                         <span className='text-sm text-purple-900 w-32'>Subtotal:</span>
