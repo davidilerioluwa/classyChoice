@@ -150,36 +150,44 @@ export async function PATCH(req:Request) {
         imageUrls.push(...oldImagesParsed)
         
         const files= formData.getAll("files") as Array<Blob> | Array<null>
-        const uploadPromises = files.map(async (file) => {
-            if (!file) return;
         
+         // Convert the file uploads into promises
+         const uploadPromises = files.map(async (file) => {
+            if (!file) return null;
+
             const buffer = Buffer.from(await file.arrayBuffer());
-        
-            return new Promise((resolve, reject) => {
-                const stream = cloudinary.uploader.upload_stream(
+            console.log(buffer);
+            
+            const base64String = `data:${file.type};base64,${buffer.toString("base64")}`;
+            return new Promise<Url>((resolve, reject) => {
+                // Use cloudinary.uploader.upload instead of upload_stream
+                cloudinary.uploader.upload(
+                    base64String,
                     { folder: "JENS" },
                     (err, res) => {
                         if (err) {
                             reject(err);
+                            console.log("Cloudinary upload error:", err);
                         } else {
+                            console.log("Cloudinary upload response:", res);
                             const newUrl = {
                                 url: res?.url,
                                 assetId: res?.public_id,
                             };
-                            imageUrls.push(newUrl);
                             resolve(newUrl);
                         }
                     }
                 );
-        
-                stream.write(buffer);
-                stream.end();
             });
         });
         
         (async () => {
             try {
-                await Promise.all(uploadPromises);
+                
+          // Wait for all uploads to finish and filter out null results
+                const uploadedImages = await Promise.all(uploadPromises);
+                const validImages = uploadedImages.filter((image): image is Url => image !== null);
+                const totalImages= validImages.concat(imageUrls)
                 deletedUrls.forEach(async (assetId)=>{
                     const deleted=await cloudinary.uploader.destroy(String(assetId))  
                     console.log("deleted",deleted)
@@ -191,7 +199,7 @@ export async function PATCH(req:Request) {
                     subCategory:subCategory,
                     quantityType:quantityType,
                     price:Number(price),
-                    images: imageUrls,
+                    images: totalImages,
                     unitsAvailable:unitsAvailable
                     }
                     
