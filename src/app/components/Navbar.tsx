@@ -22,16 +22,18 @@ const Navbar = () => {
   const [loggedIn,setLoggedIn] = useState<string>()
     
   useEffect(()=>{
-    const user: iUser= JSON.parse(String(localStorage.getItem("user")))
-    if(user){
-      state.user=user
-      setLoggedIn(String(user._id))
+    const userString = localStorage.getItem("user");
+    if (userString) { // Check if userString is not null
+      try {
+        const user = JSON.parse(userString); // No need for String(), localStorage returns a string
+        state.user = user;
+        setLoggedIn(user._id); // Assume user._id exists and is a valid identifier
+      } catch (error) {
+        console.error("Error parsing user data from localStorage:", error);
+      }
+    } else {
+      console.log("No user data found in localStorage.");
     }
-   
-    console.log(user);
-    console.log(state.user);
-    
-    
     (async function name() {
       const userSession= await getUserSession()
       
@@ -51,7 +53,7 @@ const Navbar = () => {
       state.user=res.user
       setLoggedIn(res.user)
       console.log(res);
-      state.userId=(res.user.id); 
+      state.userId=(res.user?.id); 
     })()
   },[snap.userId])
   
