@@ -11,6 +11,7 @@ import { state } from '@/store/state'
 import { signOut } from 'next-auth/react';
 import { categories } from '@/store/constants';
 import { useRouter } from 'next/navigation';
+import { iUser } from '../lib/models/User';
 // import { iCart } from '../lib/models/Cart';
 const Navbar = () => {
   
@@ -21,6 +22,13 @@ const Navbar = () => {
   const [loggedIn,setLoggedIn] = useState<string>()
     
   useEffect(()=>{
+    const user: iUser= JSON.parse(String(localStorage.getItem("user")))
+    if(user){state.user=user}
+    setLoggedIn(String(user._id))
+    console.log(user);
+    console.log(state.user);
+    
+    
     (async function name() {
       const userSession= await getUserSession()
       
@@ -36,6 +44,7 @@ const Navbar = () => {
                   
       //         } 
       //     }
+      localStorage.setItem("user", JSON.stringify(res.user));
       state.user=res.user
       setLoggedIn(res.user)
       console.log(res);
