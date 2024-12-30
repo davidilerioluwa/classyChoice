@@ -83,10 +83,10 @@ const Page = () => {
                 <p className='text-sm'>{snap.user?.phoneNumber?snap.user.phoneNumber:"No Phone Number Entered"}</p>
                 <button className='bg-purple-800 rounded-md px-6 py-1 text-white' onClick={()=>setShowEditAccount(true)}>Edit</button>
                </div>
-               <div className='drop-shadow-md h-80 w-60 border border-purple-100 text-purple-800 p-4 rounded-md flex flex-col gap-2 justify-center items-center'>
+               <div className='drop-shadow-md h-80 w-60 border text-center border-purple-100 text-purple-800 p-4 rounded-md flex flex-col gap-2 justify-center items-center'>
                 <p className='font-bold'>Address</p>
-                <p className='text-sm'>{snap.user?.address?snap.user.address:"No address entered"}</p>
-                <p className='text-sm'>{snap.user?.city?snap.user.city+",":""}{snap.user?.state?snap.user.state:""}</p>
+                <p className='text-sm'>{snap.user?.address?snap.user.address+",":"No address entered"}</p>
+                <p className='text-sm'>{snap.user?.city?snap.user.city+", ":""}{snap.user?.state?snap.user.state+".":""}</p>
                 <button className='bg-purple-800 rounded-md px-6 py-1 text-white' onClick={()=> setShowEditAddress(true)}>Edit</button>
                </div>
             </section>
@@ -129,11 +129,11 @@ const EditAccountDetails = ({setShowEditAccount,showEditAccount,name,setName,pho
 const EditAddressDetails = ({setShowEditAddress,showEditAddress,address,city,state,setAddress,setCity,setState,updateAccountDetails}:{setShowEditAddress: React.Dispatch<React.SetStateAction<boolean>>,showEditAddress:boolean,address:string,city:string,state:string,setCity:React.Dispatch<React.SetStateAction<string>>,setAddress:React.Dispatch<React.SetStateAction<string>>,setState:React.Dispatch<React.SetStateAction<string>>,updateAccountDetails:(params:React.MouseEvent<HTMLButtonElement, MouseEvent>)=>void})=>{
  
   const statesInNigeria = [
-    "Abia", "Adamawa", "Akwa Ibom", "Anambra", "Bauchi", "Bayelsa", "Benue",
-    "Borno", "Cross River", "Delta", "Ebonyi", "Edo", "Ekiti", "Enugu", "Gombe",
-    "Imo", "Jigawa", "Kaduna", "Kano", "Katsina", "Kebbi", "Kogi", "Kwara",
-    "Lagos", "Nasarawa", "Niger", "Ogun", "Ondo", "Osun", "Oyo", "Plateau",
-    "Rivers", "Sokoto", "Taraba", "Yobe", "Zamfara", "Federal Capital Territory (Abuja)"
+    "Abia State", "Adamawa State", "Akwa Ibom State", "Anambra State", "Bauchi State", "Bayelsa State", "Benue State",
+    "Borno State", "Cross River State", "Delta State", "Ebonyi State", "Edo State", "Ekiti State", "Enugu State", "Gombe State",
+    "Imo State", "Jigawa State", "Kaduna State", "Kano State", "Katsina State", "Kebbi State", "Kogi State", "Kwara State",
+    "Lagos State", "Nasarawa State", "Niger State", "Ogun State", "Ondo State", "Osun State", "Oyo State", "Plateau State",
+    "Rivers State", "Sokoto State", "Taraba State", "Yobe State", "Zamfara State", "Federal Capital Territory (Abuja)"
   ];
 
   return(

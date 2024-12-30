@@ -8,6 +8,7 @@ import { state } from '@/store/state';
 import dynamic from 'next/dynamic';
 import PacmanLoader from 'react-spinners/PacmanLoader';
 import { toast } from 'sonner';
+import UpdateProfileForm from '@/app/components/UpdateProfileForm';
 const PaystackButton = dynamic(() => import('react-paystack').then(mod => mod.PaystackButton), { ssr: false });
 
 export interface iCheckoutDetails {
@@ -21,11 +22,29 @@ const Page = () => {
     const [totalAmount,setTotalAmount]= useState<number>(0)
     const [checkoutDetails,setCheckoutDetails]= useState<Array<iCheckoutDetails>>([])
     const [showPaystackButton,setPaystackButton]=useState(true)
+    const [showUpdateProfile,setShowUpdateProfile]= useState(false)
     const [note,setNote]=useState("")
     const snap=useSnapshot(state)
     const email=snap.user?snap.user.email:"no email"
     const publicKey= String(process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY)
-    
+    if (
+        snap.user?.address &&
+        snap.user?.phoneNumber &&
+        snap.user?.city &&
+        snap.user?.state
+    ) {
+        console.log("All fields are present");
+    } else {
+        console.log("Some fields are missing");
+        console.log(snap.user?.address);
+        console.log(snap.user?.phoneNumber);
+        console.log(snap.user?.state);
+        
+        console.log((snap.user?.phoneNumber && snap.user?.phoneNumber && snap.user?.city &&  snap.user?.state)?"exist":"doesnt");
+        
+        
+        
+    }
     const postToProducts=async (x:unknown)=>{
         console.log(x);
         
@@ -118,6 +137,7 @@ const Page = () => {
     </div> 
     :
         <div className='lg:h-screen h-full p-2 pt-24 lg:p-8 lg:pt-24 bg-white'>
+            {showUpdateProfile && <UpdateProfileForm setShowUpdateProfile={setShowUpdateProfile}/>}
             <h1 className='font-bold p-2 text-lg text-purple-900 mb-2'>Shopping Cart ({cart.length})</h1>
             <div className='w-full flex flex-col md:flex-row items-center md:items-start  gap-4 h-full pb-12'>
                 <section className='  bg-white border border-purple-100  drop-shadow-md rounded-md p-2 lg:p-4 text-purple-900 w-full overflow-x-auto'>
@@ -155,12 +175,13 @@ const Page = () => {
                         <span className='text-purple-900 font-bold'>₦{totalAmount}</span>
                     </div>
                     <div>
-                        <label className='font-bold text-purple-900 text-sm'>Enter Note To pass on To Seller: </label>
-                        <textarea value={note} onChange={(e)=>setNote(e.target.value)} className='w-full px-2 mt-2 text-purple-900 outline outline-[1px] outline-purple-900 rounded-md'/>
+                        <label className='font-bold text-purple-900 text-sm'>Enter note to pass on to the Seller: </label>
+                        <textarea value={note} onChange={(e)=>setNote(e.target.value)} placeholder='Note for the seller' className='w-full px-2 flex mt-2 text-purple-900 outline outline-[1px] outline-purple-900 rounded-md'/>
                     </div>
                     </div>
+                    {(snap.user?.address && snap.user?.phoneNumber && snap.user?.city && snap.user?.state)?
                     <PaystackButton
-                    className='bg-purple-900 text-white px-4 py-2 rounded-md w-fit' 
+                    className='bg-purple-900 text-white px-4 py-2 rounded-md w-full' 
                     text='Proceed To Checkout' 
                     email={String(email)} 
                     publicKey={publicKey} 
@@ -168,6 +189,10 @@ const Page = () => {
                     onSuccess={(x)=>postToProducts(x)}
                     disabled={!showPaystackButton}
                     />
+                    :
+                    <button onClick={(e)=>setShowUpdateProfile(true)} className='bg-purple-900 text-white px-4 py-2 rounded-md w-full'>Update Profile to proceed to Payment</button>
+                    }
+                    
                 </section>
 
             

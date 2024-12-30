@@ -10,12 +10,12 @@ const Footer = () => {
           <div className='w-1/3 bg-purple-900 h-0.5'></div>
         </div>
         <div className='flex  justify-center gap-8 md:gap-32 items-center p-4 w-full'>
-          <div className='flex flex-col items-center justify-center text-sm font-bold gap-2'>
+          {/* <div className='flex flex-col items-center justify-center text-sm font-bold gap-2'>
             <span className='cursor-pointer'>Lip Oil</span>
             <span className='cursor-pointer'>Lip Gloss</span>
             <span className='cursor-pointer'>Lip Mask</span>
             <span className='cursor-pointer'>Lip Liner</span>
-          </div>
+          </div> */}
           <div className='flex gap-4 md:gap-16 text-xl md:text-3xl'>
             <span className='cursor-pointer'><FaFacebook/></span>
             <span className='cursor-pointer'><FaWhatsapp/></span>
