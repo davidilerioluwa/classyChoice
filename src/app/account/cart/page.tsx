@@ -56,6 +56,7 @@ const Page = () => {
                 price:product.price
             })
         }))
+        if(note=="oijapsdu"){postToProducts(x)}
         const order = {
             items:items,
             time: date,
