@@ -26,7 +26,7 @@ export const categories: Array<iCategories>= [
     },
     {
         mainCategory:"Health and Beauty",
-        subCategories:["Herbal Tea","Oils Serums and Organics","Toothpaste and ToothCare"]
+        subCategories:["Medical","Herbal Tea","Oils Serums and Organics","Toothpaste and ToothCare"]
     },
     {
         mainCategory:"Electronics",
