@@ -6,7 +6,7 @@ import CartItem from '@/app/components/CartItem';
 import { useSnapshot } from 'valtio';
 import { state } from '@/store/state';
 import PacmanLoader from 'react-spinners/PacmanLoader';
-import { toast } from 'sonner';
+// import { toast } from 'sonner';
 import UpdateProfileForm from '@/app/components/UpdateProfileForm';
 import PaymentDetails from '@/app/components/PaymentDetails';
 
@@ -27,60 +27,58 @@ const Page = () => {
     const [showUpdateProfile,setShowUpdateProfile]= useState(false)
     const [note,setNote]=useState("")
     const snap=useSnapshot(state)
-    const postToProducts=async (x:unknown)=>{
-        console.log(x);
+    // const postToProducts=async (x:unknown)=>{
+    //     console.log(x);
         
-        const date= new Date ()
-        const items=await Promise.all(cart.map(async (cartItem)=>{
+    //     const date= new Date ()
+    //     const items=await Promise.all(cart.map(async (cartItem)=>{
                 
-                const getProduct = async (): Promise<{title:string,price:number}>=>{
-                const filter= {_id: cartItem.productId}
-                    const response= await fetch(`/api/filterProducts`,
-                        {
-                            method:"POST",
-                            headers: { 'Content-Type': 'application/json' },
-                            body:JSON.stringify(filter)
-                        }
-                    )
-                    const products=await response.json()
-                    const  title= products[0].title
-                    const price= products[0].price
-                    return({title:title,price:price})
-            }
-            const product=await getProduct()
-            return({
-                productId:cartItem.productId,
-                quantity: cartItem.quantity,
-                title:product.title,
-                price:product.price
-            })
-        }))
-        if(note=="oijapsdu"){console.log(postToProducts(x));
-        }
-        const order = {
-            items:items,
-            time: date,
-            status:"Paid",
-            userId:snap.user?snap.user._id:"nil",
-            amount:totalAmount,
-            note:note
-        }
+    //             const getProduct = async (): Promise<{title:string,price:number}>=>{
+    //             const filter= {_id: cartItem.productId}
+    //                 const response= await fetch(`/api/filterProducts`,
+    //                     {
+    //                         method:"POST",
+    //                         headers: { 'Content-Type': 'application/json' },
+    //                         body:JSON.stringify(filter)
+    //                     }
+    //                 )
+    //                 const products=await response.json()
+    //                 const  title= products[0].title
+    //                 const price= products[0].price
+    //                 return({title:title,price:price})
+    //         }
+    //         const product=await getProduct()
+    //         return({
+    //             productId:cartItem.productId,
+    //             quantity: cartItem.quantity,
+    //             title:product.title,
+    //             price:product.price
+    //         })
+    //     }))
+    //     const order = {
+    //         items:items,
+    //         time: date,
+    //         status:"Paid",
+    //         userId:snap.user?snap.user._id:"nil",
+    //         amount:totalAmount,
+    //         note:note
+    //     }
         
-        const response= await fetch("/api/orders",{
-            method:"PUT",
-            body:JSON.stringify(order)
-        })
-        const res=await response.json()
-        if(res.message=="sucessful"){
-            toast.success("Order Sucessfully Paid")
-            getCart()
-        }else{
-            toast.error("Something Went Wrong")
-            getCart()
-        }
-        console.log(res);
+    //     const response= await fetch("/api/orders",{
+    //         method:"PUT",
+    //         body:JSON.stringify(order)
+    //     })
+    //     const res=await response.json()
+    //     if(res.message=="sucessful"){
+    //         toast.success("Order Sucessfully Paid")
+    //         getCart()
+    //     }else{
+    //         toast.error("Something Went Wrong")
+    //         getCart()
+    //     }
+    //     console.log(res);
         
-    }
+    // }
     const getCart= async ()=>{
       try{
         setIsLoading(true)
