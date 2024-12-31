@@ -5,7 +5,6 @@ import { iCart } from '@/app/lib/models/Cart';
 import CartItem from '@/app/components/CartItem';
 import { useSnapshot } from 'valtio';
 import { state } from '@/store/state';
-import dynamic from 'next/dynamic';
 import PacmanLoader from 'react-spinners/PacmanLoader';
 import { toast } from 'sonner';
 import UpdateProfileForm from '@/app/components/UpdateProfileForm';
