@@ -20,7 +20,6 @@ const Navbar = () => {
   const [showCategoriesDropdown,setShowCategoriesDropdown]=useState(false)
   const [showSearch,setShowSearch]=useState(false)
   const [loggedIn,setLoggedIn] = useState<string>()
-  const [cartNumber,setCartNumber]=useState(0)
   useEffect(()=>{
     const userString = localStorage.getItem("user");
     if (userString ) { // Check if userString is not null
