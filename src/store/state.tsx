@@ -10,7 +10,8 @@ type state = {
         maxAmount:number,
         category:string,
         subCategory:string
-    }
+    },
+    cartNumber:number
 }
 export const state = proxy<state>({
     userId: "",
@@ -20,5 +21,6 @@ export const state = proxy<state>({
         maxAmount:10000000,
         category:"",
         subCategory:""
-    }
+    },
+    cartNumber:0
 })

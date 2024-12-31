@@ -11,6 +11,7 @@ import { state } from '@/store/state'
 import { signOut } from 'next-auth/react';
 import { categories } from '@/store/constants';
 import { useRouter } from 'next/navigation';
+import { iCart } from '../lib/models/Cart';
 // import { iCart } from '../lib/models/Cart';
 const Navbar = () => {
   
@@ -19,16 +20,16 @@ const Navbar = () => {
   const [showCategoriesDropdown,setShowCategoriesDropdown]=useState(false)
   const [showSearch,setShowSearch]=useState(false)
   const [loggedIn,setLoggedIn] = useState<string>()
-    
+  const [cartNumber,setCartNumber]=useState(0)
   useEffect(()=>{
     const userString = localStorage.getItem("user");
-    if (userString) { // Check if userString is not null
+    if (userString ) { // Check if userString is not null
       try {
         const user = JSON.parse(userString); // No need for String(), localStorage returns a string
         state.user = user;
         setLoggedIn(user._id); // Assume user._id exists and is a valid identifier
       } catch (error) {
-        console.error("Error parsing user data from localStorage:", error);
+        console.error("No User Data found");
       }
     } else {
       console.log("No user data found in localStorage.");
@@ -41,18 +42,22 @@ const Navbar = () => {
       }})
       
       const res = await response.json()
-      //  const getCart= async ()=>{
-      //         const response= await fetch("/api/cart")
-      //         const cart: Array<iCart>= await response.json()
-      //         if(cart.length){
-                  
-      //         } 
-      //     }
+       const getCart= async ()=>{
+              const response= await fetch("/api/cart")
+              const cart: Array<iCart>= await response.json()
+              console.log(cart);
+                const totalQuantity = cart.reduce((total, item) => total + Number(item.quantity), 0);
+                state.cartNumber=(totalQuantity)
+      }
+      getCart()
+     try{
       localStorage.setItem("user", JSON.stringify(res.user));
       state.user=res.user
       setLoggedIn(res.user)
-      console.log(res);
-      state.userId=(res.user?.id); 
+      state.userId=(res.user?.id);
+     } catch(error){
+      console.error(error)
+     }
     })()
   },[snap.userId])
   
@@ -72,7 +77,7 @@ const Navbar = () => {
             }
             <span className="py-2 cursor-pointer flex items-center" onClick={()=>setShowSearch(true)}><FaSearch/></span>
             {showSearch? <Search setShowSearch={setShowSearch}/> :""} 
-           { snap.user?.accountType=="admin"? "":<Link href={"/account/cart"} className="py-1 cursor-pointer flex items-center relative"><FiShoppingCart/><span className='absolute top-[-7px] right-[-17px] text-sm bg-purple-800 text-white rounded-full px-2'>2</span></Link>}
+           { snap.user?.accountType=="admin"? "":<Link href={"/account/cart"} className="py-1 cursor-pointer flex items-center relative"><FiShoppingCart/><span className='absolute top-[-7px] right-[-17px] text-sm bg-purple-800 text-white rounded-full px-2'>{snap.cartNumber}</span></Link>}
         </div>
     </nav>
   )
@@ -92,7 +97,7 @@ const CategoriesDropdown=()=>{
 }
 return(
 <div className='absolute top-8 left-[-30px] w-fit bg-white p-4 rounded-md flex flex-col drop-shadow-md text-sm'>
-  {categories.map((category)=><button key={category.mainCategory} onClick={()=>{navigateToCategories(category.mainCategory)}} className='p-2 text-left  text-nowrap hover:drop-shadow-lg rounded-md bg-white'>{category.mainCategory}{category.subCategories.length?">":""}</button>)}  
+  {categories.map((category)=><button key={category.mainCategory} onClick={()=>{navigateToCategories(category.mainCategory)}} className='p-2 text-left  text-nowrap hover:drop-shadow-lg rounded-md bg-white'>{category.mainCategory}{category.subCategories.length?"":""}</button>)}  
 </div>
 )
 }

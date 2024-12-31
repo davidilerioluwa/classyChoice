@@ -102,8 +102,11 @@ const Page = () => {
         const response= await fetch("/api/cart")
         const cart: Array<iCart>= await response.json()
         setIsLoading(false)
+         const totalQuantity = cart.reduce((total, item) => total + Number(item.quantity), 0);
+        state.cartNumber=(totalQuantity)
         if(cart.length){
             setCart(cart)
+            
         }else{
             setCart([])
         }       
