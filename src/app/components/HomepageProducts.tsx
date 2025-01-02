@@ -7,7 +7,7 @@ import PacmanLoader from "react-spinners/PacmanLoader"
 import { toast } from 'sonner'
 import CreateNewListingForm from './CreateNewListingForm'
 import Link from 'next/link'
-import { BsArrowBarRight, BsArrowLeft, BsArrowRight } from 'react-icons/bs'
+import {  BsArrowRight } from 'react-icons/bs'
 
 
 
