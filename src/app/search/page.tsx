@@ -70,7 +70,7 @@ const Page = () => {
           })()
       },[snap.filter])
   return (
-    <div className='pt-24 px-4 lg:px-6 py-4'>
+    <div className='pt-24 px-4 lg:px-6 py-4 min-h-screen'>
        {showAreYouSure && <AreYouSure setShowAreYouSure={setShowAreYouSure}/> }
       {showListingForm?<CreateNewListingForm setShowListingForm={setShowListingForm} EditListingId={EditListingId}/>:""}
         {showSearch?<Search setShowSearch={setShowSearch}/>:""}

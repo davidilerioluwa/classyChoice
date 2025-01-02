@@ -6,6 +6,8 @@ import { categories } from '@/store/constants'
 import PacmanLoader from "react-spinners/PacmanLoader"
 import { toast } from 'sonner'
 import CreateNewListingForm from './CreateNewListingForm'
+import Link from 'next/link'
+import { BsArrowBarRight, BsArrowLeft, BsArrowRight } from 'react-icons/bs'
 
 
 
@@ -43,12 +45,11 @@ const HomepageProducts = () => {
           }
     useEffect(()=>{
       (async  function getProducts(){
-        const filter= {category:active}
         setIsLoading(true)
         
             try{
                 const response= await fetch("/api/filterProducts",{
-                  body:JSON.stringify(filter),
+                  body:JSON.stringify({}),
                   method:"POST"
                 })
                 const products=await response.json()
@@ -70,17 +71,13 @@ const HomepageProducts = () => {
     <section className='w-screen '>
        {showAreYouSure && <AreYouSure setShowAreYouSure={setShowAreYouSure}/> }
        {showListingForm?<CreateNewListingForm EditListingId={EditListingId} setShowListingForm={setShowListingForm}/>:""}
-        <div className='flex flex-col items-center justify-center '>
-          <div className='flex flex-wrap justify-center items-center gap-6 text-sm  py-2 px-2 rounded-md mt-4 mx-4 bg-gray-200 rounded-md'>
-             {categories.map((category)=><button key={category.mainCategory} className={`cursor-pointer text-purple-900 p-1  ${active===category.mainCategory?" font-bold drop-shadow-md bg-white rounded-md":""}`} onClick={()=>setActive(category.mainCategory)}>{category.mainCategory}</button>)}
-          </div>
-          <div className='flex gap-2 py-4'>
-              {categories.map((category)=><span className={`cursor-pointer h-4 w-4 rounded-full ${active===category.mainCategory?"bg-purple-800":"border border-purple-800"}`} key={category.mainCategory} onClick={()=>setActive(category.mainCategory)}></span>)}
-          </div>
+        <div className='flex px-6 md:px-16 lg:px-24 py-4 items-center justify-between w-full text-purple-900 font-bold'>
+          <div>Latest Arrivals</div>
+          <Link href={"/search"} className='flex gap-2 items-center'><span>View All</span> <span className='text-xl font-bolder'><BsArrowRight /></span></Link>
         </div>
         {isLoading?<div className='flex justify-center'><PacmanLoader color='rgb(88 28 135 / var(--tw-text-opacity, 1))'/></div>:
-        <div className='flex flex-wrap md:gap-4 justify-center p-1 md:p-4 bg-gray-100'>
-            {products.length?products.map((product)=><ProductsCard setDeleteListingId={setDeleteListingId} setEditListingId={setEditListingId} setShowAreYouSure={setShowAreYouSure} setShowListingForm={setShowListingForm} product={product} key={product.id}/>):"No Items Found"}
+        <div className='flex flex-wrap gap-6 md:gap-4 justify-center p-2 md:p-4 bg-gray-100 '>
+            {products.length?products.slice(0,10).map((product)=><ProductsCard setDeleteListingId={setDeleteListingId} setEditListingId={setEditListingId} setShowAreYouSure={setShowAreYouSure} setShowListingForm={setShowListingForm} product={product} key={product.id}/>):"No Items Found"}
         </div>}
       </section>
   )

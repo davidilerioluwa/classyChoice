@@ -28,7 +28,7 @@ export async function POST(req:Request) {
         }
         console.log(filter);
         
-        const products= await Product.find(filter)  
+        const products= await Product.find(filter).sort({_id:-1})  
         console.log(products);
           
        return Response.json(products)
