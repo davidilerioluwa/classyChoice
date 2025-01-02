@@ -42,6 +42,7 @@ export async function PUT (req:Request){
         const amount=formData.get("amount")
         const note=formData.get("note")
         const status=formData.get("status")
+        const alternativeAddress=formData.get("alternativeAddress")
         console.log(items);
         console.log(time);
         console.log(userId);
@@ -82,7 +83,8 @@ export async function PUT (req:Request){
           orderId:randomNumber,
           note:note,
           status:status,
-          amount:amount
+          amount:amount,
+          alternativeAddress:alternativeAddress
         })
         console.log(newOrder);
         

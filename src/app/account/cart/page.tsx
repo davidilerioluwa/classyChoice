@@ -23,6 +23,7 @@ const Page = () => {
     const [showPaystackButton,setPaystackButton]=useState(true)
     const [showPaymentDetails,setShowPaymentDetails]=useState(false)
     const [addressType,setAddressType]=useState("default")
+    const [alternativeAddress,setAlternativeAddress]=useState("")
     const [showUpdateProfile,setShowUpdateProfile]= useState(false)
     const [note,setNote]=useState("")
     const snap=useSnapshot(state)
@@ -64,6 +65,7 @@ const Page = () => {
         formData.append("status","Awaiting Confirmation")
         formData.append("amount",String(totalAmount))
         formData.append("note",note)
+        formData.append("alternativeAddress",alternativeAddress)
         
         const response= await fetch("/api/orders",{
             method:"PUT",
@@ -182,7 +184,7 @@ const Page = () => {
                             </div>
                             {addressType=="different" &&
                             <label>
-                                <textarea required placeholder='enter new address' className='w-full h-20 px-2 flex py-2 text-purple-900 outline outline-[1px] outline-purple-900 rounded-md'/>
+                                <textarea value={alternativeAddress} onChange={(e)=>setAlternativeAddress(e.target.value)} required placeholder='enter new address' className='w-full h-20 px-2 flex py-2 text-purple-900 outline outline-[1px] outline-purple-900 rounded-md'/>
                             </label>
                             }
                         </div>

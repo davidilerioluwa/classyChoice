@@ -36,7 +36,7 @@ const DashboardOrders = ({order}:{order:iOrder}) => {
       })()
    },[])
     return(
-        showDetailsPopup? <OrderDetails paymentProof={order.paymentProof} note={order.note} state={state} city={city} address={address} name={name} email={email} phoneNumber={phoneNumber} setShowDetailsPopup={setShowDetailsPopup}/>:
+        showDetailsPopup? <OrderDetails alternativeAddress={order.alternativeAddress} paymentProof={order.paymentProof} note={order.note} state={state} city={city} address={address} name={name} email={email} phoneNumber={phoneNumber} setShowDetailsPopup={setShowDetailsPopup}/>:
     <section key={order.orderId} className='bg-white text-xs md:text-sm  border border-purple-100 drop-shadow-md rounded-md p-4 text-purple-800 w-full'>
         
         <div className='gap-2 flex flex-col gap-2 '>
