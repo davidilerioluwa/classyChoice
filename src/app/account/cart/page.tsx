@@ -1,6 +1,5 @@
 "use client"
 import React, { useEffect, useState } from 'react'
-import { PaystackButton } from 'react-paystack';
 import { iCart } from '@/app/lib/models/Cart';
 import CartItem from '@/app/components/CartItem';
 import { useSnapshot } from 'valtio';
@@ -58,15 +57,6 @@ const Page = () => {
                 
             })
         }))
-        const order = {
-            items:items,
-            time: date,
-            status:"Paid",
-            userId:snap.user?snap.user._id:"nil",
-            amount:totalAmount,
-            note:note,
-            paymentProof:formData
-        }
         formData.append("paymentProof",file?file[0]:"")
         formData.append("items",JSON.stringify(items))
         formData.append("time",JSON.stringify(date))

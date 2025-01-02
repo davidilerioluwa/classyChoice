@@ -1,7 +1,7 @@
 import Image from 'next/image'
 import React from 'react'
 
-const OrderDetails = ({setShowDetailsPopup,state,city,address,name,phoneNumber,email,note,paymentProof}:{setShowDetailsPopup:React.Dispatch<React.SetStateAction<boolean>>,state:string,city:string,address:string,name:string,phoneNumber:string,email:string,note:string,paymentProof:{url:String,assetId:String}}) => {
+const OrderDetails = ({setShowDetailsPopup,state,city,address,name,phoneNumber,email,note,paymentProof}:{setShowDetailsPopup:React.Dispatch<React.SetStateAction<boolean>>,state:string,city:string,address:string,name:string,phoneNumber:string,email:string,note:string,paymentProof:{url:string,assetId:string}}) => {
   console.log(paymentProof);
   
   return (
