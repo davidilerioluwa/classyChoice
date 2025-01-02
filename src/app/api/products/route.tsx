@@ -180,9 +180,7 @@ export async function PATCH(req:Request) {
                 );
             });
         });
-        
-        (async () => {
-            try {
+      
                 
           // Wait for all uploads to finish and filter out null results
                 const uploadedImages = await Promise.all(uploadPromises);
@@ -205,11 +203,7 @@ export async function PATCH(req:Request) {
                     
                 const updatedListing=await Product.findOneAndUpdate({_id:id},{...newListing})
                 if(updatedListing){}
-                
-            } catch (err) {
-                console.error("Upload failed:", err);
-            }
-        })();
+      
         console.log("final:",imageUrls);
         return Response.json({message:"sucessfully Updated"})
     }catch{

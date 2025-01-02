@@ -31,15 +31,16 @@ const DashboardOrders = ({order}:{order:iOrder}) => {
         setCity(String(res.user.city))
         setAddress(String(res.user.address))
         setState(String(res.user.state))
+        
 
       })()
    },[])
     return(
-        showDetailsPopup? <OrderDetails note={order.note} state={state} city={city} address={address} name={name} email={email} phoneNumber={phoneNumber} setShowDetailsPopup={setShowDetailsPopup}/>:
+        showDetailsPopup? <OrderDetails paymentProof={order.paymentProof} note={order.note} state={state} city={city} address={address} name={name} email={email} phoneNumber={phoneNumber} setShowDetailsPopup={setShowDetailsPopup}/>:
     <section key={order.orderId} className='bg-white text-xs md:text-sm  border border-purple-100 drop-shadow-md rounded-md p-4 text-purple-800 w-full'>
         
         <div className='gap-2 flex flex-col gap-2 '>
-        <div className='flex flex-col gap-2 lg:h-64 xl:h-80 overflow-y-auto '>
+        <div className='flex flex-col gap-2'>
            
             <div className='w-full relative justify-between flex flex-col gap-2  items-center px-4 py-8  rounded-md border bg-purple-800 text-white'>    
                     <div className='flex justify-between w-full items-center'>
@@ -52,7 +53,7 @@ const DashboardOrders = ({order}:{order:iOrder}) => {
                             <div className='w-20 md:w-fit break-words'>{name}</div>
                     </div>
                     <div className='justify-between flex w-full'>
-                        <button className='text-white bg-green-800 rounded-md px-4 py-1.5 w-20'>{order.status}</button>
+                        <button className='text-white bg-green-800 rounded-md px-4 py-1.5 w-fit'>{order.status}</button>
                         <span className='w-20 md:w-fit'>{date}</span>
                         <div className='flex gap-1 flex-col md:flex-row'>
                             <span className='font-bold'>Total Amount:</span>

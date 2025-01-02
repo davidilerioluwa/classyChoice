@@ -1,5 +1,17 @@
+import dbConnect from "@/app/lib/DBconnect";
 import Cart from "@/app/lib/models/Cart";
 import Order from "@/app/lib/models/Orders"
+import {v2 as cloudinary} from "cloudinary"
+cloudinary.config({
+    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+    api_key: process.env.CLOUDINARY_API_KEY,
+    api_secret: process.env.CLOUDINARY_API_SECRET,
+    secure:true
+  });
+  interface Url{
+    url?: string,
+    assetId?:string
+  }
 export async function PUT (req:Request){
     async function generateUniqueRandomNumber() {
         const MIN = 1;
@@ -19,11 +31,63 @@ export async function PUT (req:Request){
     const randomNumber= await generateUniqueRandomNumber()
     try{
         
-        const order= await new Response(req.body).json()
-        const newOrder= new Order(order)
-        newOrder.orderId=randomNumber
-        newOrder.save()
-        const deletedCart= await Cart.deleteMany({userId:order.userId})
+        const formData = await req.formData();
+    
+        // const newOrder= new Order(order)
+        // newOrder.orderId=randomNumber
+        const file =formData.get("paymentProof") as Blob | null
+        const items=JSON.parse(String(formData.get("items")))
+        const time=JSON.parse(String(formData.get("time")))
+        const userId=JSON.parse(String(formData.get("userId")))
+        const amount=formData.get("amount")
+        const note=formData.get("note")
+        const status=formData.get("status")
+        console.log(items);
+        console.log(time);
+        console.log(userId);
+        console.log(file);
+        const uploadImage=async()=>{
+          if (!file) return null;
+
+          const buffer = Buffer.from(await file.arrayBuffer());
+          const base64String = `data:${file.type};base64,${buffer.toString("base64")}`;
+          return new Promise<Url>((resolve, reject) => {
+                          // Use cloudinary.uploader.upload instead of upload_stream
+                          cloudinary.uploader.upload(
+                              base64String,
+                              { folder: "JENS" },
+                              (err, res) => {
+                                  if (err) {
+                                      reject(err);
+                                      console.log("Cloudinary upload error:", err);
+                                  } else {
+                                      console.log("Cloudinary upload response:", res);
+                                      const newUrl = {
+                                          url: res?.url,
+                                          assetId: res?.public_id,
+                                      };
+                                      resolve(newUrl);
+                                  }
+                              }
+                          );
+                      });
+        }
+        
+        const newImage= await uploadImage()
+        const newOrder= new Order({
+          items:items,
+          time:time,
+          userId:userId,
+          paymentProof:newImage,
+          orderId:randomNumber,
+          note:note,
+          status:status,
+          amount:amount
+        })
+        console.log(newOrder);
+        
+        await newOrder.save()
+        const deletedCart= await Cart.deleteMany({userId:userId})
         if(deletedCart){
             return  Response.json({
                 message:"sucessful",
@@ -44,7 +108,7 @@ export async function PUT (req:Request){
 }
 export async function POST (req:Request){
     
-
+await dbConnect();
     try{
         const userId= await new Response(req.body).json()
       const orders= await Order.find({userId:userId})

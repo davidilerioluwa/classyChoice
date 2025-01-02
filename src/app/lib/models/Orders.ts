@@ -13,7 +13,8 @@ export interface iOrder extends Document {
     status:string,
     amount: number,
     orderId:string,
-    note:string
+    note:string,
+    paymentProof: {url:string,assetId:string}
 }
 
 const orderSchema: Schema= new mongoose.Schema({
@@ -46,6 +47,10 @@ const orderSchema: Schema= new mongoose.Schema({
         type:String,
         required:false
     },
+    paymentProof:{
+        type: {url:String,assetId:String},
+        required:true
+    }
 
 })
 
