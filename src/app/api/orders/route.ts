@@ -2,7 +2,6 @@ import dbConnect from "@/app/lib/DBconnect";
 import Cart from "@/app/lib/models/Cart";
 import Order from "@/app/lib/models/Orders"
 import {v2 as cloudinary} from "cloudinary"
-import { time } from "console";
 cloudinary.config({
     cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
     api_key: process.env.CLOUDINARY_API_KEY,

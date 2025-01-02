@@ -12,7 +12,7 @@ import {  BsArrowRight } from 'react-icons/bs'
 
 
 const HomepageProducts = () => {
-    const [active,setActive]=useState(categories[0].mainCategory)
+    // const [active,setActive]=useState(categories[0].mainCategory)
     const [products,setProducts]=useState<Array<iProduct>>([])
     const [isLoading,setIsLoading]= useState(true)
     const [showListingForm,setShowListingForm]= useState(false)
@@ -66,7 +66,7 @@ const HomepageProducts = () => {
                 setProducts([])
             }
         })()
-    },[active])
+    },[])
   return (
     <section className='w-screen '>
        {showAreYouSure && <AreYouSure setShowAreYouSure={setShowAreYouSure}/> }
