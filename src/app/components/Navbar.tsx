@@ -42,11 +42,15 @@ const Navbar = () => {
       
       const res = await response.json()
        const getCart= async ()=>{
-              const response= await fetch("/api/cart")
-              const cart: Array<iCart>= await response.json()
-              console.log(cart);
-                const totalQuantity = cart.reduce((total, item) => total + Number(item.quantity), 0);
-                state.cartNumber=(totalQuantity)
+           try{
+            const response= await fetch("/api/cart")
+            const cart: Array<iCart>= await response.json()
+            console.log(cart);
+              const totalQuantity = cart.reduce((total, item) => total + Number(item.quantity), 0);
+              state.cartNumber=(totalQuantity)
+           }catch(error){
+            console.error("cart is empty")
+           }
       }
       getCart()
      try{
@@ -87,8 +91,8 @@ const CategoriesDropdown=()=>{
   function navigateToCategories(category:string){
     state.filter={
       category:category,
-      maxAmount:0,
-      minAmount:Infinity,
+      maxAmount:1000000,
+      minAmount:0,
       searchQuery:"",
       subCategory:""
     }
@@ -117,7 +121,10 @@ const AccountDropdown= ()=>{
       <Link href={"/account/cart"} className='p-2 text-nowrap hover:drop-shadow-lg rounded-md bg-white'>Cart</Link>
       <Link href={"/account/profile"} className='p-2 text-nowrap hover:drop-shadow-lg rounded-md bg-white'>Likes</Link>
       <Link href={"/account/orders"} className='p-2 text-nowrap hover:drop-shadow-lg rounded-md bg-white'>Orders</Link>
-      <button onClick={()=>signOut()} className='p-2 text-nowrap hover:drop-shadow-lg rounded-md bg-white text-left'>Sign out</button>
+      <button onClick={()=>{
+        signOut()
+        localStorage.setItem("user","")
+      }} className='p-2 text-nowrap hover:drop-shadow-lg rounded-md bg-white text-left'>Sign out</button>
     </div>
   }
   </>)

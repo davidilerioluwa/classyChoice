@@ -5,21 +5,22 @@ import { useRouter } from "next/navigation";
 import React, { useEffect } from "react";
 import { useState } from "react";
 import {BsCaretDown } from "react-icons/bs";
+import { useSnapshot } from "valtio";
 
 interface ChildProps {
   setShowSearch: React.Dispatch<React.SetStateAction<boolean>>;
 }
 const  Search: React.FC<ChildProps> =({setShowSearch})  =>{
+  const snap=useSnapshot(state)
   const router=useRouter()
-  const [searchQuery,setSearchQuery]=useState("")
-  const [startingAmount,setStartingAmount]=useState(0)
-  const [highestAmount,setHighestAmount]=useState(10000000)
-  const [category,setCategory]=useState("")
-  const [subCategory,setSubCategory]=useState("")
+  const [searchQuery,setSearchQuery]=useState(snap.filter.searchQuery)
+  const [startingAmount,setStartingAmount]=useState(snap.filter.minAmount)
+  const [highestAmount,setHighestAmount]=useState(snap.filter.maxAmount)
+  const [category,setCategory]=useState(snap.filter.category)
+  const [subCategory,setSubCategory]=useState(snap.filter.subCategory)
   const [subCategories,setSubCategories]=useState <Array<string>> ([])
 
 const search=async (e:React.MouseEvent<HTMLButtonElement, MouseEvent>)=>{
-  if(false){setSubCategory("")}
   e.preventDefault()
   
    state.filter={
@@ -53,23 +54,23 @@ const search=async (e:React.MouseEvent<HTMLButtonElement, MouseEvent>)=>{
           <form className="flex flex-col gap-2 text-sm">
               <div className="flex flex-col gap-1 w-full">
                 <label>Search Query</label>
-                <input type="text" onChange={(e)=>setSearchQuery(e.target.value)} className="border border-purple-800 rounded-md p-2 outline-none w-full" placeholder="Enter search query"/>
+                <input type="text" value={searchQuery} onChange={(e)=>setSearchQuery(e.target.value)} className="border border-purple-800 rounded-md p-2 outline-none w-full" placeholder="Enter search query"/>
               </div>
               <div className="grid grid-cols-2 gap-2 w-full">
                 <div className="flex flex-col gap-1 w-full">
                   <label>Starting Amount</label>
-                  <input onChange={(e)=>setStartingAmount(Number(e.target.value))} type="number" className="border border-purple-800 rounded-md p-2 outline-none" placeholder="Enter "/>
+                  <input value={startingAmount} onChange={(e)=>setStartingAmount(Number(e.target.value))} type="number" className="border border-purple-800 rounded-md p-2 outline-none" placeholder="Enter "/>
                 </div>
                 <div className="flex flex-col gap-1 w-full">
                   <label>Highest Amount</label>
-                  <input onChange={(e)=>setHighestAmount(Number(e.target.value))} type="number" className="border border-purple-800 rounded-md p-2 outline-none" placeholder="Enter "/>
+                  <input value={highestAmount} onChange={(e)=>setHighestAmount(Number(e.target.value))} type="number" className="border border-purple-800 rounded-md p-2 outline-none" placeholder="Enter "/>
                 </div>
               </div>
               <div className="flex gap-2 ">
                 <div className="flex flex-col gap-1 w-1/2">
                   <label>Category</label>
                   <div className="flex relative rounded-md justify-between">
-                    <select onChange={(e)=>setCategory(e.target.value)} className="appearance-none  outline-none w-full  border border-purple-800 p-2 rounded-md text-sm">
+                    <select value={category} onChange={(e)=>setCategory(e.target.value)} className="appearance-none  outline-none w-full  border border-purple-800 p-2 rounded-md text-sm">
                     <option className="hover:bg-purple-800 hover:text-white" value={""} >All</option>
                       {categories.map((category)=><option className="hover:bg-purple-800 hover:text-white" value={category.mainCategory} key={category.mainCategory}>{category.mainCategory}</option>)}
                     </select>

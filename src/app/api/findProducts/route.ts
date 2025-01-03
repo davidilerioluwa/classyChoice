@@ -93,7 +93,7 @@ const buildSearchQuery = ({
             category: request.category,
             subcategory:request.subcategory
         }
-        // console.log();
+        console.log(buildSearchQuery(searchParams));
         
         
         const products= await Product.find(buildSearchQuery(searchParams) ).sort({_id:-1})  

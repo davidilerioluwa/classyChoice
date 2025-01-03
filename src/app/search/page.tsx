@@ -9,8 +9,12 @@ import { HiAdjustmentsHorizontal } from "react-icons/hi2";
 import Search from '../components/Search'
 import CreateNewListingForm from '../components/CreateNewListingForm'
 import { toast } from 'sonner'
+import { useRouter } from 'next/navigation'
+
 
 const Page = () => {
+  const snap=useSnapshot(state)
+  const router=useRouter()
     const [products,setProducts]=useState<Array<iProduct>>([])
     const [isLoading,setIsLoading]= useState(true)
     const [showSearch,setShowSearch]=useState(false)
@@ -18,8 +22,7 @@ const Page = () => {
     const [EditListingId,setEditListingId]=useState("")
         const [deleteListingId,setDeleteListingId]=useState("")
           const [showAreYouSure, setShowAreYouSure] = useState (false);
-    
-    const snap=useSnapshot(state)
+    const [searchQuery,setSearchQuery]=useState(snap.filter.searchQuery)
     const deleteProduct=async ()=>{
       toast("loading")
       const response= await fetch("/api/products",{
@@ -44,10 +47,18 @@ const Page = () => {
         </div>
       </div>)
     }
+    const search=async (e:React.MouseEvent<HTMLButtonElement, MouseEvent>)=>{
+      e.preventDefault()
+      
+       state.filter.searchQuery=searchQuery
+     router.push("/search")
+      setShowSearch(false)
+    }
     useEffect(()=>{
         (async  function getProducts(){
           const filter= snap.filter
           console.log(filter);
+          setSearchQuery(snap.filter.searchQuery)
           
               try{
                   const response= await fetch("/api/findProducts",{
@@ -75,9 +86,9 @@ const Page = () => {
       {showListingForm?<CreateNewListingForm setShowListingForm={setShowListingForm} EditListingId={EditListingId}/>:""}
         {showSearch?<Search setShowSearch={setShowSearch}/>:""}
         <div className='w-full flex gap-2 mb-4 '>
-                        <input type='text' className='w-full px-2 text-purple-900 outline outline-[1px] outline-purple-900 rounded-md'/>
+                        <input type='text'  value={searchQuery} onChange={(e)=>setSearchQuery(e.target.value)}  className='w-full px-2 text-purple-900 outline outline-[1px] outline-purple-900 rounded-md'/>
                         <button className='bg-purple-900 px-4 py-2 rounded-md text-white text-3xl' onClick={()=>setShowSearch(true)}><HiAdjustmentsHorizontal/></button>
-                        <button className='bg-purple-900 px-4 py-2 rounded-md text-white'>Search</button>
+                        <button className='bg-purple-900 px-4 py-2 rounded-md text-white' onClick={(e)=>search(e)}>Search</button>
         </div>
         <div className=' bg-white drop-shadow-lg w-full rounded-md p-4'>
             <span className='font-bold text-sm py-2 mb-4'>{products.length?products.length+" results":""}</span>

@@ -18,6 +18,7 @@ const HomepageProducts = () => {
     const [EditListingId,setEditListingId]=useState("")
     const [deleteListingId,setDeleteListingId]=useState("")
           const [showAreYouSure, setShowAreYouSure] = useState (false);
+          
           const deleteProduct=async ()=>{
             toast("loading")
             const response= await fetch("/api/products",{
