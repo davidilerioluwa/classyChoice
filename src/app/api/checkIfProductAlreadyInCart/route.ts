@@ -8,10 +8,10 @@ export async function POST(req: NextRequest){
         const response= await new Response(req.body).json()
        const userId=response.userId
        const productId=response.productId
-       console.log(response);
+      //  console.log(response);
        
         const cart=await Cart.find({userId:userId,productId:productId})
-        console.log(cart);
+      //   console.log(cart);
         
         if(cart.length>0){
          return Response.json({
