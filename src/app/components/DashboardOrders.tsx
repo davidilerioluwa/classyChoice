@@ -14,7 +14,7 @@ const DashboardOrders = ({order}:{order:iOrder}) => {
     const [address,setAddress]=useState("")
     const [showOrders,setShowOrders]=useState(true)
     const [showDetailsPopup,setShowDetailsPopup]=useState(false)
-    console.log(email);
+    console.log(order);
     
     const userId=order.userId
    useEffect(()=>{

@@ -4,6 +4,11 @@ type iCategories={
 }
 
 export const categories: Array<iCategories>= [
+    
+    {
+        mainCategory:"Turkey Brand Fashion Items",
+        subCategories:["Men","Women","Boys","Girls"]
+    },
     {
         mainCategory:"Exercise And Fitness",
         subCategories:["Sport and Exercise","Waist Trainers and Body Shapers"]
@@ -39,9 +44,5 @@ export const categories: Array<iCategories>= [
     {
         mainCategory:"Others",
         subCategories:[]
-    },
-    {
-        mainCategory:"Turkey Brand Fashion Items",
-        subCategories:["Men","Women","Boys","Girls"]
     }
 ]
