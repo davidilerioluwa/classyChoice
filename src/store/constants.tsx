@@ -39,5 +39,9 @@ export const categories: Array<iCategories>= [
     {
         mainCategory:"Others",
         subCategories:[]
+    },
+    {
+        mainCategory:"Turkey Brand Fashion Items",
+        subCategories:["Men","Women","Boys","Girls"]
     }
 ]

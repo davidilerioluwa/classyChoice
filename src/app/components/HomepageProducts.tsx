@@ -2,7 +2,6 @@
 import React,{useState,useEffect} from 'react'
 import ProductsCard from './ProductsCard'
 import { iProduct } from '../lib/models/Product'
-import { categories } from '@/store/constants'
 import PacmanLoader from "react-spinners/PacmanLoader"
 import { toast } from 'sonner'
 import CreateNewListingForm from './CreateNewListingForm'
