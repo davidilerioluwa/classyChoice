@@ -121,7 +121,10 @@ const Page = () => {
         
         let totalAmount=0
         checkoutDetails.forEach((item)=>totalAmount=item.price+totalAmount)
+        console.log(newAmount.length);
         setTotalAmount(totalAmount);
+        if(newAmount.length==0){setTotalAmount(0)}
+       
      }
     useEffect(()=>{
          getCart()
