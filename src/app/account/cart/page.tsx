@@ -100,26 +100,31 @@ const Page = () => {
             console.error(error)
       } 
     }
-     const AddToTotalAmount=(newItem:iCheckoutDetails)=>{
-        const newAmount= checkoutDetails
-        {!newAmount.find((item)=>item.cartId==newItem.cartId) && newAmount.push(newItem)}
-        // checking if it previously exists on the checkoutDetails array
-       const previousItem= newAmount.find((item)=>item.cartId==newItem.cartId) 
-       if(previousItem){
-        const indexOfPrevious= newAmount.indexOf(previousItem)
-        newAmount[indexOfPrevious]=newItem
-        
-       }
+     const AddToTotalAmount=({newItem,removeItem}:{newItem?:iCheckoutDetails,removeItem?:iCheckoutDetails})=>{
+        let newAmount= checkoutDetails
+        if(newItem){
+            // checks if it previously exists on the checkoutDetails arrayBuffer, if it doesnt, it gets added
+            {!newAmount.find((item)=>item.cartId==newItem.cartId) && newAmount.push(newItem)}
+            // checking if it previously exists on the checkoutDetails array, if it does exist previously it gets updated
+            const previousItem= newAmount.find((item)=>item.cartId==newItem.cartId) 
+            if(previousItem){
+                const indexOfPrevious= newAmount.indexOf(previousItem)
+                newAmount[indexOfPrevious]=newItem
+                
+            }
+        }else if(removeItem){
+            newAmount= newAmount.filter((item)=>item.cartId!==removeItem.cartId)
+            
+        }
         setCheckoutDetails(newAmount)
+        console.log(newAmount);
+        
         let totalAmount=0
         checkoutDetails.forEach((item)=>totalAmount=item.price+totalAmount)
         setTotalAmount(totalAmount);
      }
     useEffect(()=>{
          getCart()
-    },[])
-    useEffect(()=>{
-
     },[])
   return (
     <>

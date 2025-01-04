@@ -11,7 +11,8 @@ type state = {
         category:string,
         subCategory:string
     },
-    cartNumber:number
+    cartNumber:number,
+    refreshNavbarCart:boolean
 }
 export const state = proxy<state>({
     userId: "",
@@ -22,5 +23,6 @@ export const state = proxy<state>({
         category:"",
         subCategory:""
     },
-    cartNumber:0
+    cartNumber:0,
+    refreshNavbarCart:true
 })

@@ -17,7 +17,7 @@ const HomepageProducts = () => {
     const [showListingForm,setShowListingForm]= useState(false)
     const [EditListingId,setEditListingId]=useState("")
     const [deleteListingId,setDeleteListingId]=useState("")
-          const [showAreYouSure, setShowAreYouSure] = useState (false);
+          const [showAreYouSure, setShowAreYouSure] = useState (false); 
           
           const deleteProduct=async ()=>{
             toast("loading")

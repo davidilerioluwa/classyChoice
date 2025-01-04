@@ -5,7 +5,7 @@ import { toast} from 'sonner'
 import { iCheckoutDetails } from '../account/cart/page'
 
 
-const CartItem = ({cartItem,getCart,AddToTotalAmount,setPaystackButton}:{cartItem:iCart,getCart:()=>void,AddToTotalAmount:(params:iCheckoutDetails)=>void,setPaystackButton:Dispatch<SetStateAction<boolean>>}) => {
+const CartItem = ({cartItem,getCart,AddToTotalAmount,setPaystackButton}:{cartItem:iCart,getCart:()=>void,AddToTotalAmount:({newItem,removeItem}:{newItem?:iCheckoutDetails,removeItem?:iCheckoutDetails})=>void,setPaystackButton:Dispatch<SetStateAction<boolean>>}) => {
     
     const [product,setProduct]= useState<iProduct>()
     const imageUrl=(product?(product.images?product.images[0].url:"loading"):"");
@@ -90,7 +90,11 @@ const CartItem = ({cartItem,getCart,AddToTotalAmount,setPaystackButton}:{cartIte
             
             if(res.message=="sucessfully deleted from cart"){
                 toast.success(res.message)
-                console.log(res.message);
+                const checkoutDetails: iCheckoutDetails={
+                    cartId:String(cartItem._id),
+                    price:Number(product?.price)*Number(cartItem.quantity)
+                }
+                AddToTotalAmount({removeItem:checkoutDetails})
                 getCart()
                 
                 
@@ -134,7 +138,7 @@ const CartItem = ({cartItem,getCart,AddToTotalAmount,setPaystackButton}:{cartIte
                 }
                 console.log(cartItem.quantity);
                 
-            AddToTotalAmount(checkoutDetails)
+            AddToTotalAmount({newItem:checkoutDetails})
         }
       },[product])
     

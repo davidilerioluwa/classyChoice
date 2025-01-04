@@ -8,7 +8,9 @@ export interface iProduct extends Document {
     subCategory:string
     quantityType:string
     unitsAvailable:number
-    images:Array<{url:string,assetId:string}>
+    images:Array<{url:string,assetId:string}>,
+    setDiscount: boolean
+    discount:number
 }
 
 const productSchema: Schema= new mongoose.Schema({
@@ -44,6 +46,14 @@ const productSchema: Schema= new mongoose.Schema({
         type: Array<string>,
         required: false,
     },
+    setDiscount:{
+        type:Boolean,
+        required:true
+    },
+    discount:{
+        type:Number,
+        required:false
+    }
 
 })
 

@@ -24,6 +24,8 @@ cloudinary.config({
           const quantityType = formData.get("quantityType");
           const unitsAvailable = formData.get("unitsAvailable");
           const files = formData.getAll("files") as Array<Blob | null>;
+          const setDiscount=formData.get("setDiscount")
+          const discount=formData.get("discount")
   
           // Convert the file uploads into promises
           const uploadPromises = files.map(async (file) => {
@@ -67,6 +69,8 @@ cloudinary.config({
               price: Number(price),
               images: validImages,
               unitsAvailable,
+              setDiscount,
+              discount
           });
           await newListing.save();
   
@@ -145,6 +149,8 @@ export async function PATCH(req:Request) {
         const subCategory= formData.get("subCategory")
         const quantityType=formData.get("quantityType")
         const unitsAvailable=formData.get("unitsAvailable")
+        const setDiscount=formData.get("setDiscount")
+          const discount=formData.get("discount")
         const imageUrls: Array<Url>=[]
         
         imageUrls.push(...oldImagesParsed)
@@ -198,7 +204,9 @@ export async function PATCH(req:Request) {
                     quantityType:quantityType,
                     price:Number(price),
                     images: totalImages,
-                    unitsAvailable:unitsAvailable
+                    unitsAvailable:unitsAvailable,
+                    setDiscount,
+                    discount
                     }
                     
                 const updatedListing=await Product.findOneAndUpdate({_id:id},{...newListing})

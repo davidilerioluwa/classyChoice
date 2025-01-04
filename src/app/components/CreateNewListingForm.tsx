@@ -20,6 +20,8 @@ const CreateNewListingForm = ({setShowListingForm,EditListingId}:{setShowListing
   const [deletedUrls,setDeletedUrls]=useState<Array<string>>([])
   const [QuantityType,setQuantityType]=useState("Limited Quantity")
   const [unitsAvailable,setUnitsAvailable]=useState(0)
+  const [SetDiscount,setSetDiscount]=useState(false)
+  const [discount,setDiscount]=useState(0)
   const  addNewFile= (e:ChangeEvent<HTMLInputElement>)=>{
     const formData= new FormData()
     const newFilesArray=files
@@ -53,6 +55,8 @@ const CreateNewListingForm = ({setShowListingForm,EditListingId}:{setShowListing
     formData.append("subCategory",subCategory)
     formData.append("quantityType",QuantityType)
     formData.append("unitsAvailable",String(unitsAvailable))
+    formData.append("setDiscount",String(SetDiscount))
+    formData.append("discount",String(discount))
     console.log(files);
     
     console.log(formData.getAll("files"));
@@ -101,6 +105,8 @@ const CreateNewListingForm = ({setShowListingForm,EditListingId}:{setShowListing
     formData.append("subCategory",subCategory)
     formData.append("quantityType",QuantityType)
     formData.append("unitsAvailable",String(unitsAvailable))
+    formData.append("setDiscount",String(SetDiscount))
+    formData.append("discount",String(discount))
     formData
    oldUrls.map((oldImg)=> formData.append("oldUrls",JSON.stringify({url:oldImg.url,assetId:oldImg.assetId})))
    deletedUrls.map((assetId)=> formData.append("deletedUrls",assetId))
@@ -171,6 +177,8 @@ const CreateNewListingForm = ({setShowListingForm,EditListingId}:{setShowListing
             setUnitsAvailable(products.unitsAvailable)
             setPrice(String(products.price))
             setOldUrls(products.images)
+            setSetDiscount(products.setDiscount)
+            setDiscount(products.discount)
           }
           
           
@@ -214,6 +222,16 @@ const CreateNewListingForm = ({setShowListingForm,EditListingId}:{setShowListing
                 <label>Price</label>
                 <input value={price} onChange={(e)=>setPrice(e.target.value)} type='number' className='px-2 py-2 text-purple-800 outline outline-[1px] outline-purple-800 rounded-md'/>
             </div>
+            <div className='flex gap-2'>
+              <label>Do you want to set a discount?</label>
+              <input type='checkbox' className='text-purple-900' checked={SetDiscount} onChange={(e)=>setSetDiscount(e.target.checked)}/>
+            </div>
+           {SetDiscount &&
+             <div className='flex flex-col gap-2'>
+              <label>Discounted Price:</label>
+              <input type='number'  className='px-2 py-2 text-purple-800 outline outline-[1px] outline-purple-800 rounded-md' value={discount} onChange={(e)=>setDiscount(Number(e.target.value))}/>
+            </div>
+           }
             <div className='flex flex-col gap-2'>
                 <label>Category</label>
                 <div className="flex relative rounded-md justify-between">

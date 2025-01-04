@@ -41,18 +41,7 @@ const Navbar = () => {
       }})
       
       const res = await response.json()
-       const getCart= async ()=>{
-           try{
-            const response= await fetch("/api/cart")
-            const cart: Array<iCart>= await response.json()
-            console.log(cart);
-              const totalQuantity = cart.reduce((total, item) => total + Number(item.quantity), 0);
-              state.cartNumber=(totalQuantity)
-           }catch(error){
-            console.error("cart is empty")
-           }
-      }
-      getCart()
+      
      try{
       localStorage.setItem("user", JSON.stringify(res.user));
       state.user=res.user
@@ -63,6 +52,20 @@ const Navbar = () => {
      }
     })()
   },[snap.userId])
+  useEffect(()=>{
+    const getCart= async ()=>{
+      try{
+       const response= await fetch("/api/cart")
+       const cart: Array<iCart>= await response.json()
+       console.log(cart);
+         const totalQuantity = cart.reduce((total, item) => total + Number(item.quantity), 0);
+         state.cartNumber=(totalQuantity)
+      }catch(error){
+       console.error("cart is empty")
+      }
+   }
+  getCart()
+  },[state.refreshNavbarCart])
   
   return (
     <nav className='flex fixed z-30 top-0  justify-between w-screen pl-4 pr-6 md:px-16 py-2 md:text-lg text-purple-800 bg-white drop-shadow-lg'>

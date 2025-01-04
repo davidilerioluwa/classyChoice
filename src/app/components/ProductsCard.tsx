@@ -4,6 +4,7 @@ import { state } from '@/store/state';
 import { useSnapshot } from 'valtio';
 import { toast } from 'sonner';
 import Image from 'next/image';
+import { iCart } from '../lib/models/Cart';
 
 const ProductsCard = ({product,setEditListingId,setShowListingForm,setDeleteListingId,setShowAreYouSure}:{product:iProduct,setEditListingId:React.Dispatch<React.SetStateAction<string>>,setShowListingForm:React.Dispatch<React.SetStateAction<boolean>>,setDeleteListingId:React.Dispatch<React.SetStateAction<string>>,setShowAreYouSure:React.Dispatch<React.SetStateAction<boolean>>}) => {
   const snap=useSnapshot(state)
@@ -26,7 +27,21 @@ const ProductsCard = ({product,setEditListingId,setShowListingForm,setDeleteList
       })
       const products=await response.json()
       if(products){
+       const getCart= async ()=>{
+             try{
+              const response= await fetch("/api/cart")
+              const cart: Array<iCart>= await response.json()
+              console.log(cart);
+                const totalQuantity = cart.reduce((total, item) => total + Number(item.quantity), 0);
+                state.cartNumber=(totalQuantity)
+             }catch(error){
+              console.error("cart is empty")
+             }
+          }
+         getCart()
+        
         toast.success("Item has been sucessfully added to cart")
+        
       }
       
       
@@ -57,12 +72,20 @@ const ProductsCard = ({product,setEditListingId,setShowListingForm,setDeleteList
   
   return (
     <div className={`bg-white drop-shadow-md p-3 rounded-md  md:flex flex-col gap-0.5 cursor-pointer `}>
-        <Image alt={product.title} loading='lazy' width={200} height={200} src={product.images?product.images[0].url:""} className='w-32 md:w-60 h-32 md:h-60 bg-white drop-shadow-lg m-0 rounded-md object-cover'/>
+        <div className='w-32 md:w-60 h-32 md:h-60'><Image alt={product.title} loading='lazy' width={200} height={200} src={product.images?product.images[0].url:""} className='w-32 md:w-60 h-32 md:h-60 bg-white drop-shadow-lg m-0 rounded-md object-cover'/></div>
         <p className='font-bold text-purple-800 mt-2 text-xs sm:text-sm md:text-md hover:text-purple-800 break-words w-32 md:hidden h-8'>{product.title.length>28?product.title.slice(0,30)+"...":product.title}</p>
         <p className='font-bold text-purple-800 mt-2 text-xs sm:text-sm md:text-md hover:text-purple-800 hidden md:flex break-words w-32 md:w-60 h-8'>{product.title.length>60?product.title.slice(0,60)+"...":product.title}</p>
-        <p className='text-purple-800 mb-2'>₦{product.price}</p>
+        {product.setDiscount?
+        <p className='text-purple-800 mb-2'>
+          <p className='text-gray-600 line-through'>₦{product.price}</p>
+          <p> ₦{product.discount}</p>
+        </p>
+        :<p className='text-purple-800 mb-2'>
+          <p>&nbsp; </p>
+          <p>₦{product.price}</p>  
+        </p>}
         {snap.user?.accountType=="admin"?
-          <div className='relative' 
+          <div className='relative flex flex-col justify-end' 
            onClick={()=>setShowEditMenu(!showEditMenu)}
            onMouseLeave={()=>setShowEditMenu(false)}
           >
