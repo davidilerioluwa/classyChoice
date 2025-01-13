@@ -122,7 +122,7 @@ export default function Page({ params }:{params:Params}) {
           <img  src={images?images[activeImage].url:""} className="w-full h-80 w-80 md:h-96 object-contain rounded-md"/>
           <div className="flex py-4 flex-wrap gap-2">
             {
-              images&& images.map((image,index)=> <img  src={image.url} onClick={()=>setActiveImage(index)} className={`object-cover w-14 h-14 rounded-md cursor-pointer ${activeImage==index?"border-2 border-purple-600":""} `}/>)
+              images&& images.map((image,index)=> <img  src={image.url} key={image.assetId} onClick={()=>setActiveImage(index)} className={`object-cover w-14 h-14 rounded-md cursor-pointer ${activeImage==index?"border-2 border-purple-600":""} `}/>)
             }
           </div>
           <div className="font-bold text-lg md:text-2xl">
