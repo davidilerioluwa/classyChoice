@@ -113,7 +113,7 @@ export async function POST (req:Request){
 await dbConnect();
     try{
         const userId= await new Response(req.body).json()
-      const orders= await Order.find({userId:userId})
+      const orders= await Order.find({userId:userId}).sort({_id:-1}) 
         return  Response.json(orders)
         
     }catch{

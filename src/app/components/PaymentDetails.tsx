@@ -1,8 +1,10 @@
 import Link from 'next/link'
 import React, { useState ,Dispatch, SetStateAction} from 'react'
+import { toast } from 'sonner'
 
 const PaymentDetails = ({setShowPaymentDetails,postToProducts}:{setShowPaymentDetails: Dispatch<SetStateAction<boolean>>,postToProducts:(file?:FileList)=>void}) => {
     const [file,setFile]= useState <FileList>()
+    const [disableButton,setDisableButton]=useState(false)
     const addFile=(e:React.ChangeEvent<HTMLInputElement>)=>{
             if(e.target.files){
                 setFile(e.target.files)
@@ -14,6 +16,8 @@ const PaymentDetails = ({setShowPaymentDetails,postToProducts}:{setShowPaymentDe
      <div className='w-screen fixed flex items-center justify-center bg-opacity-30  h-screen bg-black top-0 left-0 fixed z-30'>
         <form onSubmit={(e)=>{
             e.preventDefault()
+            setDisableButton(true)
+            toast("Loading...")
             postToProducts(file)
         }} className={`flex flex-col gap-4 relative items-center justify-center bg-white  p-6 rounded-md`}>
         <span onClick={()=>setShowPaymentDetails(false)} className='absolute top-2 right-2 px-3  pb-1 rounded-md cursor-pointer text-xl  text-purple-800 border border-purple-800 '>x</span>
@@ -38,7 +42,7 @@ const PaymentDetails = ({setShowPaymentDetails,postToProducts}:{setShowPaymentDe
                 <label>Upload Payment Proof</label>
                 <input className='w-full bg-purple-800 w-6 h-32 bg-opacity-10 cursor-pointer' type='file' accept='image/*' onChange={(e)=>addFile(e)}/>
             </div>
-            <button type='submit' className='bg-purple-900 text-white px-4 py-2 rounded-md w-full'>Confirm Order</button>
+            <button type='submit' disabled={disableButton} className='bg-purple-900 text-white px-4 py-2 rounded-md w-full'>Confirm Order</button>
         </form>
         </div>
   )

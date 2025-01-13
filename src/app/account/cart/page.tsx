@@ -73,7 +73,8 @@ const Page = () => {
         })
         const res=await response.json()
         if(res.message=="sucessful"){
-            toast.success("Order Sucessfully Paid")
+            toast.success("Order Sucessfully Placed Please wait for confirmation")
+            location.reload()
             getCart()
         }else{
             toast.error("Something Went Wrong")
@@ -173,17 +174,21 @@ const Page = () => {
                     </div>
                     <div  className='flex-col text-purple-900 '>
                         <span className='text-sm'>Shipping:</span>
-                        <div className='flex flex-col gap-2'>
-                            <div className='flex gap-2'>
-                                <input type='radio' checked={addressType=="default"} onChange={()=>setAddressType("default")} required={true} name='address' id='default' value={addressType}/>
-                                <span>Ship to default Address:</span>
-                            </div>
-                            <label>
-                                <div className='bg-purple-900 text-white text-sm drop-shadow-md  rounded-md w-full p-2 backdrop-blur-md bg-opacity-90'>
-                                    No 10, Karonwi street, Abule-Egba, Lagos.
-                                </div>
-                            </label>
-                        </div>
+                        {(snap.user?.address && snap.user?.phoneNumber && snap.user?.city && snap.user?.state)?
+                    <div className='flex flex-col gap-2'>
+                       <div className='flex gap-2'>
+                           <input type='radio' checked={addressType=="default"} onChange={()=>setAddressType("default")} required={true} name='address' id='default' value={addressType}/>
+                           <span>Ship to default Address:</span>
+                       </div>
+                       <label>
+                           <div className='bg-purple-900 text-white text-sm drop-shadow-md  rounded-md w-full p-2 backdrop-blur-md bg-opacity-90'>
+                               {snap.user?.address+", "+ snap.user?.city+","+ snap.user?.state}
+                           </div>
+                       </label>
+                   </div>
+                    :""    
+                    }
+                     
 
                         <div className='flex flex-col gap-2 mt-4'>
                             <div className='flex gap-2'>
