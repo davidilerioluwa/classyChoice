@@ -122,7 +122,7 @@ const AccountDropdown= ()=>{
     :<div className='absolute top-6 left-[-30px] w-fit bg-white p-4 rounded-md flex flex-col drop-shadow-md text-sm'>
       <Link href={"/account/profile"} className='p-2 w-32 text-nowrap hover:drop-shadow-lg rounded-md bg-white'>Account Profile</Link>
       <Link href={"/account/cart"} className='p-2 text-nowrap hover:drop-shadow-lg rounded-md bg-white'>Cart</Link>
-      <Link href={"/account/profile"} className='p-2 text-nowrap hover:drop-shadow-lg rounded-md bg-white'>Likes</Link>
+      {/* <Link href={"/account/profile"} className='p-2 text-nowrap hover:drop-shadow-lg rounded-md bg-white'>Likes</Link> */}
       <Link href={"/account/orders"} className='p-2 text-nowrap hover:drop-shadow-lg rounded-md bg-white'>Orders</Link>
       <button onClick={()=>{
         signOut()

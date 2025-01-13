@@ -8,7 +8,7 @@ import PacmanLoader from 'react-spinners/PacmanLoader';
 import { toast } from 'sonner';
 import UpdateProfileForm from '@/app/components/UpdateProfileForm';
 import PaymentDetails from '@/app/components/PaymentDetails';
-
+import { useRouter } from 'next/navigation';
 
 export interface iCheckoutDetails {
         cartId:string,
@@ -27,7 +27,9 @@ const Page = () => {
     const [showUpdateProfile,setShowUpdateProfile]= useState(false)
     const [note,setNote]=useState("")
     const snap=useSnapshot(state)
+    const router=useRouter()
     const postToProducts=async (file?:FileList)=>{
+        
         console.log(file);
         const formData=new FormData()
         
@@ -74,7 +76,7 @@ const Page = () => {
         const res=await response.json()
         if(res.message=="sucessful"){
             toast.success("Order Sucessfully Placed Please wait for confirmation")
-            location.reload()
+            router.push("/account/orders")
             getCart()
         }else{
             toast.error("Something Went Wrong")
@@ -178,7 +180,7 @@ const Page = () => {
                     <div className='flex flex-col gap-2'>
                        <div className='flex gap-2'>
                            <input type='radio' checked={addressType=="default"} onChange={()=>setAddressType("default")} required={true} name='address' id='default' value={addressType}/>
-                           <span>Ship to default Address:</span>
+                           <span className='cursor-pointer' onClick={()=>setAddressType("default")}>Ship to default Address:</span>
                        </div>
                        <label>
                            <div className='bg-purple-900 text-white text-sm drop-shadow-md  rounded-md w-full p-2 backdrop-blur-md bg-opacity-90'>
@@ -193,7 +195,7 @@ const Page = () => {
                         <div className='flex flex-col gap-2 mt-4'>
                             <div className='flex gap-2'>
                                 <input type='radio' required={true} checked={addressType=="different"} onChange={()=>setAddressType("different")} name='address' id='different' value={"different"}/>
-                                <span>Ship to a different Address:</span>
+                                <span className='cursor-pointer' onClick={()=>setAddressType("different")}>Ship to a different Address:</span>
                             </div>
                             {addressType=="different" &&
                             <label>
