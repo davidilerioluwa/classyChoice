@@ -1,5 +1,8 @@
 import mongoose,{Schema, Document } from "mongoose";
-
+export interface variation{
+variation: string,
+variants: Array<string>
+}
 export interface iProduct extends Document {
     title: string,
     description: string,
@@ -10,7 +13,8 @@ export interface iProduct extends Document {
     unitsAvailable:number
     images:Array<{url:string,assetId:string}>,
     setDiscount: boolean
-    discount:number
+    discount:number,
+    variations: Array<variation>
 }
 
 const productSchema: Schema= new mongoose.Schema({
@@ -43,8 +47,8 @@ const productSchema: Schema= new mongoose.Schema({
         required:true
     },
     images: {
-        type: Array<string>,
-        required: false,
+        type: Array,
+        required: true,
     },
     setDiscount:{
         type:Boolean,
@@ -53,7 +57,12 @@ const productSchema: Schema= new mongoose.Schema({
     discount:{
         type:Number,
         required:false
+    },
+    variations:{
+        type:Array,
+        required:false
     }
+
 
 })
 

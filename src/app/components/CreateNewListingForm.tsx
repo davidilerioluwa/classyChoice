@@ -2,11 +2,11 @@ import React, { ChangeEvent, Dispatch, SetStateAction,useEffect,useState } from 
 import { categories } from '@/store/constants'
 import { BsCaretDown } from 'react-icons/bs'
 import { toast } from 'sonner'
-import { iProduct } from '../lib/models/Product'
+import { iProduct, variation } from '../lib/models/Product'
 import PacmanLoader from 'react-spinners/PacmanLoader'
 import Loading from './Loading'
 
-const CreateNewListingForm = ({setShowListingForm,EditListingId}:{setShowListingForm:Dispatch<SetStateAction<boolean>>,EditListingId?:string}) => {
+const CreateNewListingForm = ({setShowListingForm,EditListingId,setEditListingId}:{setShowListingForm:Dispatch<SetStateAction<boolean>>,EditListingId?:string,setEditListingId?:Dispatch<SetStateAction<string>>}) => {
   const [files,setFiles]= useState<Array<File>>([])
   const [title,setTitle]= useState("")
   const [description,setDescription]=useState("")
@@ -22,6 +22,75 @@ const CreateNewListingForm = ({setShowListingForm,EditListingId}:{setShowListing
   const [unitsAvailable,setUnitsAvailable]=useState(0)
   const [SetDiscount,setSetDiscount]=useState(false)
   const [discount,setDiscount]=useState(0)
+  const [showCreateVariation,setShowCreateVariation]=useState("none")
+  const [oldVariationValue,setOldVariationValue]=useState("")
+  const [newVariationValue,setNewVariationValue]=useState("")
+  const [variations,setVariations]=useState<Array<variation>>([])
+  const [rerenderCount,setRerenderCount]=useState(0)
+  console.log(variations);
+  
+  const [currentVariation,setCurrentVariation]=useState("")
+  const [currentVariant,setCurrentVariant]=useState("")
+  const createNewVariation=(Variation:string)=>{
+    const oldVariations=variations
+    const toBeAddedVariations=[{
+      variation:Variation,
+      variants:[]
+    }]
+    setVariations(oldVariations.concat(toBeAddedVariations))
+  }
+  const addNewVariant=(newVariant:string)=>{
+    const variationToBeEdited=variations.find((variation)=>variation.variation==currentVariation)
+    if(variationToBeEdited){
+      const variationIndex=variations.indexOf(variationToBeEdited)
+      variationToBeEdited.variants.push(newVariant)
+      const oldVariations=variations
+    oldVariations[variationIndex]=variationToBeEdited
+    setVariations(oldVariations)
+    setCurrentVariant("")
+    }
+  }
+  const updateVariationName=({oldVariationValue,newVariationValue}:{oldVariationValue:string,newVariationValue:string})=>{
+    console.log(oldVariationValue,newVariationValue);
+    const variationItem=variations.find((variation)=>variation.variation=oldVariationValue)
+    if(variationItem){
+      variationItem.variation=newVariationValue
+    const variationIndex=variations.indexOf(variationItem)
+    const oldVariations=variations
+    oldVariations[variationIndex]=variationItem
+    setVariations(oldVariations)
+    setOldVariationValue("")
+    setNewVariationValue("")
+    console.log(variationItem);
+    
+    }
+  }
+  const deleteVariant=({variantName,currentVariation}:{variantName:string,currentVariation:string})=>{
+    // console.log(oldVariantValue);
+    console.log(currentVariation);
+    console.log(variantName);
+    
+    
+    const variationItem=variations.find((variation)=>variation.variation=currentVariation)
+    if(variationItem){
+      const oldVariations=variations
+      const variationIndex=variations.indexOf(variationItem)
+      const oldVariants=variationItem.variants
+      const newVariants=oldVariants.filter((variant)=>{
+        console.log(variant);
+        console.log(variantName);
+        console.log(!(variant==variantName));
+        
+        return !(variant==variantName)
+      })
+      variationItem.variants=newVariants
+      oldVariations[variationIndex]=variationItem
+      setVariations(oldVariations)
+      setShowCreateVariation("variant")
+      setRerenderCount(rerenderCount+1)
+
+    }
+  }
   const  addNewFile= (e:ChangeEvent<HTMLInputElement>)=>{
     const formData= new FormData()
     const newFilesArray=files
@@ -57,6 +126,7 @@ const CreateNewListingForm = ({setShowListingForm,EditListingId}:{setShowListing
     formData.append("unitsAvailable",String(unitsAvailable))
     formData.append("setDiscount",String(SetDiscount))
     formData.append("discount",String(discount))
+    formData.append("variations",JSON.stringify(variations))
     console.log(files);
     
     console.log(formData.getAll("files"));
@@ -107,6 +177,7 @@ const CreateNewListingForm = ({setShowListingForm,EditListingId}:{setShowListing
     formData.append("unitsAvailable",String(unitsAvailable))
     formData.append("setDiscount",String(SetDiscount))
     formData.append("discount",String(discount))
+    formData.append("variations",JSON.stringify(variations))
     formData
    oldUrls.map((oldImg)=> formData.append("oldUrls",JSON.stringify({url:oldImg.url,assetId:oldImg.assetId})))
    deletedUrls.map((assetId)=> formData.append("deletedUrls",assetId))
@@ -179,6 +250,9 @@ const CreateNewListingForm = ({setShowListingForm,EditListingId}:{setShowListing
             setOldUrls(products.images)
             setSetDiscount(products.setDiscount)
             setDiscount(products.discount)
+            console.log(products);
+            
+           {products.variations &&  setVariations(products.variations)}
           }
           
           
@@ -206,7 +280,12 @@ const CreateNewListingForm = ({setShowListingForm,EditListingId}:{setShowListing
     <div className='bg-black z-50 top-0 left-0 bg-opacity-50 fixed flex justify-center items-center h-screen w-screen md:py-40 p-10 md:p-20'>
         {isLoading?<Loading/>:""}
         <div className='bg-white rounded-md p-4 w-96 h-full md:h-screen  relative overflow-y-auto'>
-            <span onClick={()=>setShowListingForm(false)} className='absolute top-2 right-2 px-3  pb-1 rounded-md cursor-pointer text-xl  text-red-800 border border-red-800 '>x</span>
+            <span onClick={()=>{
+              setShowListingForm(false)
+              {setEditListingId && setEditListingId("")}
+              console.log(EditListingId);
+              
+            }} className='absolute top-2 right-2 px-3  pb-1 rounded-md cursor-pointer text-xl  text-purple-900 border border-purple-900 '>x</span>
             <h1 className='text-lg text-center mt-2 font-bold text-purple-800 w-full '>Create New Listing</h1>
             {isLoading?<div className='w-full h-full flex items-center justify-center '><PacmanLoader color='rgb(88 28 135 / var(--tw-text-opacity, 1))'/></div>:
             <form className='text-purple-800 flex flex-col gap-2' onSubmit={(e:React.FormEvent<HTMLFormElement>)=>{EditListingId?updateListing(e):CreateNewListing(e)}}>
@@ -251,6 +330,77 @@ const CreateNewListingForm = ({setShowListingForm,EditListingId}:{setShowListing
                     <span className="absolute right-2 flex items-center top-2 rounded-md bg-purple-800 p-1 text-white"><BsCaretDown/></span>
                 </div>
             </div>:""}
+            <div className=' py-2 flex flex-col gap-2'>
+              <h1 className='font-bold'>Variations</h1>
+              <div className='p-2 flex flex-col gap-2'>
+                {variations.map((variation)=>(
+                <div className='flex flex-col gap-1'>
+                  {oldVariationValue?
+                  <div className='flex w-full justify-between w-full gap-4'>
+                    <input value={newVariationValue} onChange={(e)=>setNewVariationValue(e.target.value)} className='px-2 py-2 text-purple-800 outline outline-[1px] outline-purple-800 rounded-md w-full'/>
+                    <button onClick={(e)=>{
+                      e.preventDefault()
+                      updateVariationName({oldVariationValue,newVariationValue})
+                    }}>Save</button>
+                  </div>:
+                  <div className='flex w-full justify-between'>
+                    <h1 className='font-bold'>{variation.variation}:</h1>
+                    <button onClick={(e)=>{
+                      e.preventDefault()
+                      setOldVariationValue(variation.variation)
+                      setNewVariationValue(variation.variation)
+                    }}>Edit</button>
+                  </div>
+                  }
+                  <div className='flex flex-wrap gap-2'>
+                    {variation.variants.map((variant)=> 
+                    <div  className='border border-purple-900 px-4 py-0.5 rounded-md flex items-center gap-1'>
+                      <span>{variant} </span>
+                      <span className='text-2xl mb-1 cursor-pointer' onClick={()=>{
+                        setCurrentVariation(variation.variation)
+                        deleteVariant({variantName:variant,currentVariation:variation.variation})
+                      }}>x</span>
+                    </div>)}
+                  </div>
+                </div>
+                ))}
+              </div>
+              {showCreateVariation=="variation" && 
+              <div className='flex flex-col gap-2' >
+                <label>Whats the name of the Variation?</label>
+                <div className='flex gap-2'>
+                  <input onChange={(e)=>setCurrentVariation(e.target.value)} className='px-2 py-2 text-purple-800 outline outline-[1px] outline-purple-800 rounded-md w-full'/>
+                  <button onClick={(e)=>{
+                    e.preventDefault()
+                    if(currentVariation){
+                      createNewVariation(currentVariation)
+                      setShowCreateVariation("variant")
+                      
+                    }
+                  }} className='text-white bg-purple-900 rounded-md py-2 px-4'>+</button>
+                </div>
+              </div>}
+              {(showCreateVariation=="variant" || showCreateVariation=="moreVariants") && 
+              <div className='flex flex-col gap-2' >
+                <label>Name of the new variant?</label>
+                <div className='flex gap-2'>
+                  <input onChange={(e)=>setCurrentVariant(e.target.value)} value={currentVariant} className='px-2 py-2 text-purple-800 outline outline-[1px] outline-purple-800 rounded-md w-full'/>
+                  <button onClick={(e)=>{
+                    e.preventDefault()
+                    if(currentVariant){
+                      addNewVariant(currentVariant)
+                    setShowCreateVariation("moreVariants")
+                    setCurrentVariant("")
+                    }
+                  }} className='text-white bg-purple-900 rounded-md py-2 px-4'>+</button>
+                </div>
+              </div>}
+              {(showCreateVariation=="none" || showCreateVariation=="moreVariants") && <button onClick={(e)=>{
+                e.preventDefault()
+                setShowCreateVariation("variation")
+              }}  className='bg-purple-900 w-full text-white py-2 rounded-md'>Create New Variation</button>}
+              
+            </div>
             <div className='flex flex-col gap-2'>
                 <label>Quantity Type</label>
                 <div className="flex relative rounded-md justify-between">

@@ -9,6 +9,7 @@ import { toast } from 'sonner';
 import Search from '@/app/components/Search';
 import { useSnapshot } from 'valtio';
 import { state } from '@/store/state';
+// import SearchTags from '@/app/components/SearchTags';
 
 const Page = () => {
     // const products=[1,2,3,4,5,6,7,8,9]
@@ -75,14 +76,16 @@ const Page = () => {
     
         <div className='w-full gap-4 h-full pb-12 mt-20 p-4'>
             {showAreYouSure && <AreYouSure setShowAreYouSure={setShowAreYouSure}/> }
-            {showListingForm?<CreateNewListingForm EditListingId={EditListingId} setShowListingForm={setShowListingForm}/>:""}
+            {showListingForm?<CreateNewListingForm setEditListingId={setEditListingId} EditListingId={EditListingId} setShowListingForm={setShowListingForm}/>:""}
             {showSearch?<Search setShowSearch={setShowSearch}/>:""}
+           
             <h1 className='font-bold p-2 text-lg text-purple-800 mb-2'>Products</h1>
             <div className='w-full flex gap-2 mb-4 '>
                                     <input type='text' className='w-full px-2 text-purple-900 outline outline-[1px] outline-purple-900 rounded-md'/>
                                     <button className='bg-purple-900 px-2 py-1.5 rounded-md text-white text-lg md:text-3xl' onClick={()=>setShowSearch(true)}><HiAdjustmentsHorizontal/></button>
                                     <button className='bg-purple-900 px-2 py-1.5 rounded-md text-white'>Search</button>
             </div>
+            {/* <SearchTags/> */}
             <p className='border border-purple-800  px-4 my-2 py-2 w-fit rounded-md text-purple-800 hover:underline cursor-pointer '  onClick={()=>setShowListingForm(true)}>Create New Listing</p>
             <section className='bg-white  border border-purple-100 drop-shadow-md rounded-md p-4 text-purple-800 w-full'>
                 {isLoading?<PacmanLoader color='rgb(88 28 135 / var(--tw-text-opacity, 1))'/>:""}

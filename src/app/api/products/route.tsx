@@ -26,6 +26,7 @@ cloudinary.config({
           const files = formData.getAll("files") as Array<Blob | null>;
           const setDiscount=formData.get("setDiscount")
           const discount=formData.get("discount")
+          const variations=JSON.parse(String(formData.get("variations")))
   
           // Convert the file uploads into promises
           const uploadPromises = files.map(async (file) => {
@@ -70,8 +71,11 @@ cloudinary.config({
               images: validImages,
               unitsAvailable,
               setDiscount,
-              discount
+              discount,
+              variations:variations
           });
+          console.log(newListing);
+          
           await newListing.save();
   
           console.log("final images:", validImages);
@@ -112,6 +116,7 @@ export async function PUT(req:Request) {
             url:string,
             assetId:string
         }
+      if(product.images.length){
         product.images.forEach(async (image:imageType)=>{
             const deleted=await cloudinary.uploader.destroy(image.assetId)  
             console.log(deleted);
@@ -122,6 +127,10 @@ export async function PUT(req:Request) {
             }
             
         })
+      }else{
+        const deletedProduct= await Product.deleteOne({_id:productId}) 
+        if(deletedProduct){}
+      }
 
         
         
@@ -150,6 +159,9 @@ export async function PATCH(req:Request) {
         const quantityType=formData.get("quantityType")
         const unitsAvailable=formData.get("unitsAvailable")
         const setDiscount=formData.get("setDiscount")
+        console.log("variations",formData.get("variations"));
+        
+        const variations=JSON.parse(String(formData.get("variations")))
           const discount=formData.get("discount")
         const imageUrls: Array<Url>=[]
         
@@ -206,8 +218,11 @@ export async function PATCH(req:Request) {
                     images: totalImages,
                     unitsAvailable:unitsAvailable,
                     setDiscount,
-                    discount
+                    discount,
+                    variations:variations
                     }
+                    console.log(variations);
+                    console.log(newListing);
                     
                 const updatedListing=await Product.findOneAndUpdate({_id:id},{...newListing})
                 if(updatedListing){}
