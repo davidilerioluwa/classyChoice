@@ -354,7 +354,7 @@ const CreateNewListingForm = ({setShowListingForm,EditListingId,setEditListingId
                   }
                   <div className='flex flex-wrap gap-2'>
                     {variation.variants.map((variant)=> 
-                    <div  className='border border-purple-900 px-4 py-0.5 rounded-md flex items-center gap-1'>
+                    <div  key={variant} className='border border-purple-900 px-4 py-0.5 rounded-md flex items-center gap-1'>
                       <span>{variant} </span>
                       <span className='text-2xl mb-1 cursor-pointer' onClick={()=>{
                         setCurrentVariation(variation.variation)
