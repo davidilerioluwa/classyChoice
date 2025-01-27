@@ -56,8 +56,10 @@ const Page = () => {
     }
     useEffect(()=>{
         (async  function getProducts(){
+          setIsLoading(true)
+          console.log(isLoading);
+          
           const filter= snap.filter
-          console.log(filter);
           setSearchQuery(snap.filter.searchQuery)
           
               try{
@@ -91,7 +93,7 @@ const Page = () => {
                         <button className='bg-purple-900 px-4 py-2 rounded-md text-white' onClick={(e)=>search(e)}>Search</button>
         </div>
         <div className=' bg-white drop-shadow-lg w-full rounded-md p-4'>
-            <span className='font-bold text-sm py-2 mb-4'>{products.length?products.length+" results":""}</span>
+            {!isLoading && <span className='font-bold text-sm py-2 mb-4 text-purple-900'>{products.length?products.length+" results":""}</span>}
                 <div >
                     {isLoading?<PacmanLoader color='rgb(88 28 135 / var(--tw-text-opacity, 1))'/>:<div className='flex flex-wrap items-center justify-center gap-2 md:gap-4'>{products.length?products.map((product)=><ProductsCard setShowAreYouSure={setShowAreYouSure} setDeleteListingId={setDeleteListingId} setEditListingId={setEditListingId} setShowListingForm={setShowListingForm} product={product} key={product.id}/>):"No Items Found, Please Try a new search"}</div>}
                 </div>

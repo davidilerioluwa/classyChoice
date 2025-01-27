@@ -127,11 +127,6 @@ const CreateNewListingForm = ({setShowListingForm,EditListingId,setEditListingId
     formData.append("setDiscount",String(SetDiscount))
     formData.append("discount",String(discount))
     formData.append("variations",JSON.stringify(variations))
-    console.log(files);
-    
-    console.log(formData.getAll("files"));
-    
-    
     toast("uploading")
     try {
         const response = await fetch('/api/products', {

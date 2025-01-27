@@ -48,6 +48,7 @@ const Page = () => {
       }
    useEffect(()=>{
           (async  function getProducts(){
+            setIsLoading(true)
             const filter= snap.filter
             console.log(filter);
             

@@ -28,7 +28,7 @@ const Page = () => {
     const [note,setNote]=useState("")
     const snap=useSnapshot(state)
     const router=useRouter()
-    const postToProducts=async (file?:FileList)=>{
+    const postToProducts=async (file?:FileList | null)=>{
         
         console.log(file);
         const formData=new FormData()
@@ -214,7 +214,17 @@ const Page = () => {
                     </div>
                     </div>
                     {(snap.user?.address && snap.user?.phoneNumber && snap.user?.city && snap.user?.state)?
-                   <button disabled={!showPaystackButton} onClick={()=>setShowPaymentDetails(true)} type='submit' className='bg-purple-900 text-white px-4 py-2 rounded-md w-full'>Proceed To Checkout</button>
+                   <button disabled={!showPaystackButton} onClick={()=>{
+                        // console.log();
+                        
+                        if(cart.length==0){
+                            toast.error("Please Add an Item to Your Cart before Proceeding")
+                        }else if(addressType=="different" && alternativeAddress==""){
+                            toast.error("Please Enter a Valid Address")
+                        }else{
+                            setShowPaymentDetails(true)
+                        }
+                   }} type='submit' className='bg-purple-900 text-white px-4 py-2 rounded-md w-full'>Proceed To Checkout</button>
                     :
                     <button onClick={()=>setShowUpdateProfile(true)} className='bg-purple-900 text-white px-4 py-2 rounded-md w-full'>Update Profile to proceed to Payment</button>
                     }
