@@ -4,21 +4,25 @@ import { useSnapshot } from 'valtio';
 import { state } from '@/store/state';
 import { toast } from 'sonner';
 import { iOrder } from '@/app/lib/models/Orders';
+import PacmanLoader from 'react-spinners/PacmanLoader';
 import OrderItem from '@/app/components/OrderItem';
 const Page = () => {
     const snap=useSnapshot(state)
     const [orders,setOrders]=useState<Array<iOrder>>([])
-    
+    const [isLoading,setIsLoading]=useState(false)
     const getProducts=async ()=>{
+        setIsLoading(true)
        try{
         const response= await fetch("/api/orders",{
             method:"POST",
             body:JSON.stringify(snap.user?snap.user._id:"nil")
         })
         const res=await response.json()
+        setIsLoading(false)
         setOrders(res);
        }catch{
         toast.error("something went wrong")
+        setIsLoading(false)
        }
         
     }
@@ -34,6 +38,7 @@ const Page = () => {
                         <button className='bg-purple-800 px-4 py-2 rounded-md text-white'>Search</button>
             </div>
            <div className='flex flex-col gap-2'>
+            {isLoading && <div className='px-4'><PacmanLoader  color='rgb(88 28 135 / var(--tw-text-opacity, 1))' /></div>}
            {orders.map((order)=>{
             const date= (new Date(String(order.time))).toLocaleString()
             return(<section key={order._id} className='bg-white text-xs  border border-purple-100 drop-shadow-md rounded-md p-4 text-purple-800 w-full'>

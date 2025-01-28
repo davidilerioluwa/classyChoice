@@ -9,8 +9,9 @@ import { useSnapshot } from "valtio";
 
 interface ChildProps {
   setShowSearch: React.Dispatch<React.SetStateAction<boolean>>;
+  SearchLink?:string
 }
-const  Search: React.FC<ChildProps> =({setShowSearch})  =>{
+const  Search: React.FC<ChildProps> =({setShowSearch,SearchLink})  =>{
   const snap=useSnapshot(state)
   const router=useRouter()
   const [searchQuery,setSearchQuery]=useState(snap.filter.searchQuery)
@@ -31,7 +32,12 @@ const search=async (e:React.MouseEvent<HTMLButtonElement, MouseEvent>)=>{
       subCategory:subCategory
     }
     
- router.push("/search")
+if(SearchLink){
+  router.push(SearchLink)
+}else{
+  router.push("/search")
+}
+
   setShowSearch(false)
 }
    useEffect(()=>{
