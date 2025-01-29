@@ -8,7 +8,9 @@ export default  function page () {
 return (
   <div className=''>
     <section className='w-screen h-fit md:h-screen mt-14 relative md:grid grid-cols-12 justify-between bg-purple-800'>
-      <img src="clothes.jpeg" className='object-cover w-full h-full md:hidden  h-[60] col-span-5' alt="" />
+      <div className='w-full h-full md:hidden  h-[60]'>
+        <img src="clothes.jpeg" className='object-cover w-full h-full md:hidden  h-[60] col-span-5' alt="" />
+      </div>
       <div className=' p-8 py-24 md:p-20 z-10 hidden md:flex flex-col col-span-7 gap-2 md:gap-4 justify-center items-start text-white'>
           <div className='absolute w-1/4 left-0 rounded-md   bg-purple-900 z-[-1] h-72 md:h-1/2'></div>
           <p>Shop Smart, Live Better</p>
