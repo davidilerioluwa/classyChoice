@@ -94,7 +94,7 @@ const Page = () => {
                         <button className='bg-purple-900 px-4 py-2 rounded-md text-white' onClick={(e)=>search(e)}>Search</button>
         </div>
         <SearchTags/> 
-        <div className=' bg-white h-full drop-shadow-lg w-full rounded-md p-4'>     
+        <div className='  w-full rounded-md py-4'>     
             {!isLoading && <span className='font-bold text-sm py-2 mb-4 text-purple-900'>{products.length?products.length+" results":""}</span>}
                 <div >
                     {isLoading?<PacmanLoader color='rgb(88 28 135 / var(--tw-text-opacity, 1))'/>:<div className='flex flex-wrap items-center justify-center gap-2 md:gap-4'>{products.length?products.map((product)=><ProductsCard setShowAreYouSure={setShowAreYouSure} setDeleteListingId={setDeleteListingId} setEditListingId={setEditListingId} setShowListingForm={setShowListingForm} product={product} key={product.id}/>):"No Items Found, Please Try a new search"}</div>}
