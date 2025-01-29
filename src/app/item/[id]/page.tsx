@@ -118,8 +118,10 @@ export default function Page({ params }:{params:Params}) {
         {showAreYouSure && <AreYouSure setShowAreYouSure={setShowAreYouSure}/> }
         {showListingForm?<CreateNewListingForm setShowListingForm={setShowListingForm} EditListingId={id}/>:""}
        <div className="mt-16 max-w-[1200px] flex flex-col lg:grid grid-cols-4 p-4 gap-4 ">
-        <div className="col-span-2 bg-white rounded-md p-4 drop-shadow-lg ">
-          <img  src={images?images[activeImage].url:""} className="w-full h-80 w-80 md:h-96 object-contain rounded-md"/>
+        <div className="col-span-2 bg-white  rounded-md p-4 drop-shadow-lg ">
+          <div className="w-[calc(100vw-64px)] h-[calc(100vw-8)] md:h-96 md:w-96">
+            <img  src={images?images[activeImage].url:""} className="w-full h-80 w-80 md:h-96 object-contain rounded-md"/>
+          </div>
           <div className="flex py-4 flex-wrap gap-2">
             {
               images&& images.map((image,index)=> <img  src={image.url} key={image.assetId} onClick={()=>setActiveImage(index)} className={`object-cover w-14 h-14 rounded-md cursor-pointer ${activeImage==index?"border-2 border-purple-600":""} `}/>)
