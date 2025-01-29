@@ -84,7 +84,7 @@ const Page = () => {
           })()
       },[snap.filter])
   return (
-    <div className='pt-24 px-4 lg:px-6 py-4 min-h-screen'>
+    <div className='pt-24 px-4 lg:px-6 py-4 h-full min-h-screen'>
        {showAreYouSure && <AreYouSure setShowAreYouSure={setShowAreYouSure}/> }
       {showListingForm?<CreateNewListingForm setShowListingForm={setShowListingForm} EditListingId={EditListingId}/>:""}
         {showSearch?<Search setShowSearch={setShowSearch}/>:""}
@@ -93,8 +93,8 @@ const Page = () => {
                         <button className='bg-purple-900 px-4 py-2 rounded-md text-white text-3xl' onClick={()=>setShowSearch(true)}><HiAdjustmentsHorizontal/></button>
                         <button className='bg-purple-900 px-4 py-2 rounded-md text-white' onClick={(e)=>search(e)}>Search</button>
         </div>
-        <SearchTags/>     
-        <div className=' bg-white drop-shadow-lg w-full rounded-md p-4'>     
+        <SearchTags/> 
+        <div className=' bg-white h-full drop-shadow-lg w-full rounded-md p-4'>     
             {!isLoading && <span className='font-bold text-sm py-2 mb-4 text-purple-900'>{products.length?products.length+" results":""}</span>}
                 <div >
                     {isLoading?<PacmanLoader color='rgb(88 28 135 / var(--tw-text-opacity, 1))'/>:<div className='flex flex-wrap items-center justify-center gap-2 md:gap-4'>{products.length?products.map((product)=><ProductsCard setShowAreYouSure={setShowAreYouSure} setDeleteListingId={setDeleteListingId} setEditListingId={setEditListingId} setShowListingForm={setShowListingForm} product={product} key={product.id}/>):"No Items Found, Please Try a new search"}</div>}

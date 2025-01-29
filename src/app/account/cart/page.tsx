@@ -139,7 +139,7 @@ const Page = () => {
         <PacmanLoader color='rgb(88 28 135 / var(--tw-text-opacity, 1))' />
     </div> 
     :
-        <div className='lg:h-screen h-full p-2 pt-24 lg:p-8 lg:pt-24 bg-white'>
+        <div className='lg:h-screen h-full p-4 pt-24 lg:p-8 lg:pt-24 bg-white'>
             {showUpdateProfile && <UpdateProfileForm setShowUpdateProfile={setShowUpdateProfile}/>}
             {showPaymentDetails && <PaymentDetails postToProducts={postToProducts} setShowPaymentDetails={setShowPaymentDetails}/>}
             <h1 className='font-bold p-2 text-lg text-purple-900 mb-2'>Shopping Cart ({cart.length})</h1>
