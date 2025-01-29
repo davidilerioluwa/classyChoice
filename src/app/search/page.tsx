@@ -10,6 +10,7 @@ import Search from '../components/Search'
 import CreateNewListingForm from '../components/CreateNewListingForm'
 import { toast } from 'sonner'
 import { useRouter } from 'next/navigation'
+import SearchTags from '../components/SearchTags'
 
 
 const Page = () => {
@@ -20,8 +21,8 @@ const Page = () => {
     const [showSearch,setShowSearch]=useState(false)
     const [showListingForm, setShowListingForm]=useState(false) 
     const [EditListingId,setEditListingId]=useState("")
-        const [deleteListingId,setDeleteListingId]=useState("")
-          const [showAreYouSure, setShowAreYouSure] = useState (false);
+    const [deleteListingId,setDeleteListingId]=useState("")
+    const [showAreYouSure, setShowAreYouSure] = useState (false);
     const [searchQuery,setSearchQuery]=useState(snap.filter.searchQuery)
     const deleteProduct=async ()=>{
       toast("loading")
@@ -92,7 +93,8 @@ const Page = () => {
                         <button className='bg-purple-900 px-4 py-2 rounded-md text-white text-3xl' onClick={()=>setShowSearch(true)}><HiAdjustmentsHorizontal/></button>
                         <button className='bg-purple-900 px-4 py-2 rounded-md text-white' onClick={(e)=>search(e)}>Search</button>
         </div>
-        <div className=' bg-white drop-shadow-lg w-full rounded-md p-4'>
+        <SearchTags/>     
+        <div className=' bg-white drop-shadow-lg w-full rounded-md p-4'>     
             {!isLoading && <span className='font-bold text-sm py-2 mb-4 text-purple-900'>{products.length?products.length+" results":""}</span>}
                 <div >
                     {isLoading?<PacmanLoader color='rgb(88 28 135 / var(--tw-text-opacity, 1))'/>:<div className='flex flex-wrap items-center justify-center gap-2 md:gap-4'>{products.length?products.map((product)=><ProductsCard setShowAreYouSure={setShowAreYouSure} setDeleteListingId={setDeleteListingId} setEditListingId={setEditListingId} setShowListingForm={setShowListingForm} product={product} key={product.id}/>):"No Items Found, Please Try a new search"}</div>}

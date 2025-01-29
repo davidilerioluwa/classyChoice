@@ -28,7 +28,9 @@ const SearchTags = () => {
                           category:"",
                           subCategory:''
                         }
-                      }}><AiOutlineClose/></span>
+                      }}>
+                        <AiOutlineClose/>
+                      </span>
                       {showCategoriesDropdown &&
                       <div className='absolute bg-white drop-shadow-lg p-3 rounded-md top-8 flex flex-col z-30'>
                         {categories.map((category)=><span onClick={()=>{
@@ -39,7 +41,7 @@ const SearchTags = () => {
                           }
                           router.push("/dashboard/products")
                           setShowCategoriesDropdown(false)
-                        }} className='cursor-pointer bg-white p-2 rounded-md hover:drop-shadow-lg w-full text-nowrap'>{category.mainCategory}</span>)}
+                        }} key={category.mainCategory} className='cursor-pointer bg-white p-2 rounded-md hover:drop-shadow-lg w-full text-nowrap'>{category.mainCategory}</span>)}
                       </div>
                       }
                     </div>}
