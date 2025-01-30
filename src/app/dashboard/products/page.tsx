@@ -10,6 +10,7 @@ import Search from '@/app/components/Search';
 import { useSnapshot } from 'valtio';
 import { state } from '@/store/state';
 import SearchTags from '@/app/components/SearchTags';
+import { useRouter } from 'next/navigation';
 
 const Page = () => {
     // const products=[1,2,3,4,5,6,7,8,9]
@@ -19,9 +20,15 @@ const Page = () => {
     const [EditListingId,setEditListingId]=useState("")
     const [deleteListingId,setDeleteListingId]=useState("")
     const [showSearch,setShowSearch]=useState(false)
-      const [showAreYouSure, setShowAreYouSure] = useState (false);
-        const snap=useSnapshot(state)
-    console.log(products);
+    const [showAreYouSure, setShowAreYouSure] = useState (false);
+    const [searchQuery,setSearchQuery]=useState("")
+    const snap=useSnapshot(state)
+  const router=useRouter()
+    const search=(e: React.FormEvent<HTMLFormElement>)=>{
+      e.preventDefault()
+      state.filter.searchQuery=searchQuery
+      router.push("/dashboard/products")
+    }
     const deleteProduct=async ()=>{
         toast("loading")
         const response= await fetch("/api/products",{
@@ -81,12 +88,12 @@ const Page = () => {
             {showSearch?<Search SearchLink='/dashboard/products' setShowSearch={setShowSearch}/>:""}
            
             <h1 className='font-bold p-2 text-lg text-purple-800 mb-2'>Products</h1>
-            <div className='w-full flex gap-2 mb-4 '>
-                                    <input type='text' className='w-full px-2 text-purple-900 outline outline-[1px] outline-purple-900 rounded-md'/>
+            <form onSubmit={(e)=>search(e)} className='w-full flex gap-2 mb-4 '>
+                                    <input onChange={(e)=>setSearchQuery(e.target.value)} value={searchQuery} type='text' className='w-full px-2 text-purple-900 outline outline-[1px] outline-purple-900 rounded-md'/>
                                     <button className='bg-purple-900 px-2 py-1.5 rounded-md text-white text-lg md:text-3xl' onClick={()=>setShowSearch(true)}><HiAdjustmentsHorizontal/></button>
-                                    <button className='bg-purple-900 px-2 py-1.5 rounded-md text-white'>Search</button>
-            </div>
-            <SearchTags/>
+                                    <button className='bg-purple-900 px-2 py-1.5 rounded-md text-white' type='submit'>Search</button>
+            </form>
+            <SearchTags redirectUrl="/dashboard/products"/>
             <p className='border border-purple-800  px-4 my-2 py-2 w-fit rounded-md bg-purple-900 text-white hover:underline cursor-pointer '  onClick={()=>setShowListingForm(true)}>Create New Listing</p>
             <section className='bg-white  border border-purple-100 drop-shadow-md rounded-md p-4 text-purple-800 w-full'>
                 {isLoading?<PacmanLoader color='rgb(88 28 135 / var(--tw-text-opacity, 1))'/>:""}

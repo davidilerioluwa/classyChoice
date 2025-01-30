@@ -93,7 +93,7 @@ const Page = () => {
                         <button className='bg-purple-900 px-4 py-2 rounded-md text-white text-3xl' onClick={()=>setShowSearch(true)}><HiAdjustmentsHorizontal/></button>
                         <button className='bg-purple-900 px-4 py-2 rounded-md text-white' onClick={(e)=>search(e)}>Search</button>
         </div>
-        <SearchTags/> 
+        <SearchTags redirectUrl="/dashboard/products"/> 
         <div className='  w-full rounded-md py-4'>     
             {!isLoading && <span className='font-bold text-sm py-2 mb-4 text-purple-900'>{products.length?products.length+" results":""}</span>}
                 <div >

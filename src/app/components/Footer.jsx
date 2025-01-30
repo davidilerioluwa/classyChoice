@@ -4,7 +4,7 @@ import { FaFacebook,FaWhatsapp,FaPhone } from 'react-icons/fa6'
 
 const Footer = () => {
   return (
-    <div  className=' drop-shadow-lg bg-purple-100 text-purple-900 p-4 m-4 md:m-8 rounded-md'>
+    <div  className=' drop-shadow-lg bg-purple-100 text-purple-900 p-4 m-4 md:m-12 lg:m-16 rounded-md'>
         <div className='flex  w-full items-center md:h-20'>
           <div className='w-1/4 hidden md:inline bg-purple-900 h-0.5'></div>
           <div className='w-full md:w-1/2 text-xl text-center font-bold'>Classy Choice Varieties Store</div>

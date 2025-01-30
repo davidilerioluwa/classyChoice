@@ -5,7 +5,7 @@ import React, { useEffect, useState } from 'react'
 import { AiOutlineClose } from "react-icons/ai";
 import { useSnapshot } from 'valtio';
 
-const SearchTags = () => {
+const SearchTags = ({redirectUrl}:{redirectUrl:string}) => {
   const snap=useSnapshot(state)
   const [showCategoriesDropdown,setShowCategoriesDropdown]=useState(false)
   // const [showSubCategories,setShowSubCategories]=useState(false)
@@ -39,7 +39,7 @@ const SearchTags = () => {
                             category:category.mainCategory,
                             subCategory:""
                           }
-                          router.push("/dashboard/products")
+                          router.push(redirectUrl)
                           setShowCategoriesDropdown(false)
                         }} key={category.mainCategory} className='cursor-pointer bg-white p-2 rounded-md hover:drop-shadow-lg w-full text-nowrap'>{category.mainCategory}</span>)}
                       </div>
@@ -69,7 +69,7 @@ const SearchTags = () => {
                             minAmount:minAmount,
                             maxAmount:maxAmount
                           }
-                          router.push("/dashboard/products")
+                          router.push(redirectUrl)
                           setShowPriceDropdown(false)
                         }}>Save</button>
                       </div>
