@@ -28,7 +28,7 @@ return (
       <img src="clothes.jpeg" className='object-cover w-full h-full hidden md:flex md:h-screen col-span-5' alt="" />
     </section>
     <HomepageProducts/>
-    {homepageSections.map((homepageSection)=><HompageSection sectionName={homepageSection.sectionName} productIds={homepageSection.productIds}/>)}
+    {homepageSections.map((homepageSection)=><HompageSection sectionName={homepageSection.sectionName} key={homepageSection.sectionName} productIds={homepageSection.productIds}/>)}
   </div>
 )
 }
