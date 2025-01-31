@@ -2,6 +2,8 @@
 import React from 'react'
 import HomepageProducts from './components/HomepageProducts'
 import Link from 'next/link'
+import { homepageSections } from '@/store/constants'
+import HompageSection from './components/Section'
 
 export default  function page () {
   
@@ -26,6 +28,7 @@ return (
       <img src="clothes.jpeg" className='object-cover w-full h-full hidden md:flex md:h-screen col-span-5' alt="" />
     </section>
     <HomepageProducts/>
+    {homepageSections.map((homepageSection)=><HompageSection sectionName={homepageSection.sectionName} productIds={homepageSection.productIds}/>)}
   </div>
 )
 }
