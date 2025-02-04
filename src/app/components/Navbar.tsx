@@ -41,10 +41,12 @@ const Navbar = () => {
       }})
       
       const res = await response.json()
+     
       
      try{
       localStorage.setItem("user", JSON.stringify(res.user));
       state.user=res.user
+      console.log(res.user);
       setLoggedIn(res.user)
       state.userId=(res.user?.id);
      } catch(error){

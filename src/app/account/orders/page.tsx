@@ -10,6 +10,8 @@ const Page = () => {
     const snap=useSnapshot(state)
     const [orders,setOrders]=useState<Array<iOrder>>([])
     const [isLoading,setIsLoading]=useState(false)
+    
+    console.log(orders);
     const getProducts=async ()=>{
         setIsLoading(true)
        try{
@@ -20,6 +22,8 @@ const Page = () => {
         const res=await response.json()
         setIsLoading(false)
         setOrders(res);
+        console.log((snap.user?snap.user._id:"nil"));
+        
        }catch{
         toast.error("something went wrong")
         setIsLoading(false)
@@ -31,7 +35,7 @@ const Page = () => {
     },[snap.user])
   return (
     
-        <div className='w-full gap-4 h-full pb-12 mt-20 p-4'>
+        <div className='w-full gap-4 h-full min-h-screen pb-12 mt-20 p-4'>
             <h1 className='font-bold p-2 text-lg text-purple-800 mb-2'>Orders</h1>
             <div className='w-full flex gap-2 mb-4 px-4'>
                         <input type='text' className='w-full px-2 text-purple-800 outline outline-[1px] outline-purple-800 rounded-md'/>

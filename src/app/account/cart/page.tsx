@@ -177,7 +177,7 @@ const Page = () => {
                     <div  className='flex-col text-purple-900 '>
                         <span className='text-sm'>Shipping:</span>
                         {(snap.user?.address && snap.user?.phoneNumber && snap.user?.city && snap.user?.state)?
-                    <div className='flex flex-col gap-2'>
+                    <div className='flex flex-col gap-2 text-sm'>
                        <div className='flex gap-2'>
                            <input type='radio' checked={addressType=="default"} onChange={()=>setAddressType("default")} required={true} name='address' id='default' value={addressType}/>
                            <span className='cursor-pointer' onClick={()=>setAddressType("default")}>Ship to default Address:</span>
@@ -192,7 +192,7 @@ const Page = () => {
                     }
                      
 
-                        <div className='flex flex-col gap-2 mt-4'>
+                        <div className='flex flex-col gap-2 mt-4 text-sm'>
                             <div className='flex gap-2'>
                                 <input type='radio' required={true} checked={addressType=="different"} onChange={()=>setAddressType("different")} name='address' id='different' value={"different"}/>
                                 <span className='cursor-pointer' onClick={()=>setAddressType("different")}>Ship to a different Address:</span>

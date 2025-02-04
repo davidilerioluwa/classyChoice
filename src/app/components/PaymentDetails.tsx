@@ -1,11 +1,13 @@
 import Link from 'next/link'
 import React, { useState ,Dispatch, SetStateAction} from 'react'
 import { toast } from 'sonner'
+import Loading from './Loading'
 
 const PaymentDetails = ({setShowPaymentDetails,postToProducts}:{setShowPaymentDetails: Dispatch<SetStateAction<boolean>>,postToProducts:(file?:FileList | null)=>void}) => {
     const [file,setFile]= useState <FileList | null>()
     const [disableButton,setDisableButton]=useState(false)
     const [url,setUrl]=useState("")
+    const [isLoading,setIsLoading]=useState(false)
     const addFile=(e:React.ChangeEvent<HTMLInputElement>)=>{
          
             {e.target.files && setFile(e.target.files)}  
@@ -19,14 +21,15 @@ const PaymentDetails = ({setShowPaymentDetails,postToProducts}:{setShowPaymentDe
             setUrl(url)
            }
     }
+  if(isLoading){return <Loading/>}
   return (
      <div className='w-screen fixed flex items-center px-4 py-4 justify-center bg-opacity-30 overflow-hidden  h-screen bg-black top-0 left-0 fixed z-30'>
         <div className=' bg-white relative p-6 rounded-md max-h-[calc(100vh-20px)] overflow-scroll'>
             <form onSubmit={(e)=>{
                 e.preventDefault()
                 if(file){
+                setIsLoading(true)
                 setDisableButton(true)
-                toast("Loading...")
                 postToProducts(file)
                 }else{
                     toast.error("Please Choose An Image to Complete Your Order")
