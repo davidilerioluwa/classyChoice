@@ -18,7 +18,7 @@ const SearchTags = ({redirectUrl}:{redirectUrl:string}) => {
     setMaxAmount(snap.filter.maxAmount)
   },[state.filter])
   return (
-    <div className='flex flex-wrap w-full text-purple-900 gap-2 '> 
+    <div className='flex flex-wrap w-full text-purple-900 gap-2 relative'> 
                     {snap.filter.category && 
                     <div onMouseLeave={()=>setShowCategoriesDropdown(false)}  className='border border-purple-900 px-4 py-1.5 rounded-md flex items-center gap-1 relative'>
                       <span className='cursor-pointer' onClick={()=>setShowCategoriesDropdown(true)} >{snap.filter.category}</span>
@@ -46,7 +46,7 @@ const SearchTags = ({redirectUrl}:{redirectUrl:string}) => {
                       }
                     </div>}
                     {!(snap.filter.minAmount==0 && snap.filter.maxAmount==10000000) && 
-                    <div onMouseLeave={()=>setShowPriceDropdown(false)}  className='relative border border-purple-900 px-4 py-1.5 rounded-md flex items-center gap-1'>
+                    <div onMouseLeave={()=>setShowPriceDropdown(false)}  className=' border border-purple-900 px-4 py-1.5 rounded-md flex items-center gap-1'>
                     <span onClick={()=>setShowPriceDropdown(true)} className='cursor-pointer'>{snap.filter.minAmount}-{snap.filter.maxAmount} </span>
                     <span className='text-lg cursor-pointer' onClick={()=>{
                          state.filter={
