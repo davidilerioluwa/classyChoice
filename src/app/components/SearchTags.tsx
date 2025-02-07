@@ -56,12 +56,12 @@ const SearchTags = ({redirectUrl}:{redirectUrl:string}) => {
                         }
                     }}><AiOutlineClose/></span>
                     {showPriceDropdown &&
-                      <div className='absolute bg-white drop-shadow-lg p-3 rounded-md flex flex-col gap-2 top-8 z-30'>
+                      <div className='absolute bg-white drop-shadow-lg p-3 rounded-md flex flex-col gap-2 left-0 top-8 z-30'>
                         <p className='font-bold'>Price(N)</p>
                        <div className=' flex gap-3 items-center'>
-                        <input value={minAmount} onChange={(e)=>setMinAmount(Number(e.target.value))} type='number' className='outline outline-[1px] outline-purple-800 rounded-md p-2'/>
+                        <input value={minAmount} onChange={(e)=>setMinAmount(Number(e.target.value))} type='number' className='outline outline-[1px] outline-purple-800 rounded-md p-2 w-32'/>
                         <span className='font-bold text-lg'>-</span>
-                        <input value={maxAmount} onChange={(e)=>setMaxAmount(Number(e.target.value))} type='number' className='outline outline-[1px] outline-purple-800 rounded-md p-2'/>
+                        <input value={maxAmount} onChange={(e)=>setMaxAmount(Number(e.target.value))} type='number' className='outline outline-[1px] outline-purple-800 rounded-md p-2 w-32'/>
                        </div>
                        <button className='bg-purple-900 text-white py-2 rounded-md'  onClick={()=>{
                           state.filter={

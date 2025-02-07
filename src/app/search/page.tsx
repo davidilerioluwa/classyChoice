@@ -48,7 +48,7 @@ const Page = () => {
         </div>
       </div>)
     }
-    const search=async (e:React.MouseEvent<HTMLButtonElement, MouseEvent>)=>{
+    const search=async (e: React.FormEvent<HTMLFormElement>)=>{
       e.preventDefault()
       
        state.filter.searchQuery=searchQuery
@@ -88,11 +88,11 @@ const Page = () => {
        {showAreYouSure && <AreYouSure setShowAreYouSure={setShowAreYouSure}/> }
       {showListingForm?<CreateNewListingForm setShowListingForm={setShowListingForm} EditListingId={EditListingId}/>:""}
         {showSearch?<Search setShowSearch={setShowSearch}/>:""}
-        <div className='w-full flex gap-2 mb-4 '>
+        <form onSubmit={(e)=>search(e)} className='w-full flex gap-2 mb-4 '>
                         <input type='text'  value={searchQuery} onChange={(e)=>setSearchQuery(e.target.value)}  className='w-full px-2 text-purple-900 outline outline-[1px] outline-purple-900 rounded-md'/>
                         <button className='bg-purple-900 px-4 py-2 rounded-md text-white text-3xl' onClick={()=>setShowSearch(true)}><HiAdjustmentsHorizontal/></button>
-                        <button className='bg-purple-900 px-4 py-2 rounded-md text-white' onClick={(e)=>search(e)}>Search</button>
-        </div>
+                        <button className='bg-purple-900 px-4 py-2 rounded-md text-white' type='submit'>Search</button>
+        </form>
         <SearchTags redirectUrl="/search"/> 
         <div className='  w-full rounded-md py-4'>     
             {!isLoading && <span className='font-bold text-sm py-2 mb-4 text-purple-900'>{products.length?products.length+" results":""}</span>}
