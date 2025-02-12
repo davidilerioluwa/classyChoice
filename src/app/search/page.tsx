@@ -88,9 +88,18 @@ const Page = () => {
        {showAreYouSure && <AreYouSure setShowAreYouSure={setShowAreYouSure}/> }
       {showListingForm?<CreateNewListingForm setShowListingForm={setShowListingForm} EditListingId={EditListingId}/>:""}
         {showSearch?<Search setShowSearch={setShowSearch}/>:""}
-        <form onSubmit={(e)=>search(e)} className='w-full flex gap-2 mb-4 '>
+        <form 
+        onSubmit={(e)=>search(e)} 
+        className='w-full flex gap-2 mb-4 '
+        >
                         <input type='text'  value={searchQuery} onChange={(e)=>setSearchQuery(e.target.value)}  className='w-full px-2 text-purple-900 outline outline-[1px] outline-purple-900 rounded-md'/>
-                        <button className='bg-purple-900 px-4 py-2 rounded-md text-white text-3xl' onClick={()=>setShowSearch(true)}><HiAdjustmentsHorizontal/></button>
+                        <button className='bg-purple-900 px-4 py-2 rounded-md text-white text-3xl' 
+                        type='button'
+                         onClick={()=>{
+                          
+                          setShowSearch(true)
+                          console.log(showSearch);
+                        }}><HiAdjustmentsHorizontal/></button>
                         <button className='bg-purple-900 px-4 py-2 rounded-md text-white' type='submit'>Search</button>
         </form>
         <SearchTags redirectUrl="/search"/> 
