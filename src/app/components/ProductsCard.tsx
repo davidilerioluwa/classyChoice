@@ -9,10 +9,9 @@ import Link from 'next/link';
 
 const ProductsCard = ({ product, setEditListingId, setShowListingForm, setDeleteListingId, setShowAreYouSure }: { product: iProduct, setEditListingId: React.Dispatch<React.SetStateAction<string>>, setShowListingForm: React.Dispatch<React.SetStateAction<boolean>>, setDeleteListingId: React.Dispatch<React.SetStateAction<string>>, setShowAreYouSure: React.Dispatch<React.SetStateAction<boolean>> }) => {
   const snap = useSnapshot(state)
-  const [disableAdd, setDisableAdd] = useState(true)
+  const [disableAdd, setDisableAdd] = useState(false)
   const [showEditMenu, setShowEditMenu] = useState(false)
   const [isLoading, setIsloading] = useState(true)
-
 
   const AddProductToCart = async () => {
     setDisableAdd(true)
@@ -33,7 +32,6 @@ const ProductsCard = ({ product, setEditListingId, setShowListingForm, setDelete
           try {
             const response = await fetch("/api/cart")
             const cart: Array<iCart> = await response.json()
-            console.log(cart);
             const totalQuantity = cart.reduce((total, item) => total + Number(item.quantity), 0);
             state.cartNumber = (totalQuantity)
           } catch (error) {
@@ -112,12 +110,15 @@ const ProductsCard = ({ product, setEditListingId, setShowListingForm, setDelete
         </div>
         :
         // will show for regular users
-        <button disabled={disableAdd} className='bg-purple-900 hover:bg-purple-950  text-white w-full rounded-md px-4 py-2 text-sm'
-         onClick={() =>{
+        <button disabled={disableAdd} className='bg-purple-900 hover:bg-purple-950  text-white w-full rounded-md px-4 py-2 text-sm cursor-pointer'
+         onClick={() =>{console.log(snap)
           // only allow adding to cart for logged in users
-          if(snap.userId){ AddProductToCart()}
+          
+          
+          if(snap.user?._id){ AddProductToCart()}
           else{ toast.error("Please Login and try again")}
-         } }
+         }
+         }
          >{isLoading?"Loading...":(disableAdd && snap.userId ? "Added To Cart" : "Add to Cart")}</button>
       }
     </div>

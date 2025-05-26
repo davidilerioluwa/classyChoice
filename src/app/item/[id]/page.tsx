@@ -85,6 +85,7 @@ export default function Page({ params }:{params:Params}) {
       }
     }
     useEffect(()=>{
+      console.log(disableAdd);
       const getProduct= async()=>{
         const response= await fetch("/api/filterProducts",{
           method:"POST",
