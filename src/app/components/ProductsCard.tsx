@@ -112,7 +112,13 @@ const ProductsCard = ({ product, setEditListingId, setShowListingForm, setDelete
         </div>
         :
         // will show for regular users
-        <button disabled={disableAdd} className='bg-purple-900 hover:bg-purple-950  text-white w-full rounded-md px-4 py-2 text-sm' onClick={(() => AddProductToCart())}>{isLoading?"Loading...":(disableAdd && snap.userId ? "Added To Cart" : "Add to Cart")}</button>
+        <button disabled={disableAdd} className='bg-purple-900 hover:bg-purple-950  text-white w-full rounded-md px-4 py-2 text-sm'
+         onClick={() =>{
+          // only allow adding to cart for logged in users
+          if(snap.userId){ AddProductToCart()}
+          else{ toast.error("Please Login and try again")}
+         } }
+         >{isLoading?"Loading...":(disableAdd && snap.userId ? "Added To Cart" : "Add to Cart")}</button>
       }
     </div>
   )
