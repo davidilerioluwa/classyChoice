@@ -75,7 +75,7 @@ const HomepageProducts = () => {
           <div>Latest Arrivals</div>
           <Link href={"/search"} className='flex gap-2 items-center'><span>View All</span> <span className='text-xl font-bolder'><BsArrowRight /></span></Link>
         </div>
-        {isLoading?<div className='flex justify-center'><PacmanLoader color='rgb(88 28 135 / var(--tw-text-opacity, 1))'/></div>:
+        {isLoading?<div className='flex justify-center p-20'><PacmanLoader color='rgb(88 28 135 / var(--tw-text-opacity, 1))'/></div>:
         <div className='flex flex-wrap gap-6 md:gap-4 justify-center p-2 md:p-4 bg-gray-100 pb-8 md:pb-16 '>
             {products.length?products.slice(0,10).map((product)=><ProductsCard setDeleteListingId={setDeleteListingId} setEditListingId={setEditListingId} setShowAreYouSure={setShowAreYouSure} setShowListingForm={setShowListingForm} product={product} key={product.id}/>):"No Items Found"}
         </div>}

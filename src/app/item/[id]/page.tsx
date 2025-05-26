@@ -78,6 +78,7 @@ export default function Page({ params }:{params:Params}) {
         })
       })
       const res=await response.json()
+      console.log("is item in cart: " + res.message);
       
       if(res.message == "This Item has not been added to cart"){
         setDisableAdd(false)
@@ -93,8 +94,6 @@ export default function Page({ params }:{params:Params}) {
         })
         const product= await response.json()
         setProduct(product[0])
-        console.log(product[0]);
-        
       }
       getProduct()
       CheckIfProductAlreadyInCart()
@@ -131,31 +130,32 @@ export default function Page({ params }:{params:Params}) {
             {product?.title}
           </div>
           <p className="font-bold text-lg md:text-2xl">₦{product?.price}</p>
+          {/* add to cart button */}
           {snap.user?.accountType=="admin"?
-          <div className='relative flex flex-col justify-end' 
-           onClick={()=>setShowEditMenu(!showEditMenu)}
-           onMouseLeave={()=>setShowEditMenu(false)}
-          >
-            <button className='bg-purple-900 hover:bg-purple-950  text-white w-full rounded-md px-4 py-2 text-sm'
-              
-            >Edit</button>
-            {showEditMenu?
-            <div className='absolute text-purple-900 w-full bg-white drop-shadow-lg rounded-md p-2 flex flex-col gap-1 top-[-65px]'>
-                <button className='bg-white p-1 rounded-md hover:drop-shadow-lg' onClick={()=>{
-                  // if(setEditListingId && setShowListingForm){
-                    // setEditListingId(String(id))
-                    setShowListingForm(true)
-                  // }
-                }}>Edit</button>
-                <button className='bg-white rounded-md p-1 hover:drop-shadow-lg' onClick={()=>{
-                  setShowAreYouSure(true)
-                }}>Delete</button>
+          // this part will show for admin users
+            <div className='relative flex flex-col justify-end' 
+            onClick={()=>setShowEditMenu(!showEditMenu)}
+            onMouseLeave={()=>setShowEditMenu(false)}
+            >
+              <button className='bg-purple-900 hover:bg-purple-950  text-white w-full rounded-md px-4 py-2 text-sm'>Edit</button>
+              {showEditMenu &&
+                <div className='absolute text-purple-900 w-full bg-white drop-shadow-lg rounded-md p-2 flex flex-col gap-1 top-[-65px]'>
+                    <button className='bg-white p-1 rounded-md hover:drop-shadow-lg' onClick={()=>{
+                      // if(setEditListingId && setShowListingForm){
+                        // setEditListingId(String(id))
+                        setShowListingForm(true)
+                      // }
+                    }}>Edit</button>
+                    <button className='bg-white rounded-md p-1 hover:drop-shadow-lg' onClick={()=>{
+                      setShowAreYouSure(true)
+                    }}>Delete</button>
+                </div>
+              }
             </div>
-            :""}
-          </div>
-        :
-          <button disabled={disableAdd} className='bg-purple-900 hover:bg-purple-950  text-white w-full rounded-md px-4 py-2 text-sm' onClick={(()=> AddProductToCart())}>{disableAdd?"Added To Cart":"Add to Cart"}</button>
-        }
+            // this will only show for non-admin (regular users)
+            :
+              <button disabled={disableAdd} className='bg-purple-900 hover:bg-purple-950  text-white w-full rounded-md px-4 py-2 text-sm' onClick={(()=> AddProductToCart())}>{disableAdd && snap.userId?"Added To Cart":"Add to Cart"}</button>
+            }
         </div>
         <div className="col-span-2 bg-white rounded-md p-4 drop-shadow-lg">
             <h1 className="text-lg font-bold">Product Description</h1>
