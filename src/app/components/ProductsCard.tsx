@@ -6,7 +6,6 @@ import { toast } from "sonner";
 import Image from "next/image";
 import { iCart } from "../lib/models/Cart";
 import Link from "next/link";
-import { get } from "http";
 
 const ProductsCard = ({
   product,
