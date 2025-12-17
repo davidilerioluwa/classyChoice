@@ -34,7 +34,7 @@ const Page = () => {
   return (
     <div className="w-full gap-4 h-full min-h-screen pb-12 mt-20 p-4">
       <h1 className="font-bold p-2 text-lg text-purple-800 mb-2">Orders</h1>
-      <div className="w-full flex gap-2 mb-4 px-4">
+      {/* <div className="w-full flex gap-2 mb-4 px-4">
         <input
           type="text"
           className="w-full px-2 text-purple-800 outline outline-[1px] outline-purple-800 rounded-md"
@@ -42,7 +42,7 @@ const Page = () => {
         <button className="bg-purple-800 px-4 py-2 rounded-md text-white">
           Search
         </button>
-      </div>
+      </div> */}
       <div className="flex flex-col gap-2">
         {isLoading && (
           <div className="px-4">
