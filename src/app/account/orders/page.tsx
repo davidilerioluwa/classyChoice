@@ -54,7 +54,7 @@ const Page = () => {
           return (
             <section
               key={order._id}
-              className="bg-white text-xs  border border-purple-100 drop-shadow-md rounded-md p-4 text-purple-800 w-full"
+              className=" text-xs rounded-md py-4 text-purple-800 w-full"
             >
               <div className="gap-2 flex flex-col gap-2 ">
                 <div className="flex flex-col gap-2 overflow-y-auto ">
@@ -64,7 +64,8 @@ const Page = () => {
                     </span>
                     <div className="flex gap-2 justify-between w-full">
                       <button className="text-white bg-green-800 rounded-md px-4 py-1.5">
-                        {order.status}
+                        {/* {order.status} */}
+                        Order Sucessful
                       </button>
                       <span className="w-20 md:w-fit">{date}</span>
 
