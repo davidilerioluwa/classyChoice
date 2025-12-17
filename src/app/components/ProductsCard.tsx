@@ -6,6 +6,7 @@ import { toast } from "sonner";
 import Image from "next/image";
 import { iCart } from "../lib/models/Cart";
 import Link from "next/link";
+import { set } from "mongoose";
 
 const ProductsCard = ({
   product,
@@ -70,8 +71,6 @@ const ProductsCard = ({
       }),
     });
     const res = await response.json();
-    console.log(res, product.title);
-
     setIsloading(false);
     if (res.message == "This Item has not been added to cart") {
       setDisableAdd(false);
@@ -87,7 +86,9 @@ const ProductsCard = ({
   };
 
   useEffect(() => {
-    CheckIfProductAlreadyInCart();
+    {
+      snap.user?._id ? CheckIfProductAlreadyInCart() : setIsloading(false);
+    }
   }, []);
 
   return (
@@ -172,8 +173,7 @@ const ProductsCard = ({
           disabled={disableAdd}
           className="bg-purple-900 hover:bg-purple-950  text-white w-full rounded-md px-4 py-2 text-sm cursor-pointer"
           onClick={() => {
-            console.log(snap);
-            // only allow adding to cart for logged in users
+            console.log(snap.user);
 
             if (snap.user?._id) {
               AddProductToCart();
