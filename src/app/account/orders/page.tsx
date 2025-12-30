@@ -53,7 +53,7 @@ const Page = () => {
           const date = new Date(String(order.time)).toLocaleString();
           return (
             <section
-              key={order._id}
+              key={String(order._id)}
               className=" text-xs rounded-md py-4 text-purple-800 w-full"
             >
               <div className="gap-2 flex flex-col gap-2 ">
