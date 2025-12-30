@@ -4,9 +4,12 @@ import { NextAuthOptions } from "next-auth";
 import dbConnect from "../../../lib/DBconnect";
 import { session } from "../../../lib/session";
 import { MongoDBAdapter } from "@auth/mongodb-adapter";
+import { MongoClient } from "mongodb";
 
 import User from "@/app/lib/models/User";
-const clientPromise = dbConnect().then((m) => m.connection.getClient());
+const clientPromise = dbConnect().then(
+  (m) => m.connection.getClient() as unknown as MongoClient
+);
 export const options: NextAuthOptions = {
   session: {
     strategy: "jwt",
