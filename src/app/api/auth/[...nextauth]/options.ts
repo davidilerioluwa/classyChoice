@@ -73,7 +73,7 @@ export const options: NextAuthOptions = {
               { new: true, upsert: false } // 'new: true' returns the modified document
             );
             console.log(account.providerAccountId);
-            // console.log(user);
+            console.log(user);
             // console.log(x);
           }
         default:
