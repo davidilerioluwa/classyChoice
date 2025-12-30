@@ -4,11 +4,8 @@ import { NextAuthOptions } from "next-auth";
 import dbConnect from "../../../lib/DBconnect";
 import { session } from "../../../lib/session";
 import { MongoDBAdapter } from "@auth/mongodb-adapter";
-import nodemailer from "nodemailer";
-import type { Transporter } from "nodemailer";
 
 import User from "@/app/lib/models/User";
-import { log } from "console";
 const clientPromise = dbConnect().then((m) => m.connection.getClient());
 export const options: NextAuthOptions = {
   session: {
@@ -34,7 +31,7 @@ export const options: NextAuthOptions = {
     }),
   ],
   callbacks: {
-    async signIn({ user, account, profile }) {
+    async signIn({ account, profile }) {
       await dbConnect();
 
       switch (account?.provider) {
@@ -86,7 +83,7 @@ export const options: NextAuthOptions = {
       return true;
     },
     session,
-    async jwt({ token, profile, account }) {
+    async jwt({ token, account }) {
       // user, account,
       if (account) {
         const user = await User.findOne({ email: account.providerAccountId });
