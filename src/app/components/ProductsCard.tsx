@@ -8,7 +8,7 @@ import { GoDash } from "react-icons/go";
 import { iCart } from "../lib/models/Cart";
 import Link from "next/link";
 import { FaPlus } from "react-icons/fa6";
-import { iCheckoutDetails } from "../account/cart/page";
+// import { iCheckoutDetails } from "../account/cart/page";
 
 const ProductsCard = ({
   product,
