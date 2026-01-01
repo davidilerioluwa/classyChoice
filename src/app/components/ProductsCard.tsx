@@ -84,10 +84,10 @@ const ProductsCard = ({
 
       if (res.message == "sucessfully deleted from cart") {
         toast.success(res.message);
-        const checkoutDetails: iCheckoutDetails = {
-          cartId: String(cartItem?._id),
-          price: Number(product?.price) * Number(cartItem?.quantity),
-        };
+        // const checkoutDetails: iCheckoutDetails = {
+        //   cartId: String(cartItem?._id),
+        //   price: Number(product?.price) * Number(cartItem?.quantity),
+        // };
         CheckIfProductAlreadyInCart();
       }
     } catch {}
