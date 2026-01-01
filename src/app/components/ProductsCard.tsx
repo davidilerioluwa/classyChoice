@@ -123,6 +123,7 @@ const ProductsCard = ({
         };
         await getCart();
         setAlreadyInCart(true);
+        CheckIfProductAlreadyInCart();
         toast.success("Item has been successfully added to cart");
       }
     } catch {
