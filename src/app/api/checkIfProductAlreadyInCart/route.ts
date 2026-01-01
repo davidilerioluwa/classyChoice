@@ -14,6 +14,7 @@ export async function POST(req: NextRequest) {
     if (cart.length > 0) {
       return Response.json({
         message: "This Item has already been added to cart",
+        cartItem: cart[0],
       });
     } else {
       return Response.json({
