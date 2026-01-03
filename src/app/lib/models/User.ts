@@ -1,5 +1,4 @@
 import mongoose, { Schema, Document } from "mongoose";
-import { signIn } from "next-auth/react";
 
 export interface iUser extends Document {
   email: string;
