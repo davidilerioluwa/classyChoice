@@ -81,6 +81,7 @@ export const options: NextAuthOptions = {
                 },
                 { new: true, upsert: false }
               );
+              console.log("user");
             } else {
               const user = await User.findOne({
                 email: account.providerAccountId,
@@ -92,6 +93,7 @@ export const options: NextAuthOptions = {
                 },
                 { new: true, upsert: false }
               );
+              console.log(newUser);
             }
           }
         default:
