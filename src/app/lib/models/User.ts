@@ -1,4 +1,5 @@
 import mongoose, { Schema, Document } from "mongoose";
+import { signIn } from "next-auth/react";
 
 export interface iUser extends Document {
   email: string;
@@ -42,6 +43,11 @@ const userSchema: Schema = new mongoose.Schema({
   provider: {
     type: String,
     required: false,
+  },
+  signInCount: {
+    type: Number,
+    required: false,
+    default: 0,
   },
 });
 

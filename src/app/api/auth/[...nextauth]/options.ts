@@ -67,17 +67,32 @@ export const options: NextAuthOptions = {
             console.log("no profile email");
             break;
           } else {
-            const user = await User.findOneAndUpdate(
-              { email: account.providerAccountId },
-              {
-                provider: "email",
-                accountType: "user",
-              },
-              { new: true, upsert: false } // 'new: true' returns the modified document
-            );
-            console.log(account.providerAccountId);
+            const user = await User.findOne({
+              email: account.providerAccountId,
+            });
             console.log(user);
-            // console.log(x);
+            if (user.signInCount === 0 || user.signInCount === undefined) {
+              const user = await User.findOneAndUpdate(
+                { email: account.providerAccountId },
+                {
+                  provider: "email",
+                  accountType: "user",
+                  signInCount: 1,
+                },
+                { new: true, upsert: false }
+              );
+            } else {
+              const user = await User.findOne({
+                email: account.providerAccountId,
+              });
+              const newUser = await User.findOneAndUpdate(
+                { email: account.providerAccountId },
+                {
+                  signInCount: (user.signInCount || 0) + 1,
+                },
+                { new: true, upsert: false }
+              );
+            }
           }
         default:
           break;
