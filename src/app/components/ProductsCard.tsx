@@ -166,7 +166,7 @@ const ProductsCard = ({
 
   return (
     <div className="bg-white drop-shadow-md p-3 rounded-md md:flex flex-col gap-0.5 cursor-pointer">
-      <Link href={`/item/${product._id}`}>
+      <Link href={`/item/${product._id}`} className="relative">
         <Image
           alt={product.title}
           loading="lazy"
@@ -175,6 +175,12 @@ const ProductsCard = ({
           src={product.images.length ? product.images[0].url : ""}
           className="w-32 w-[calc(50vw-52px)] md:w-60 h-32 md:h-60 bg-white drop-shadow-lg m-0 rounded-md object-cover"
         />
+        {product.unitsAvailable === 0 &&
+          product.quantityType !== "UnLimited Quantity" && (
+            <span className="absolute top-2 right-2 text-red-600 bg-white bg-opacity-75 px-2 py-1 rounded-md text-xs font-bold">
+              out of stock
+            </span>
+          )}
       </Link>
 
       <Link href={`/item/${product._id}`}>
@@ -271,7 +277,15 @@ const ProductsCard = ({
             </div>
           ) : (
             <button
-              className="bg-purple-900 hover:bg-purple-950 text-white w-full rounded-md px-4 py-2 h-10 text-sm cursor-pointer"
+              className={`bg-purple-900 hover:bg-purple-950 text-white w-full rounded-md px-4 py-2 h-10 text-sm cursor-pointer ${
+                product.unitsAvailable === 0 &&
+                product.quantityType !== "UnLimited Quantity" &&
+                "bg-gray-400  text-red-600 hover:bg-gray-400 cursor-not-allowed"
+              }`}
+              disabled={
+                product.unitsAvailable === 0 &&
+                product.quantityType !== "UnLimited Quantity"
+              }
               onClick={() => {
                 if (snap.user?._id) {
                   AddProductToCart();
@@ -280,7 +294,10 @@ const ProductsCard = ({
                 }
               }}
             >
-              Add to Cart
+              {product.unitsAvailable === 0 &&
+              product.quantityType !== "UnLimited Quantity"
+                ? "Out of Stock"
+                : "Add to Cart"}
             </button>
           )}
         </div>
