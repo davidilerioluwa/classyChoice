@@ -1,3 +1,4 @@
+import sendOrderSucessfulEmail from "./orderSucessfulEmail";
 import dbConnect from "@/app/lib/DBconnect";
 import Cart from "@/app/lib/models/Cart";
 import Order from "@/app/lib/models/Orders";
@@ -44,6 +45,7 @@ export async function PUT(req: Request) {
     const note = formData.get("note");
     const status = formData.get("status");
     const alternativeAddress = formData.get("alternativeAddress");
+    const email = formData.get("email");
     const uploadImage = async () => {
       if (!file) return null;
 
@@ -88,6 +90,7 @@ export async function PUT(req: Request) {
     await newOrder.save();
     const deletedCart = await Cart.deleteMany({ userId: userId });
     if (deletedCart) {
+      sendOrderSucessfulEmail({ email: email as string });
       return Response.json({
         message: "sucessful",
         statusCode: 201,
@@ -103,6 +106,7 @@ export async function PUT(req: Request) {
   }
 }
 export async function POST(req: Request) {
+  // orders for users
   await dbConnect();
   try {
     const userId = await new Response(req.body).json();
@@ -113,6 +117,7 @@ export async function POST(req: Request) {
   }
 }
 export async function GET() {
+  // all OrderDetails for admin
   try {
     const orders = await Order.find().sort({ time: -1 });
     console.log(orders);

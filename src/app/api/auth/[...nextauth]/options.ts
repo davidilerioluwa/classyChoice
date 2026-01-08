@@ -60,9 +60,6 @@ export const options: NextAuthOptions = {
           }
           break;
         case "email":
-          console.log("email");
-          console.log(account);
-
           if (!account?.providerAccountId) {
             console.log("no profile email");
             break;
@@ -70,30 +67,34 @@ export const options: NextAuthOptions = {
             const user = await User.findOne({
               email: account.providerAccountId,
             });
+            console.log(account.providerAccountId);
+
             console.log(user);
-            if (user.signInCount === 0 || user.signInCount === undefined) {
-              const user = await User.findOneAndUpdate(
-                { email: account.providerAccountId },
-                {
-                  provider: "email",
-                  accountType: "user",
-                  signInCount: 1,
-                },
-                { new: true, upsert: false }
-              );
-              console.log(user);
-            } else {
-              const user = await User.findOne({
-                email: account.providerAccountId,
-              });
-              const newUser = await User.findOneAndUpdate(
-                { email: account.providerAccountId },
-                {
-                  signInCount: (user.signInCount || 0) + 1,
-                },
-                { new: true, upsert: false }
-              );
-              console.log(newUser);
+            if (user) {
+              if (user.signInCount === 0 || user.signInCount === undefined) {
+                const user = await User.findOneAndUpdate(
+                  { email: account.providerAccountId },
+                  {
+                    provider: "email",
+                    accountType: "user",
+                    signInCount: 1,
+                  },
+                  { new: true, upsert: false }
+                );
+                console.log(user);
+              } else {
+                const user = await User.findOne({
+                  email: account.providerAccountId,
+                });
+                const newUser = await User.findOneAndUpdate(
+                  { email: account.providerAccountId },
+                  {
+                    signInCount: (user.signInCount || 0) + 1,
+                  },
+                  { new: true, upsert: false }
+                );
+                console.log(newUser);
+              }
             }
           }
         default:
