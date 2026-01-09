@@ -17,10 +17,6 @@ export const options: NextAuthOptions = {
   debug: true,
   adapter: MongoDBAdapter(clientPromise),
   providers: [
-    GoogleProvider({
-      clientId: String(process.env.clientId),
-      clientSecret: String(process.env.clientSecret),
-    }),
     EmailProvider({
       server: {
         host: process.env.EMAIL_SERVER_HOST,
@@ -31,6 +27,10 @@ export const options: NextAuthOptions = {
         },
       },
       from: process.env.EMAIL_FROM,
+    }),
+    GoogleProvider({
+      clientId: String(process.env.clientId),
+      clientSecret: String(process.env.clientSecret),
     }),
   ],
   callbacks: {
@@ -49,13 +49,13 @@ export const options: NextAuthOptions = {
             if (user) {
               // console.log(user);
             } else {
-              const newUser = new User({
-                name: profile.name,
-                email: profile.email,
-                accountType: "user",
-                provider: "google",
-              });
-              await newUser.save();
+              // const newUser = new User({
+              //   name: profile.name,
+              //   email: profile.email,
+              //   accountType: "user",
+              //   provider: "google",
+              // });
+              // await newUser.save();
             }
           }
           break;
@@ -104,14 +104,15 @@ export const options: NextAuthOptions = {
       return true;
     },
     session,
-    async jwt({ token, account }) {
+    async jwt({ token, user }) {
       // user, account,
-      if (account) {
-        const user = await User.findOne({ email: account.providerAccountId });
-        if (!user) {
+
+      if (user) {
+        const userProfile = await User.findOne({ email: user.email });
+        if (!userProfile) {
           throw new Error("No user found");
         }
-        token.id = user.id;
+        token.id = userProfile.id;
       }
       return token;
     },
