@@ -72,6 +72,7 @@ const Page = () => {
     formData.append("note", note);
     formData.append("alternativeAddress", alternativeAddress);
     formData.append("email", snap.user?.email || "nil");
+    formData.append("name", snap.user?.name || "nil");
 
     const response = await fetch("/api/orders", {
       method: "PUT",

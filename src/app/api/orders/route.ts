@@ -46,6 +46,7 @@ export async function PUT(req: Request) {
     const status = formData.get("status");
     const alternativeAddress = formData.get("alternativeAddress");
     const email = formData.get("email");
+    const name = formData.get("name");
     const uploadImage = async () => {
       if (!file) return null;
 
@@ -90,7 +91,11 @@ export async function PUT(req: Request) {
     await newOrder.save();
     const deletedCart = await Cart.deleteMany({ userId: userId });
     if (deletedCart) {
-      sendOrderSucessfulEmail({ email: email as string, items: items });
+      sendOrderSucessfulEmail({
+        email: email as string,
+        name: name as string,
+        items: items,
+      });
       return Response.json({
         message: "sucessful",
         statusCode: 201,

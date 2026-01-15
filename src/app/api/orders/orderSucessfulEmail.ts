@@ -17,8 +17,10 @@ const transporter = nodemailer.createTransport({
 const sendOrderSuccessfulEmail = async ({
   email,
   items,
+  name,
 }: {
   email: string;
+  name: string;
   items: {
     productId: string;
     quantity: string;
@@ -33,7 +35,7 @@ const sendOrderSuccessfulEmail = async ({
       <td>${index + 1}</td>
       <td>${item.title}</td>
       <td>${item.quantity}</td>
-      <td>$${item.price.toFixed(2)}</td>
+      <td>₦${item.price.toFixed(2)}</td>
     </tr>`;
     })
     .join("");
@@ -43,7 +45,7 @@ const sendOrderSuccessfulEmail = async ({
     0
   );
   const finalHtml = `
-  <strong>Your order has been placed successfully!</strong>
+
   <table style="width:100%; border-collapse: collapse; margin-top: 10px;">
     <thead>
       <tr style="text-align: left; border-bottom: 1px solid #ccc;">
@@ -71,11 +73,28 @@ const sendOrderSuccessfulEmail = async ({
       to: email,
       subject: "Order Successful",
       text: "Your order has been placed successfully.",
-      html: finalHtml,
+      html:
+        `  <strong>Your order has been placed successfully!</strong>` +
+        finalHtml,
     });
-
+    const messageToSeller = await transporter.sendMail({
+      from: '"Classy Choice Stores" <classychoicevarietiesstores@gmail.com>', // Professional sender format
+      to: "davidilerioluwa1998@gmail.com",
+      subject: "Order Successful",
+      text: "Your order has been placed successfully.",
+      html:
+        `  <strong>An order has sucessfully been Placed by </strong>` +
+        name +
+        // `<br/>Email Address: ${email}` +
+        finalHtml +
+        `. <br/> Please check the admin panel to process the order.`,
+    });
     console.log("Email sent successfully to: %s", email);
-    return { success: true, messageId: info.messageId };
+    return {
+      success: true,
+      messageId: info.messageId,
+      sellerMessageId: messageToSeller.messageId,
+    };
   } catch (error) {
     console.error("Error sending order email:", error);
     // You might want to log this to a service like Sentry
