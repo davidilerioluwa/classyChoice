@@ -90,7 +90,7 @@ export async function PUT(req: Request) {
     await newOrder.save();
     const deletedCart = await Cart.deleteMany({ userId: userId });
     if (deletedCart) {
-      sendOrderSucessfulEmail({ email: email as string });
+      sendOrderSucessfulEmail({ email: email as string, items: items });
       return Response.json({
         message: "sucessful",
         statusCode: 201,

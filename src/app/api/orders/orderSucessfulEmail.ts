@@ -14,14 +14,64 @@ const transporter = nodemailer.createTransport({
 /**
  * Sends a success email to the customer after an order is placed.
  */
-const sendOrderSuccessfulEmail = async ({ email }: { email: string }) => {
+const sendOrderSuccessfulEmail = async ({
+  email,
+  items,
+}: {
+  email: string;
+  items: {
+    productId: string;
+    quantity: string;
+    title: string;
+    price: number;
+  }[];
+}) => {
+  const tableRows = items
+    .map((item, index) => {
+      return `
+    <tr>
+      <td>${index + 1}</td>
+      <td>${item.title}</td>
+      <td>${item.quantity}</td>
+      <td>$${item.price.toFixed(2)}</td>
+    </tr>`;
+    })
+    .join("");
+
+  const total = items.reduce(
+    (sum, item) => sum + item.price * Number(item.quantity),
+    0
+  );
+  const finalHtml = `
+  <strong>Your order has been placed successfully!</strong>
+  <table style="width:100%; border-collapse: collapse; margin-top: 10px;">
+    <thead>
+      <tr style="text-align: left; border-bottom: 1px solid #ccc;">
+        <th>S/N</th>
+        <th>Product</th>
+        <th>Quantity</th>
+        <th>Price</th>
+      </tr>
+    </thead>
+    <tbody>
+      ${tableRows}
+    </tbody>
+    <tfoot>
+      <tr style="font-weight: bold; border-top: 2px solid #000;">
+        <td colspan="3" style="text-align: right;">Total:</td>
+        <td>₦${total.toFixed(2)}</td>
+      </tr>
+    </tfoot>
+  </table>
+`;
+
   try {
     const info = await transporter.sendMail({
       from: '"Classy Choice Stores" <classychoicevarietiesstores@gmail.com>', // Professional sender format
       to: email,
       subject: "Order Successful",
       text: "Your order has been placed successfully.",
-      html: "<strong>Your order has been placed successfully!</strong>",
+      html: finalHtml,
     });
 
     console.log("Email sent successfully to: %s", email);
