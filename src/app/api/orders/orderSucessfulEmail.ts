@@ -1,18 +1,20 @@
 import nodemailer from "nodemailer";
 
-// Initialize the transporter once (outside the function) to reuse the connection
+// Initialize the transporter with pooling for better reliability
 const transporter = nodemailer.createTransport({
+  pool: true, // Keeps the connection open to prevent intermittent handshake failures
   host: process.env.EMAIL_SERVER_HOST,
   port: Number(process.env.EMAIL_SERVER_PORT),
-  secure: process.env.EMAIL_SERVER_PORT === "465", // true for 465, false for other ports
+  secure: process.env.EMAIL_SERVER_PORT === "465",
   auth: {
     user: process.env.EMAIL_SERVER_USER,
     pass: process.env.EMAIL_SERVER_PASSWORD,
   },
+  maxConnections: 3, // Limits simultaneous connections to avoid being flagged as spam
 });
 
 /**
- * Sends a success email to the customer after an order is placed.
+ * Sends a success email to the customer and the seller after an order is placed.
  */
 const sendOrderSuccessfulEmail = async ({
   email,
@@ -29,67 +31,79 @@ const sendOrderSuccessfulEmail = async ({
   }[];
 }) => {
   const tableRows = items
-    .map((item, index) => {
-      return `
+    .map(
+      (item, index) => `
     <tr>
-      <td>${index + 1}</td>
-      <td>${item.title}</td>
-      <td>${item.quantity}</td>
-      <td>₦${item.price.toFixed(2)}</td>
-    </tr>`;
-    })
+      <td style="padding: 8px; border: 1px solid #ddd;">${index + 1}</td>
+      <td style="padding: 8px; border: 1px solid #ddd;">${item.title}</td>
+      <td style="padding: 8px; border: 1px solid #ddd;">${item.quantity}</td>
+      <td style="padding: 8px; border: 1px solid #ddd;">₦${item.price.toLocaleString(
+        undefined,
+        { minimumFractionDigits: 2 }
+      )}</td>
+    </tr>`
+    )
     .join("");
 
   const total = items.reduce(
     (sum, item) => sum + item.price * Number(item.quantity),
     0
   );
-  const finalHtml = `
 
-  <table style="width:100%; border-collapse: collapse; margin-top: 10px;">
-    <thead>
-      <tr style="text-align: left; border-bottom: 1px solid #ccc;">
-        <th>S/N</th>
-        <th>Product</th>
-        <th>Quantity</th>
-        <th>Price</th>
-      </tr>
-    </thead>
-    <tbody>
-      ${tableRows}
-    </tbody>
-    <tfoot>
-      <tr style="font-weight: bold; border-top: 2px solid #000;">
-        <td colspan="3" style="text-align: right;">Total:</td>
-        <td>₦${total.toFixed(2)}</td>
-      </tr>
-    </tfoot>
-  </table>
-`;
+  const finalHtml = `
+    <table style="width:100%; border-collapse: collapse; margin-top: 10px; font-family: sans-serif;">
+      <thead>
+        <tr style="text-align: left; background-color: #f2f2f2;">
+          <th style="padding: 8px; border: 1px solid #ddd;">S/N</th>
+          <th style="padding: 8px; border: 1px solid #ddd;">Product</th>
+          <th style="padding: 8px; border: 1px solid #ddd;">Quantity</th>
+          <th style="padding: 8px; border: 1px solid #ddd;">Price</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${tableRows}
+      </tbody>
+      <tfoot>
+        <tr style="font-weight: bold; border-top: 2px solid #000;">
+          <td colspan="3" style="text-align: right; padding: 8px;">Total:</td>
+          <td style="padding: 8px;">₦${total.toLocaleString(undefined, {
+            minimumFractionDigits: 2,
+          })}</td>
+        </tr>
+      </tfoot>
+    </table>
+  `;
 
   try {
-    const info = await transporter.sendMail({
-      from: '"Classy Choice Stores" <classychoicevarietiesstores@gmail.com>', // Professional sender format
+    // Define both email configurations
+    const customerMail = {
+      from: '"Classy Choice Stores" <classychoicevarietiesstores@gmail.com>',
       to: email,
-      subject: "Order Successful",
-      text: "Your order has been placed successfully.",
-      html:
-        `  <strong>Your order has been placed successfully!</strong>` +
-        finalHtml,
-    });
-    const messageToSeller = await transporter.sendMail({
-      from: '"Classy Choice Stores" <classychoicevarietiesstores@gmail.com>', // Professional sender format
+      subject: "Order Successful - Classy Choice Stores",
+      text: `Hi ${name}, your order has been placed successfully.`,
+      html: `<p>Hi ${name},</p><strong>Your order has been placed successfully!</strong>${finalHtml}`,
+    };
+
+    const sellerMail = {
+      from: '"Classy Choice Stores" <classychoicevarietiesstores@gmail.com>',
       to: "davidilerioluwa1998@gmail.com",
-      subject: "Order Successful",
-      text: "Your order has been placed successfully.",
-      html:
-        `  <strong>An order has sucessfully been Placed by </strong>` +
-        name +
-        // `<br/>Email Address: ${email}` +
-        finalHtml +
-        `. <br/> Please check the admin panel to process the order.`,
-    });
-    console.log("Email sent successfully to: %s", email);
+      subject: "New Order Received!",
+      text: `An order has been placed by ${name}.`,
+      html: `<strong>An order has successfully been placed by ${name}</strong><br/>Email: ${email}${finalHtml}<p>Please check the admin panel to process the order.</p>`,
+    };
+
+    // Send both emails concurrently
+    const [info, messageToSeller] = await Promise.all([
+      transporter.sendMail(customerMail),
+      transporter.sendMail(sellerMail),
+    ]);
+
+    console.log(
+      "Emails sent successfully. IDs:",
+      info.messageId,
+      messageToSeller.messageId
+    );
+
     return {
       success: true,
       messageId: info.messageId,
@@ -97,7 +111,6 @@ const sendOrderSuccessfulEmail = async ({
     };
   } catch (error) {
     console.error("Error sending order email:", error);
-    // You might want to log this to a service like Sentry
     return { success: false, error };
   }
 };
