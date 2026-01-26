@@ -4,7 +4,7 @@ import { createTransport } from "nodemailer";
 export async function sendVerificationRequest(
   params: SendVerificationRequestParams,
 ) {
-  const { identifier, url, provider, theme } = params;
+  const { identifier, url, provider } = params;
   const { host } = new URL(url);
 
   // NOTE: You can use any email service (Resend, SendGrid, etc.)
