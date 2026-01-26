@@ -16,7 +16,7 @@ export async function sendVerificationRequest(
     from: provider.from,
     subject: `Sign in to ${host}`,
     text: text({ url, host }),
-    html: html({ url, host, theme }),
+    html: html({ url, host }),
   });
 
   const failed = result.rejected.concat(result.pending).filter(Boolean);
@@ -26,7 +26,7 @@ export async function sendVerificationRequest(
 }
 
 // HTML Email template
-function html(params: { url: string; host: string; theme: any }) {
+function html(params: { url: string; host: string }) {
   const { url } = params;
   return `
     <body style="background: #f9f9f9;">
