@@ -27,7 +27,7 @@ export async function sendVerificationRequest(
 
 // HTML Email template
 function html(params: { url: string; host: string; theme: any }) {
-  const { url, host } = params;
+  const { url } = params;
   return `
     <body style="background: #f9f9f9;">
       <table width="100%" border="0" cellspacing="0" cellpadding="0">
