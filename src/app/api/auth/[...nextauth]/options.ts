@@ -5,14 +5,18 @@ import dbConnect from "../../../lib/DBconnect";
 import { session } from "../../../lib/session";
 import { MongoDBAdapter } from "@auth/mongodb-adapter";
 import { MongoClient } from "mongodb";
+import { sendVerificationRequest } from "./sendVerificationRequest";
 
 import User from "@/app/lib/models/User";
 const clientPromise = dbConnect().then(
-  (m) => m.connection.getClient() as unknown as MongoClient
+  (m) => m.connection.getClient() as unknown as MongoClient,
 );
 export const options: NextAuthOptions = {
   session: {
     strategy: "jwt",
+  },
+  pages: {
+    verifyRequest: "/auth/verify-request", // Custom verification request page
   },
   debug: true,
   adapter: MongoDBAdapter(clientPromise),
@@ -27,6 +31,7 @@ export const options: NextAuthOptions = {
         },
       },
       from: process.env.EMAIL_FROM,
+      sendVerificationRequest,
     }),
     GoogleProvider({
       clientId: String(process.env.clientId),
@@ -79,7 +84,7 @@ export const options: NextAuthOptions = {
                     accountType: "user",
                     signInCount: 1,
                   },
-                  { new: true, upsert: false }
+                  { new: true, upsert: false },
                 );
                 console.log(user);
               } else {
@@ -91,7 +96,7 @@ export const options: NextAuthOptions = {
                   {
                     signInCount: (user.signInCount || 0) + 1,
                   },
-                  { new: true, upsert: false }
+                  { new: true, upsert: false },
                 );
                 console.log(newUser);
               }
