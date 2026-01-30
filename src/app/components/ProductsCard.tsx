@@ -114,7 +114,7 @@ const ProductsCard = ({
             const cart: Array<iCart> = await response.json();
             const totalQuantity = cart.reduce(
               (total, item) => total + Number(item.quantity),
-              0
+              0,
             );
             state.cartNumber = totalQuantity;
           } catch (error) {
@@ -175,10 +175,18 @@ const ProductsCard = ({
           src={product.images.length ? product.images[0].url : ""}
           className="w-32 w-[calc(50vw-52px)] md:w-60 h-32 md:h-60 bg-white drop-shadow-lg m-0 rounded-md object-cover"
         />
+        {/* show out of stock badge */}
         {product.unitsAvailable === 0 &&
           product.quantityType !== "UnLimited Quantity" && (
             <span className="absolute top-2 right-2 text-red-600 bg-white bg-opacity-75 px-2 py-1 rounded-md text-xs font-bold">
               out of stock
+            </span>
+          )}
+        {product.quantityType === "Limited Quantity" &&
+          product.unitsAvailable <= 5 &&
+          product.unitsAvailable > 0 && (
+            <span className="absolute top-2 right-2 text-white bg-red-600 px-2 py-1 rounded-md text-xs font-bold">
+              Only {product.unitsAvailable} left
             </span>
           )}
       </Link>
@@ -270,7 +278,15 @@ const ProductsCard = ({
               </button>
               <button
                 onClick={() => increaseQuantity()}
-                className="bg-purple-900 hover:bg-purple-950 rounded-md h-10 w-10 text-2xl flex items-center justify-center transition-colors"
+                disabled={
+                  product.quantityType !== "UnLimited Quantity" &&
+                  Number(cartItem?.quantity) >= product.unitsAvailable
+                }
+                className={`bg-purple-900 hover:bg-purple-950 rounded-md h-10 w-10 text-2xl flex items-center justify-center transition-colors ${
+                  product.quantityType !== "UnLimited Quantity" &&
+                  Number(cartItem?.quantity) >= product.unitsAvailable &&
+                  "bg-gray-500 cursor-not-allowed hover:bg-gray-500"
+                }`}
               >
                 <FaPlus />
               </button>
