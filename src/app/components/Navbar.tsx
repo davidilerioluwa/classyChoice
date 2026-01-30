@@ -14,6 +14,7 @@ import { useRouter } from "next/navigation";
 import { iCart } from "../lib/models/Cart";
 // import { iCart } from '../lib/models/Cart';
 const Navbar = () => {
+  const router = useRouter();
   const snap = useSnapshot(state);
   const [showAccountDropdown, setShowAccountDropdown] = useState(false);
   const [showCategoriesDropdown, setShowCategoriesDropdown] = useState(false);
@@ -61,7 +62,7 @@ const Navbar = () => {
         const cart: Array<iCart> = await response.json();
         const totalQuantity = cart.reduce(
           (total, item) => total + Number(item.quantity),
-          0
+          0,
         );
         state.cartNumber = totalQuantity;
       } catch (error) {
@@ -122,15 +123,19 @@ const Navbar = () => {
         {snap.user?.accountType == "admin" ? (
           ""
         ) : (
-          <Link
-            href={"/account/cart"}
+          <button
+            onClick={() =>
+              snap.user
+                ? router.push("/account/cart")
+                : router.push("/api/auth/signin")
+            }
             className="py-1 cursor-pointer flex items-center relative"
           >
             <FiShoppingCart />
             <span className="absolute top-[-7px] right-[-17px] text-sm bg-purple-800 text-white rounded-full px-2">
               {snap.cartNumber}
             </span>
-          </Link>
+          </button>
         )}
       </div>
     </nav>

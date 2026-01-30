@@ -15,6 +15,12 @@ export interface iCheckoutDetails {
   price: number;
 }
 const Page = () => {
+  const snap = useSnapshot(state);
+  const router = useRouter();
+
+  if (!snap.user) {
+    router.push("/api/auth/signin");
+  }
   const [isLoading, setIsLoading] = useState(true);
   const [cart, setCart] = useState<Array<iCart>>([]);
   const [totalAmount, setTotalAmount] = useState<number>(0);
@@ -27,8 +33,7 @@ const Page = () => {
   const [alternativeAddress, setAlternativeAddress] = useState("");
   const [showUpdateProfile, setShowUpdateProfile] = useState(false);
   const [note, setNote] = useState("");
-  const snap = useSnapshot(state);
-  const router = useRouter();
+
   const postToProducts = async (file?: FileList | null) => {
     console.log(file);
     const formData = new FormData();
@@ -58,14 +63,14 @@ const Page = () => {
           title: product.title,
           price: product.price,
         };
-      })
+      }),
     );
     formData.append("paymentProof", file ? file[0] : "");
     formData.append("items", JSON.stringify(items));
     formData.append("time", JSON.stringify(date));
     formData.append(
       "userId",
-      JSON.stringify(snap.user ? snap.user._id : "nil")
+      JSON.stringify(snap.user ? snap.user._id : "nil"),
     );
     formData.append("status", "Awaiting Confirmation");
     formData.append("amount", String(totalAmount));
@@ -97,7 +102,7 @@ const Page = () => {
       setIsLoading(false);
       const totalQuantity = cart.reduce(
         (total, item) => total + Number(item.quantity),
-        0
+        0,
       );
       state.cartNumber = totalQuantity;
       if (cart.length) {
@@ -125,7 +130,7 @@ const Page = () => {
       }
       // checking if it previously exists on the checkoutDetails array, if it does exist previously it gets updated
       const previousItem = newAmount.find(
-        (item) => item.cartId == newItem.cartId
+        (item) => item.cartId == newItem.cartId,
       );
       if (previousItem) {
         const indexOfPrevious = newAmount.indexOf(previousItem);
@@ -315,7 +320,7 @@ const Page = () => {
 
                     if (cart.length == 0) {
                       toast.error(
-                        "Please Add an Item to Your Cart before Proceeding"
+                        "Please Add an Item to Your Cart before Proceeding",
                       );
                     } else if (
                       addressType == "different" &&
