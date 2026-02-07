@@ -1,35 +1,67 @@
-import Link from 'next/link'
-import React from 'react'
-import { FaFacebook,FaWhatsapp,FaPhone } from 'react-icons/fa6'
+import { categories } from "@/store/constants";
+import Link from "next/link";
+import React from "react";
+import { FaFacebook, FaWhatsapp, FaPhone } from "react-icons/fa6";
 
 const Footer = () => {
   return (
-    <div  className=' drop-shadow-lg bg-purple-100 text-purple-900 p-4 m-4 md:m-12 lg:m-16 rounded-md'>
-        <div className='flex  w-full items-center md:h-20'>
-          <div className='w-1/4 hidden md:inline bg-purple-900 h-0.5'></div>
-          <div className='w-full md:w-1/2 text-xl text-center font-bold'>Classy Choice Varieties Store</div>
-          <div className='w-1/4 hidden md:inline bg-purple-900 h-0.5'></div>
+    <footer className="w-full flex flex-col gap-4 md:gap-0 p-6 md:p-0 items-center justify-center">
+      <div className=" drop-shadow-lg bg-purple-100 text-purple-900 p-4 md:m-12 lg:m-16 rounded-md">
+        <div className="flex  w-full items-center md:h-20">
+          <div className="w-1/4 hidden md:inline bg-purple-900 h-0.5"></div>
+          <div className="w-full md:w-1/2 text-xl text-center font-bold">
+            Classy Choice Varieties Store
+          </div>
+          <div className="w-1/4 hidden md:inline bg-purple-900 h-0.5"></div>
         </div>
-        <div className='flex flex-col md:grid grid-cols-3   justify-center gap-4 md:gap-8 md:gap-32 items-center p-4 w-full'>
-          <div className='flex flex-col items-center justify-center text-sm font-bold gap-2'>
-            <span className='cursor-pointer'>08024013533</span>
-            <span className='cursor-pointer text-center'>Goshen house, Ijere-wasinmi, Pakuro, Lotto bus-stop, Lagos-Ibadan Expressway, Ogun State.</span>
-          
+        <div className="flex flex-col md:grid grid-cols-3   justify-center gap-4 md:gap-32 items-center p-4 w-full">
+          <div className="flex flex-col items-center justify-center text-sm font-bold gap-2">
+            <span className="cursor-pointer">08024013533</span>
+            <span className="cursor-pointer text-center">
+              Goshen house, Ijere-wasinmi, Pakuro, Lotto bus-stop, Lagos-Ibadan
+              Expressway, Ogun State.
+            </span>
           </div>
-          <div className='flex gap-4 justify-center md:gap-16 text-xl md:text-3xl'>
-            <span className='cursor-pointer'><FaFacebook/></span>
-            <span className='cursor-pointer'><FaWhatsapp/></span>
-            <span className='cursor-pointer'><FaPhone/></span>
+          <div className="flex gap-4 justify-center md:gap-16 text-xl md:text-3xl">
+            <span className="cursor-pointer">
+              <FaFacebook />
+            </span>
+            <span className="cursor-pointer">
+              <FaWhatsapp />
+            </span>
+            <span className="cursor-pointer">
+              <FaPhone />
+            </span>
           </div>
-          <div className='flex flex-row md:flex-col items-center justify-center text-sm font-bold gap-4 md:gap-2'>
-            <Link href={"/search"}  className='cursor-pointer' >Categories</Link>
-            <Link href={"/account/orders"} className='cursor-pointer'>Orders</Link>
-            <Link href={"/account/cart"} className='cursor-pointer'>Cart</Link>
-            <Link href={"/account/profile"} className='cursor-pointer'>Profile</Link>
+          <div className="flex flex-row md:flex-col items-center justify-center text-sm font-bold gap-4 md:gap-2">
+            <Link href={"/search"} className="cursor-pointer">
+              Categories
+            </Link>
+            <Link href={"/account/orders"} className="cursor-pointer">
+              Orders
+            </Link>
+            <Link href={"/account/cart"} className="cursor-pointer">
+              Cart
+            </Link>
+            <Link href={"/account/profile"} className="cursor-pointer">
+              Profile
+            </Link>
           </div>
         </div>
-    </div>
-  )
-}
+      </div>
+      {/* footer part 2 */}
+      <div className="drop-shadow-lg bg-purple-100 text-purple-900 p-4 font-bold md:m-12 lg:m-16 rounded-md w-full flex flex-col gap-2 md:hidden">
+        {categories.map((category) => (
+          <Link
+            href={`/search?category=${category.mainCategory}`}
+            className="cursor-pointer"
+          >
+            {category.mainCategory}
+          </Link>
+        ))}
+      </div>
+    </footer>
+  );
+};
 
-export default Footer
+export default Footer;
