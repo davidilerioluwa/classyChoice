@@ -1,11 +1,9 @@
 "use client";
 import { categories } from "@/store/constants";
-import { state } from "@/store/state";
 import { useRouter, useSearchParams } from "next/navigation";
 import React, { useEffect } from "react";
 import { useState } from "react";
 import { BsCaretDown } from "react-icons/bs";
-import { useSnapshot } from "valtio";
 
 interface ChildProps {
   setShowSearch: React.Dispatch<React.SetStateAction<boolean>>;
