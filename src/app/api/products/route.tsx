@@ -3,7 +3,6 @@ import Product from "@/app/lib/models/Product";
 import dbConnect from "@/app/lib/DBconnect";
 import { FilterQuery } from "mongoose";
 import { NextRequest } from "next/server";
-import { log } from "console";
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
   api_key: process.env.CLOUDINARY_API_KEY,

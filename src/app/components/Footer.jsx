@@ -54,6 +54,7 @@ const Footer = () => {
         {categories.map((category) => (
           <Link
             href={`/search?category=${category.mainCategory}`}
+            key={category.mainCategory}
             className="cursor-pointer"
           >
             {category.mainCategory}

@@ -2,7 +2,7 @@
 import React from "react";
 import HomepageProducts from "./components/HomepageProducts";
 import Link from "next/link";
-import { categories, homepageSections } from "@/store/constants";
+import { homepageSections } from "@/store/constants";
 import HompageSection from "./components/Section";
 
 export default function page() {

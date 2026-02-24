@@ -2,8 +2,6 @@
 import React, { useEffect, useState } from "react";
 import ProductsCard from "../components/ProductsCard";
 import { iProduct } from "../lib/models/Product";
-import { useSnapshot } from "valtio";
-import { state } from "@/store/state";
 import PacmanLoader from "react-spinners/PacmanLoader";
 import { HiAdjustmentsHorizontal } from "react-icons/hi2";
 import Search from "../components/Search";
@@ -31,7 +29,6 @@ const Page = () => {
   const [EditListingId, setEditListingId] = useState("");
   const [deleteListingId, setDeleteListingId] = useState("");
   const [showAreYouSure, setShowAreYouSure] = useState(false);
-  const [searchQuery, setSearchQuery] = useState(query);
   const deleteProduct = async () => {
     toast("loading");
     const response = await fetch("/api/products", {

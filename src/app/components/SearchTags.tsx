@@ -1,12 +1,8 @@
 import { categories } from "@/store/constants";
-import { state } from "@/store/state";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { AiOutlineClose } from "react-icons/ai";
-import { useSnapshot } from "valtio";
 import { useSearchParams } from "next/navigation";
-import { set } from "mongoose";
-
 const SearchTags = () => {
   // const snap = useSnapshot(state);
   const searchParams = useSearchParams();

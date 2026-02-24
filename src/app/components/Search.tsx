@@ -13,14 +13,10 @@ interface ChildProps {
 }
 const Search: React.FC<ChildProps> = ({ setShowSearch, SearchLink }) => {
   const searchParams = useSearchParams();
-  const [maxAmount, setMaxAmount] = useState(
-    searchParams.get("maxAmount") || "10000000",
-  );
   const [category, setCategory] = useState(searchParams.get("category") || "");
   const [subCategory, setSubCategory] = useState(
     searchParams.get("subCategory") || "",
   );
-  const snap = useSnapshot(state);
   const router = useRouter();
   const [searchQuery, setSearchQuery] = useState(
     searchParams.get("query") || "",
