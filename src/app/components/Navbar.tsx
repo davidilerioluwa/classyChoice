@@ -82,7 +82,7 @@ const Navbar = () => {
           ClassyChoice
         </Link>
       </div>
-      <div className="flex items-center gap-3 md:gap-4 text-sm md:text-md font-bolder">
+      <div className="flex items-center gap-3 md:gap-4 text-sm md:text-lg font-bolder">
         <div
           className="py-2 cursor-pointer relative"
           onMouseEnter={() => setShowCategoriesDropdown(true)}
