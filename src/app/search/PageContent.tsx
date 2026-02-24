@@ -30,17 +30,28 @@ const PageContent = () => {
   const [deleteListingId, setDeleteListingId] = useState("");
   const [showAreYouSure, setShowAreYouSure] = useState(false);
   const deleteProduct = async () => {
-    toast("loading");
+    toast.loading("Deleting..."); // Using loading state in toast is cleaner
     const response = await fetch("/api/products", {
       method: "PUT",
       body: JSON.stringify(deleteListingId),
     });
+
     const res = await response.json();
-    router.refresh();
-    if (res.message == "sucessfully deleted") {
-      toast.success("Item has been sucessfully deleted");
+
+    if (response.ok) {
+      // 1. Remove from local state immediately
+      setProducts((prev) => prev.filter((p) => p.id !== deleteListingId));
+      // 2. Close the modal
+      setShowAreYouSure(false);
+      // 3. Show success
+      toast.success("Item has been successfully deleted");
+      // 4. Refresh server cache
+      router.refresh();
+    } else {
+      toast.error("Failed to delete item");
     }
   };
+
   const AreYouSure = ({
     setShowAreYouSure,
   }: {
