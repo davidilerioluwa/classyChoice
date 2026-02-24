@@ -24,6 +24,7 @@ export const options: NextAuthOptions = {
     GoogleProvider({
       clientId: String(process.env.clientId),
       clientSecret: String(process.env.clientSecret),
+      allowDangerousEmailAccountLinking: true,
     }),
     EmailProvider({
       server: {
