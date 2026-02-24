@@ -36,8 +36,6 @@ const PageContent = () => {
       body: JSON.stringify(deleteListingId),
     });
 
-    const res = await response.json();
-
     if (response.ok) {
       // 1. Remove from local state immediately
       setProducts((prev) => prev.filter((p) => p.id !== deleteListingId));
