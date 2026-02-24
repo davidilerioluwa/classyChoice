@@ -36,7 +36,7 @@ const PageContent = () => {
       body: JSON.stringify(deleteListingId),
     });
     const res = await response.json();
-    location.reload();
+    router.refresh();
     if (res.message == "sucessfully deleted") {
       toast.success("Item has been sucessfully deleted");
     }
