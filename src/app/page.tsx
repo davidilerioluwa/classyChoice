@@ -22,7 +22,7 @@ export default function page() {
           <p className="text-2xl md:text-4xl lg:text-6xl font-bold text-white">
             Shop Smart, Live Better
           </p>
-          shows in desktop view only
+          {/* shows in desktop view only */}
           <p>
             Discover Endless Deals And Unbeatable Quality-Everything You Need.
           </p>

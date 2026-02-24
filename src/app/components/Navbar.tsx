@@ -74,10 +74,15 @@ const Navbar = () => {
 
   return (
     <nav className="flex fixed z-30 top-0  justify-between w-screen pl-4 pr-6 md:px-16 py-2 md:text-lg text-purple-800 bg-white drop-shadow-lg">
-      <div className="flex gap-3 md:gap-4     ">
-        <Link href="/" className="hover:underline py-2">
+      <div className="flex gap-3 md:gap-4 items-center    ">
+        <Link
+          href="/"
+          className="hover:underline py-2 font-bold text-xl md:text-2xl"
+        >
           ClassyChoice
         </Link>
+      </div>
+      <div className="flex items-center gap-3 md:gap-4 text-lg font-bolder">
         <div
           className="py-2 cursor-pointer relative"
           onMouseEnter={() => setShowCategoriesDropdown(true)}
@@ -93,8 +98,6 @@ const Navbar = () => {
           </span>
           {showCategoriesDropdown ? <CategoriesDropdown /> : ""}
         </div>
-      </div>
-      <div className="flex items-center gap-3 md:gap-4 text-lg font-bolder">
         {loggedIn ? (
           <span
             className="py-2 cursor-pointer flex relative"
