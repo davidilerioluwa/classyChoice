@@ -1,17 +1,16 @@
+"use client";
 import { categories } from "@/store/constants";
 import { useRouter } from "next/navigation";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, Suspense } from "react"; // Added Suspense
 import { AiOutlineClose } from "react-icons/ai";
 import { useSearchParams } from "next/navigation";
-const SearchTags = () => {
-  // const snap = useSnapshot(state);
+
+const SearchTagsContent = () => {
   const searchParams = useSearchParams();
-  // const minAmount =
-  // const maxAmount = searchParams.get("maxAmount") || "10000000";
   const [showCategoriesDropdown, setShowCategoriesDropdown] = useState(false);
-  // const [showSubCategories,setShowSubCategories]=useState(false)
   const [showPriceDropdown, setShowPriceDropdown] = useState(false);
   const query = searchParams.get("query") || "";
+
   const [minAmount, setMinAmount] = useState(
     Number(searchParams.get("minAmount")) || 0,
   );
@@ -23,13 +22,12 @@ const SearchTags = () => {
   const [subCategory, setSubCategory] = useState(
     searchParams.get("subCategory") || "",
   );
-  // const snap = useSnapshot(state);
+
   const router = useRouter();
+
   const redirectToSearch = (overrides = {}) => {
-    // 1. Get current params
     const params = new URLSearchParams(searchParams.toString());
 
-    // 2. Apply current local state values
     if (minAmount !== 0) params.set("minAmount", minAmount.toString());
     else params.delete("minAmount");
 
@@ -40,7 +38,6 @@ const SearchTags = () => {
     if (subCategory) params.set("subCategory", subCategory);
     if (query) params.set("query", query);
 
-    // 3. Apply overrides (this solves your click issue)
     Object.entries(overrides).forEach(([key, value]) => {
       if (value) {
         params.set(key, value as string);
@@ -51,13 +48,14 @@ const SearchTags = () => {
 
     router.push(`/search?${params.toString()}`);
   };
+
   useEffect(() => {
     setMinAmount(Number(searchParams.get("minAmount")) || 0);
     setMaxAmount(Number(searchParams.get("maxAmount")) || 10000000);
     setCategory(searchParams.get("category") || "");
     setSubCategory(searchParams.get("subCategory") || "");
-    // setSearchQuery(searchParams.get("query") || "");
   }, [searchParams]);
+
   return (
     <div className="flex flex-wrap w-full text-purple-900 gap-2 relative">
       {category && (
@@ -69,8 +67,6 @@ const SearchTags = () => {
             className="cursor-pointer"
             onClick={() => setShowCategoriesDropdown(true)}
           >
-            {/* {snap.filter.category}
-             */}
             {category}
           </span>
           <span
@@ -83,7 +79,6 @@ const SearchTags = () => {
           >
             <AiOutlineClose />
           </span>
-          {/* set category */}
           {showCategoriesDropdown && (
             <div className="absolute bg-white drop-shadow-lg p-3 rounded-md top-8 flex flex-col z-30">
               {categories.map((category) => (
@@ -91,7 +86,6 @@ const SearchTags = () => {
                   onClick={() => {
                     const newCat = category.mainCategory;
                     setCategory(newCat);
-                    // Pass the new value directly so we don't wait for React state
                     redirectToSearch({ category: newCat });
                     setShowCategoriesDropdown(false);
                   }}
@@ -175,6 +169,15 @@ const SearchTags = () => {
         </div>
       )}
     </div>
+  );
+};
+
+// Wrapper with Suspense
+const SearchTags = () => {
+  return (
+    <Suspense fallback={null}>
+      <SearchTagsContent />
+    </Suspense>
   );
 };
 

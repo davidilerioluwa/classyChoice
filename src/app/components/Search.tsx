@@ -1,7 +1,7 @@
 "use client";
 import { categories } from "@/store/constants";
 import { useRouter, useSearchParams } from "next/navigation";
-import React, { useEffect } from "react";
+import React, { useEffect, Suspense } from "react"; // Added Suspense import
 import { useState } from "react";
 import { BsCaretDown } from "react-icons/bs";
 
@@ -9,7 +9,9 @@ interface ChildProps {
   setShowSearch: React.Dispatch<React.SetStateAction<boolean>>;
   SearchLink?: string;
 }
-const Search: React.FC<ChildProps> = ({ setShowSearch, SearchLink }) => {
+
+// 1. Rename your existing component to a local name
+const SearchContent: React.FC<ChildProps> = ({ setShowSearch, SearchLink }) => {
   const searchParams = useSearchParams();
   const [category, setCategory] = useState(searchParams.get("category") || "");
   const [subCategory, setSubCategory] = useState(
@@ -30,14 +32,6 @@ const Search: React.FC<ChildProps> = ({ setShowSearch, SearchLink }) => {
   const search = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.preventDefault();
 
-    // state.filter = {
-    //   searchQuery: searchQuery,
-    //   minAmount: startingAmount,
-    //   maxAmount: highestAmount,
-    //   category: category,
-    //   subCategory: subCategory,
-    // };
-
     if (SearchLink) {
       router.push(SearchLink);
     } else {
@@ -48,16 +42,18 @@ const Search: React.FC<ChildProps> = ({ setShowSearch, SearchLink }) => {
 
     setShowSearch(false);
   };
+
   useEffect(() => {
-    // THIS IS TO SET THE SUBCATEGORIES BASED ON THE SELECTED CATEGORY IN THE SEARCH COMPONENT
     setSubCategories(
       categories.find((Category) => Category.mainCategory == category)
         ?.subCategories as string[],
     );
   }, [category]);
+
   useEffect(() => {
     // { subCategories?.length ? setSubCategory(subCategories[0]) : setSubCategory("") }
   }, [subCategories]);
+
   return (
     <section className="w-full bg-lgray flex flex-col gap-1 absolute  left-[-100px] z-50 text-purple-900">
       <div
@@ -170,6 +166,15 @@ const Search: React.FC<ChildProps> = ({ setShowSearch, SearchLink }) => {
         </div>
       </div>
     </section>
+  );
+};
+
+// 2. Export the component wrapped in Suspense
+const Search: React.FC<ChildProps> = (props) => {
+  return (
+    <Suspense fallback={null}>
+      <SearchContent {...props} />
+    </Suspense>
   );
 };
 
