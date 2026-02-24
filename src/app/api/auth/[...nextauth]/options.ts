@@ -21,6 +21,10 @@ export const options: NextAuthOptions = {
   debug: true,
   adapter: MongoDBAdapter(clientPromise),
   providers: [
+    GoogleProvider({
+      clientId: String(process.env.clientId),
+      clientSecret: String(process.env.clientSecret),
+    }),
     EmailProvider({
       server: {
         host: process.env.EMAIL_SERVER_HOST,
@@ -32,10 +36,6 @@ export const options: NextAuthOptions = {
       },
       from: process.env.EMAIL_FROM,
       sendVerificationRequest,
-    }),
-    GoogleProvider({
-      clientId: String(process.env.clientId),
-      clientSecret: String(process.env.clientSecret),
     }),
   ],
   callbacks: {

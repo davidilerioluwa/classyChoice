@@ -77,12 +77,12 @@ const Navbar = () => {
       <div className="flex gap-3 md:gap-4 items-center    ">
         <Link
           href="/"
-          className="hover:underline py-2 font-bold text-xl md:text-2xl"
+          className="hover:underline py-2 font-bold text-lg md:text-2xl"
         >
           ClassyChoice
         </Link>
       </div>
-      <div className="flex items-center gap-3 md:gap-4 text-lg font-bolder">
+      <div className="flex items-center gap-3 md:gap-4 text-sm md:text-md font-bolder">
         <div
           className="py-2 cursor-pointer relative"
           onMouseEnter={() => setShowCategoriesDropdown(true)}
@@ -98,24 +98,7 @@ const Navbar = () => {
           </span>
           {showCategoriesDropdown ? <CategoriesDropdown /> : ""}
         </div>
-        {loggedIn ? (
-          <span
-            className="py-2 cursor-pointer flex relative"
-            onMouseEnter={() => setShowAccountDropdown(true)}
-            onMouseLeave={() => setShowAccountDropdown(false)}
-            onClick={() => setShowAccountDropdown(!showAccountDropdown)}
-          >
-            <FaUserAlt />
-            <FaAngleDown /> {showAccountDropdown ? <AccountDropdown /> : ""}
-          </span>
-        ) : (
-          <Link
-            href={"/api/auth/signin"}
-            className="text-sm py-1.5 border border-purple-800 px-2 md:px-6 rounded-md"
-          >
-            SIGN IN
-          </Link>
-        )}
+
         <span
           className="py-2 cursor-pointer flex items-center"
           onClick={() => setShowSearch(true)}
@@ -139,6 +122,24 @@ const Navbar = () => {
               {snap.cartNumber}
             </span>
           </button>
+        )}
+        {loggedIn ? (
+          <span
+            className="py-2 cursor-pointer flex relative ml-2 items-center"
+            onMouseEnter={() => setShowAccountDropdown(true)}
+            onMouseLeave={() => setShowAccountDropdown(false)}
+            onClick={() => setShowAccountDropdown(!showAccountDropdown)}
+          >
+            <FaUserAlt />
+            <FaAngleDown /> {showAccountDropdown ? <AccountDropdown /> : ""}
+          </span>
+        ) : (
+          <Link
+            href={"/api/auth/signin"}
+            className="text-sm py-1.5 border border-purple-800 px-2 md:px-6 ml-4 rounded-md"
+          >
+            SIGN IN
+          </Link>
         )}
       </div>
     </nav>
@@ -179,7 +180,7 @@ const AccountDropdown = () => {
   return (
     <>
       {snap.user?.accountType == "admin" ? (
-        <div className="absolute top-6 left-[-30px] w-fit bg-white p-4 rounded-md flex flex-col drop-shadow-md text-sm">
+        <div className="absolute top-6 left-[-100px] w-fit bg-white p-4 rounded-md flex flex-col drop-shadow-md text-sm">
           <Link
             href={"/dashboard/products"}
             className="p-2 w-32 text-nowrap hover:drop-shadow-lg rounded-md bg-white"
@@ -202,7 +203,7 @@ const AccountDropdown = () => {
           </button>
         </div>
       ) : (
-        <div className="absolute top-6 left-[-30px] w-fit bg-white p-4 rounded-md flex flex-col drop-shadow-md text-sm">
+        <div className="absolute top-6 left-[-100px] w-fit bg-white p-4 rounded-md flex flex-col drop-shadow-md text-sm">
           <Link
             href={"/account/profile"}
             className="p-2 w-32 text-nowrap hover:drop-shadow-lg rounded-md bg-white"
