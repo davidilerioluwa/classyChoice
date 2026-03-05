@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { FaAngleDown } from "react-icons/fa6";
-import { FaUserAlt, FaSearch } from "react-icons/fa";
+import { FaUserAlt, FaSearch, FaHamburger } from "react-icons/fa";
 import { FiShoppingCart } from "react-icons/fi";
 import { getUserSession } from "../lib/session";
 import Search from "./Search";
@@ -12,12 +12,15 @@ import { signOut } from "next-auth/react";
 import { categories } from "@/store/constants";
 import { useRouter } from "next/navigation";
 import { iCart } from "../lib/models/Cart";
+import { IoMenu } from "react-icons/io5";
+// import { set } from "mongoose";
 // import { iCart } from '../lib/models/Cart';
 const Navbar = () => {
   const router = useRouter();
   const snap = useSnapshot(state);
   const [showAccountDropdown, setShowAccountDropdown] = useState(false);
   const [showCategoriesDropdown, setShowCategoriesDropdown] = useState(false);
+  const [showMobileMenu, setShowMobileMenu] = useState(false);
   const [showSearch, setShowSearch] = useState(false);
   const [loggedIn, setLoggedIn] = useState<string>();
   useEffect(() => {
@@ -39,7 +42,7 @@ const Navbar = () => {
 
       const response = await fetch(`/api/profile/`, {
         headers: {
-          id: userSession.id,
+          id: userSession.id || "",
         },
       });
 
@@ -83,8 +86,10 @@ const Navbar = () => {
         </Link>
       </div>
       <div className="flex items-center gap-3 md:gap-4 text-sm md:text-lg font-bolder">
+        {/* . */}
+        {/* mobile categories dropdown */}
         <div
-          className="py-2 cursor-pointer relative"
+          className="py-2 cursor-pointer relative hidden lg:flex items-center"
           onMouseEnter={() => setShowCategoriesDropdown(true)}
           onMouseLeave={() => setShowCategoriesDropdown(false)}
           onClick={() => setShowCategoriesDropdown(!showCategoriesDropdown)}
@@ -96,19 +101,20 @@ const Navbar = () => {
               <FaAngleDown />
             </span>
           </span>
-          {showCategoriesDropdown ? <CategoriesDropdown /> : ""}
+          {showCategoriesDropdown ? <LargeScreenCategoriesDropdown /> : ""}
         </div>
-
+        {/* search button */}
         <span
           className="py-2 cursor-pointer flex items-center"
           onClick={() => setShowSearch(true)}
         >
           <FaSearch />
         </span>
-        {showSearch ? <Search setShowSearch={setShowSearch} /> : ""}
-        {snap.user?.accountType == "admin" ? (
-          ""
-        ) : (
+        {showSearch && <Search setShowSearch={setShowSearch} />}
+
+        {/* cart button */}
+
+        {snap.user?.accountType == "user" && (
           <button
             onClick={() =>
               snap.user
@@ -123,17 +129,9 @@ const Navbar = () => {
             </span>
           </button>
         )}
-        {loggedIn ? (
-          <span
-            className="py-2 cursor-pointer flex relative ml-2 items-center"
-            onMouseEnter={() => setShowAccountDropdown(true)}
-            onMouseLeave={() => setShowAccountDropdown(false)}
-            onClick={() => setShowAccountDropdown(!showAccountDropdown)}
-          >
-            <FaUserAlt />
-            <FaAngleDown /> {showAccountDropdown ? <AccountDropdown /> : ""}
-          </span>
-        ) : (
+
+        {/* sign in button */}
+        {!loggedIn && (
           <Link
             href={"/api/auth/signin"}
             className="text-sm py-1.5 border border-purple-800 px-2 md:px-6 ml-4 rounded-md"
@@ -141,21 +139,130 @@ const Navbar = () => {
             SIGN IN
           </Link>
         )}
+        <span
+          className="py-2 cursor-pointer  relative ml-2 items-center hidden lg:flex"
+          onMouseEnter={() => setShowAccountDropdown(true)}
+          onMouseLeave={() => setShowAccountDropdown(false)}
+          onClick={() => setShowAccountDropdown(!showAccountDropdown)}
+        >
+          <FaUserAlt />
+          <FaAngleDown />{" "}
+          {showAccountDropdown ? <LargeScreenAccountDropdown /> : ""}
+        </span>
+        {/* mobile menu */}
+        <button
+          className="text-4xl lg:hidden ml-3"
+          onClick={() => setShowMobileMenu(!showMobileMenu)}
+        >
+          <IoMenu />
+        </button>
+        {showMobileMenu && <MobileMenu setShowMobileMenu={setShowMobileMenu} />}
       </div>
     </nav>
   );
 };
-const CategoriesDropdown = () => {
-  // const snap= useSnapshot(state)
+const MobileMenu = ({
+  setShowMobileMenu,
+}: {
+  setShowMobileMenu: React.Dispatch<React.SetStateAction<boolean>>;
+}) => {
+  const snap = useSnapshot(state);
   const router = useRouter();
   function navigateToCategories(category: string) {
-    // state.filter = {
-    //   category: category,
-    //   maxAmount: 1000000,
-    //   minAmount: 0,
-    //   searchQuery: "",
-    //   subCategory: "",
-    // };
+    router.push(`/search?category=${category}`);
+  }
+  return (
+    <div className=" fixed w-screen h-screen top-14 left-0  z-10">
+      {/* account sectiont */}
+      <div className="h-full w-full p-6 bg-white border-t border-purple-800">
+        <div>
+          <h2 className="text-lg font-bold pb-2">Account</h2>
+          {snap.user?.accountType == "admin" ? (
+            <div className=" w-full bg-white font-bold rounded-md grid grid-cols-2 text-sm">
+              <Link
+                href={"/dashboard/products"}
+                className="p-2 w-32 text-nowrap hover:drop-shadow-lg rounded-md bg-white"
+                onClick={() => setShowMobileMenu(false)}
+              >
+                Products
+              </Link>
+              {/* <Link href={"/account/cart"} className='p-2 text-nowrap hover:drop-shadow-lg rounded-md bg-white'>Cart</Link>
+      <Link href={"/account/profile"} className='p-2 text-nowrap hover:drop-shadow-lg rounded-md bg-white'>Likes</Link> */}
+              <Link
+                href={"/dashboard/orders"}
+                className="p-2 text-nowrap hover:drop-shadow-lg rounded-md bg-white"
+                onClick={() => setShowMobileMenu(false)}
+              >
+                Orders
+              </Link>
+              <button
+                onClick={() => signOut()}
+                className="p-2 text-nowrap hover:drop-shadow-lg rounded-md bg-white text-left"
+              >
+                Sign out
+              </button>
+            </div>
+          ) : (
+            <div className=" w-full bg-white font-bold rounded-md grid grid-cols-2 text-sm">
+              <Link
+                href={"/account/profile"}
+                className="p-2 w-32 text-nowrap hover:drop-shadow-lg rounded-md bg-white"
+                onClick={() => setShowMobileMenu(false)}
+              >
+                Account Profile
+              </Link>
+              <Link
+                href={"/account/cart"}
+                className="p-2 text-nowrap hover:drop-shadow-lg rounded-md bg-white"
+                onClick={() => setShowMobileMenu(false)}
+              >
+                Cart
+              </Link>
+              {/* <Link href={"/account/profile"} className='p-2 text-nowrap hover:drop-shadow-lg rounded-md bg-white'>Likes</Link> */}
+              <Link
+                href={"/account/orders"}
+                className="p-2 text-nowrap hover:drop-shadow-lg rounded-md bg-white"
+                onClick={() => setShowMobileMenu(false)}
+              >
+                Orders
+              </Link>
+              <button
+                onClick={() => {
+                  signOut();
+                  localStorage.setItem("user", "");
+                }}
+                className="p-2 text-nowrap hover:drop-shadow-lg rounded-md bg-white text-left"
+              >
+                Sign out
+              </button>
+            </div>
+          )}
+        </div>
+        <div>
+          <h2 className="text-lg font-bold pb-2 pt-8">Categories</h2>
+          <div className="w-full bg-white font-bold rounded-md grid md:grid-cols-2 text-sm ">
+            {categories.map((category) => (
+              <button
+                key={category.mainCategory}
+                onClick={() => {
+                  setShowMobileMenu(false);
+                  navigateToCategories(category.mainCategory);
+                }}
+                className="p-2 text-left  text-nowrap hover:drop-shadow-lg rounded-md bg-white"
+              >
+                {category.mainCategory}
+                {category.subCategories.length ? "" : ""}
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+const LargeScreenCategoriesDropdown = () => {
+  const router = useRouter();
+  function navigateToCategories(category: string) {
     router.push(`/search?category=${category}`);
   }
   return (
@@ -175,7 +282,7 @@ const CategoriesDropdown = () => {
     </div>
   );
 };
-const AccountDropdown = () => {
+const LargeScreenAccountDropdown = () => {
   const snap = useSnapshot(state);
   return (
     <>

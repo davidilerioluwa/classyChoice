@@ -1,25 +1,17 @@
-"use server"
-import { User, getServerSession } from 'next-auth'
-
-export const session = async ({ session, token }: any) => {
-  session.user.id = token.id
-  session.user.tenant = token.tenant
-  return session
-}
+"use server";
+import { auth } from "../api/auth/[...nextauth]/options"; // Path to your auth.ts
+import type { User } from "next-auth";
 
 export const getUserSession = async (): Promise<User> => {
-  const authUserSession = await getServerSession({
-    callbacks: {
-      session
-    }
-  })
-  if (!authUserSession) {
-    console.log(authUserSession);
+  const authUserSession = await auth();
+
+  if (!authUserSession?.user) {
     return {
-      id:""
-    }
-  }else{
-    return authUserSession.user
+      id: "",
+      // Note: You may need to add other required fields like email: ""
+      // depending on your TypeScript User interface
+    } as User;
   }
- 
-}
+
+  return authUserSession.user;
+};

@@ -9,18 +9,23 @@ import { toast } from "sonner";
 import UpdateProfileForm from "@/app/components/UpdateProfileForm";
 import PaymentDetails from "@/app/components/PaymentDetails";
 import { useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
 
 export interface iCheckoutDetails {
   cartId: string;
   price: number;
 }
 const Page = () => {
+  const { status } = useSession();
   const snap = useSnapshot(state);
   const router = useRouter();
 
-  if (!snap.user) {
-    router.push("/api/auth/signin");
-  }
+  useEffect(() => {
+    if (status === "unauthenticated") {
+      router.push("/api/auth/signin");
+    }
+  }, [status, router]);
+
   const [isLoading, setIsLoading] = useState(true);
   const [cart, setCart] = useState<Array<iCart>>([]);
   const [totalAmount, setTotalAmount] = useState<number>(0);

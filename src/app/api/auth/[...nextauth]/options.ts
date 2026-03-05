@@ -1,32 +1,26 @@
-import GoogleProvider from "next-auth/providers/google";
-import EmailProvider from "next-auth/providers/email";
-import { NextAuthOptions } from "next-auth";
-import dbConnect from "../../../lib/DBconnect";
-import { session } from "../../../lib/session";
+import NextAuth, { type NextAuthConfig } from "next-auth"; // Changed this
+import Google from "next-auth/providers/google"; // Note: v5 often uses 'Google' instead of 'GoogleProvider'
+import Email from "next-auth/providers/email";
 import { MongoDBAdapter } from "@auth/mongodb-adapter";
-import { MongoClient } from "mongodb";
-import { sendVerificationRequest } from "./sendVerificationRequest";
-
+import dbConnect from "../../../lib/DBconnect";
 import User from "@/app/lib/models/User";
+import { sendVerificationRequest } from "./sendVerificationRequest";
+import { MongoClient } from "mongodb";
+
 const clientPromise = dbConnect().then(
   (m) => m.connection.getClient() as unknown as MongoClient,
 );
-export const options: NextAuthOptions = {
-  session: {
-    strategy: "jwt",
-  },
-  pages: {
-    verifyRequest: "/auth/verify-request", // Custom verification request page
-  },
-  debug: true,
+
+export const authConfig: NextAuthConfig = {
+  // session: { strategy: "jwt" }, // Optional: v5 defaults to JWT if no adapter is present, but with an adapter it defaults to "database"
   adapter: MongoDBAdapter(clientPromise),
   providers: [
-    GoogleProvider({
-      clientId: String(process.env.clientId),
-      clientSecret: String(process.env.clientSecret),
+    Google({
+      clientId: process.env.clientId,
+      clientSecret: process.env.clientSecret,
       allowDangerousEmailAccountLinking: true,
     }),
-    EmailProvider({
+    Email({
       server: {
         host: process.env.EMAIL_SERVER_HOST,
         port: Number(process.env.EMAIL_SERVER_PORT),
@@ -39,112 +33,33 @@ export const options: NextAuthOptions = {
       sendVerificationRequest,
     }),
   ],
+  pages: {
+    verifyRequest: "/auth/verify-request",
+    signIn: "/auth/signin",
+  },
   callbacks: {
-    async signIn({ account, profile }) {
+    async signIn({ user }) {
+      // 1. Basic security check (Necessary)
+      if (!user.email) return false;
       await dbConnect();
-
-      switch (account?.provider) {
-        case "google":
-          if (!profile?.email) {
-            // throw new Error("No Profile");
-            console.error("no profile");
-          } else {
-            console.log("logged in");
-
-            const user = await User.findOne({ email: profile.email });
-            if (user) {
-              // console.log(user);
-            } else {
-              // const newUser = new User({
-              //   name: profile.name,
-              //   email: profile.email,
-              //   accountType: "user",
-              //   provider: "google",
-              // });
-              // await newUser.save();
-            }
-          }
-          break;
-        case "email":
-          if (!account?.providerAccountId) {
-            console.log("no profile email");
-            break;
-          } else {
-            const user = await User.findOne({
-              email: account.providerAccountId,
-            });
-            console.log(account.providerAccountId);
-
-            console.log(user);
-            if (user) {
-              if (user.signInCount === 0 || user.signInCount === undefined) {
-                const user = await User.findOneAndUpdate(
-                  { email: account.providerAccountId },
-                  {
-                    provider: "email",
-                    accountType: "user",
-                    signInCount: 1,
-                  },
-                  { new: true, upsert: false },
-                );
-                console.log(user);
-              } else {
-                const user = await User.findOne({
-                  email: account.providerAccountId,
-                });
-                const newUser = await User.findOneAndUpdate(
-                  { email: account.providerAccountId },
-                  {
-                    signInCount: (user.signInCount || 0) + 1,
-                  },
-                  { new: true, upsert: false },
-                );
-                console.log(newUser);
-              }
-            }
-          }
-        default:
-          break;
-      }
-
       return true;
     },
-    session,
+    // In v5, you'll likely use the session callback directly here
+    async session({ session, token }) {
+      if (session.user && token?.id) {
+        session.user.id = token.id as string;
+      }
+      return session;
+    },
     async jwt({ token, user }) {
-      // user, account,
-
       if (user) {
         const userProfile = await User.findOne({ email: user.email });
-        if (!userProfile) {
-          throw new Error("No user found");
-        }
-        token.id = userProfile.id;
+        if (userProfile) token.id = userProfile.id;
       }
       return token;
     },
   },
 };
-// CredentialsProvider({
-//   name: "Credentials",
-//   credentials: {
-//     email: { label: "Email", type: "email" },
-//     password: { label: "Password", type: "password" },
-//   },
-//   async authorize(credentials) {
-//     if (!credentials?.email || !credentials?.password) return null;
 
-//     const user = await User.findOne({ email: credentials.email });
-
-//     if (!user || !user.password) return null;
-
-//     // 2. Check password
-//     const isValid = await bcrypt.compare(
-//       credentials.password as string,
-//       user.password
-//     );
-
-//     if (!isValid) return null;
-
-//     return { id: user.id, email: user.email };
-//   },
-// }),
+// V5 Initialization
+export const { handlers, auth, signIn, signOut } = NextAuth(authConfig);
