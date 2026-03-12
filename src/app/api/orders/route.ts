@@ -15,6 +15,7 @@ interface Url {
   assetId?: string;
 }
 export async function PUT(req: Request) {
+  await dbConnect();
   async function generateUniqueRandomNumber() {
     const MIN = 1;
     const MAX = 9999999;
