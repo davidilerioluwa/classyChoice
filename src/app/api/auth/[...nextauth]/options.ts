@@ -90,8 +90,6 @@ export const authConfig: NextAuthConfig = {
 
       return true;
     },
-    // Note: ensure your custom session logic is compatible with NextAuthConfig
-    // @ts-ignore - ignoring if your custom session helper has a different signature
     async session({ session, token }) {
       // console.log(session, "session");
 

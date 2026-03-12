@@ -1,4 +1,3 @@
-import { log } from "console";
 import nodemailer from "nodemailer";
 
 // Initialize the transporter with pooling for better reliability
