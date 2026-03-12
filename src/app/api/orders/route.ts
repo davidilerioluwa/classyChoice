@@ -98,7 +98,7 @@ export async function PUT(req: Request) {
         name,
         items,
       });
-      sendOrderSucessfulEmail({
+      await sendOrderSucessfulEmail({
         email: email as string,
         name: name as string,
         items: items,
