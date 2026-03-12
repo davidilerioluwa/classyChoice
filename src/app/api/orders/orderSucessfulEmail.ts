@@ -39,15 +39,15 @@ const sendOrderSuccessfulEmail = async ({
       <td style="padding: 8px; border: 1px solid #ddd;">${item.quantity}</td>
       <td style="padding: 8px; border: 1px solid #ddd;">₦${item.price.toLocaleString(
         undefined,
-        { minimumFractionDigits: 2 }
+        { minimumFractionDigits: 2 },
       )}</td>
-    </tr>`
+    </tr>`,
     )
     .join("");
 
   const total = items.reduce(
     (sum, item) => sum + item.price * Number(item.quantity),
-    0
+    0,
   );
 
   const finalHtml = `
@@ -86,7 +86,7 @@ const sendOrderSuccessfulEmail = async ({
 
     const sellerMail = {
       from: '"Classy Choice Stores" <classychoicevarietiesstores@gmail.com>',
-      to: "davidilerioluwa1998@gmail.com",
+      to: "classychoicevarietiesstores@gmail.com",
       subject: "New Order Received!",
       text: `An order has been placed by ${name}.`,
       html: `<strong>An order has successfully been placed by ${name}</strong><br/>Email: ${email}${finalHtml}<p>Please check the admin panel to process the order.</p>`,
@@ -101,7 +101,7 @@ const sendOrderSuccessfulEmail = async ({
     console.log(
       "Emails sent successfully. IDs:",
       info.messageId,
-      messageToSeller.messageId
+      messageToSeller.messageId,
     );
 
     return {

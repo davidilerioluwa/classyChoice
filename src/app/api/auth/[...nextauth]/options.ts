@@ -1,10 +1,10 @@
-import NextAuth, { type NextAuthConfig } from "next-auth"; // Changed this
-import Google from "next-auth/providers/google"; // Note: v5 often uses 'Google' instead of 'GoogleProvider'
-import Email from "next-auth/providers/email";
+import NextAuth, { type NextAuthConfig } from "next-auth";
+import Google from "next-auth/providers/google";
+import Credentials from "next-auth/providers/credentials"; // 1. Import Credentials
+import bcrypt from "bcryptjs"; // 2. Import bcrypt
 import { MongoDBAdapter } from "@auth/mongodb-adapter";
 import dbConnect from "../../../lib/DBconnect";
 import User from "@/app/lib/models/User";
-import { sendVerificationRequest } from "./sendVerificationRequest";
 import { MongoClient } from "mongodb";
 
 const clientPromise = dbConnect().then(
@@ -12,7 +12,9 @@ const clientPromise = dbConnect().then(
 );
 
 export const authConfig: NextAuthConfig = {
-  // session: { strategy: "jwt" }, // Optional: v5 defaults to JWT if no adapter is present, but with an adapter it defaults to "database"
+  // 3. FORCE JWT strategy (Required for Credentials)
+  session: { strategy: "jwt" },
+
   adapter: MongoDBAdapter(clientPromise),
   providers: [
     Google({
@@ -20,17 +22,56 @@ export const authConfig: NextAuthConfig = {
       clientSecret: process.env.clientSecret,
       allowDangerousEmailAccountLinking: true,
     }),
-    Email({
-      server: {
-        host: process.env.EMAIL_SERVER_HOST,
-        port: Number(process.env.EMAIL_SERVER_PORT),
-        auth: {
-          user: process.env.EMAIL_SERVER_USER,
-          pass: process.env.EMAIL_SERVER_PASSWORD,
-        },
+
+    // 4. ADD THE CREDENTIALS PROVIDER
+    Credentials({
+      name: "Credentials",
+      credentials: {
+        email: { label: "Email", type: "email" },
+        password: { label: "Password", type: "password" },
       },
-      from: process.env.EMAIL_FROM,
-      sendVerificationRequest,
+      async authorize(credentials) {
+        await dbConnect();
+        console.log(
+          (credentials?.email as string)?.toLowerCase(),
+          "credentials",
+        );
+
+        // Find the user
+        const user = await User.findOne({
+          email: (credentials?.email as string)?.toLowerCase(),
+        });
+
+        if (!user || !user.password) {
+          // throw new Error("No user found with this email");
+          console.error("No user found with this email");
+          return null;
+        }
+
+        // Verify OTP/Verification status (from your earlier step)
+        if (!user.isVerified) {
+          console.error("Please verify your email before logging in.");
+          return null;
+        }
+
+        // Check password
+        const isPasswordCorrect = await bcrypt.compare(
+          credentials.password as string,
+          user.password,
+        );
+
+        if (!isPasswordCorrect) {
+          console.error("Invalid password");
+          return null;
+        }
+
+        // Return user for the JWT
+        return {
+          id: user._id.toString(),
+          email: user.email,
+          name: user.name,
+        };
+      },
     }),
   ],
   pages: {
@@ -38,28 +79,33 @@ export const authConfig: NextAuthConfig = {
     signIn: "/auth/signin",
   },
   callbacks: {
-    async signIn({ user }) {
-      // 1. Basic security check (Necessary)
+    async signIn({ user, account }) {
       if (!user.email) return false;
-      await dbConnect();
+
+      // If signing in with credentials, check if verified
+      if (account?.provider === "credentials") {
+        await dbConnect();
+        const dbUser = await User.findOne({ email: user.email });
+        if (!dbUser?.isVerified) return false;
+      }
+
       return true;
     },
-    // In v5, you'll likely use the session callback directly here
     async session({ session, token }) {
-      if (session.user && token?.id) {
-        session.user.id = token.id as string;
+      console.log(session, "session");
+
+      if (session.user && token?.sub) {
+        session.user.id = token.sub; // v5 often uses 'sub' for the user ID
       }
       return session;
     },
     async jwt({ token, user }) {
       if (user) {
-        const userProfile = await User.findOne({ email: user.email });
-        if (userProfile) token.id = userProfile.id;
+        token.id = user.id;
       }
       return token;
     },
   },
 };
 
-// V5 Initialization
 export const { handlers, auth, signIn, signOut } = NextAuth(authConfig);

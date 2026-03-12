@@ -15,6 +15,10 @@ const userSchema: Schema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  password: {
+    type: String,
+    required: false, // Not required for OAuth users
+  },
   name: {
     type: String,
     required: true,
@@ -43,10 +47,26 @@ const userSchema: Schema = new mongoose.Schema({
     type: String,
     required: false,
   },
-  signInCount: {
-    type: Number,
+  createdAt: {
+    type: Date,
+    default: Date.now,
+  },
+  isVerified: {
+    type: Boolean,
+    default: false,
     required: false,
-    default: 0,
+  },
+  otp: {
+    type: String,
+    required: false,
+  },
+  otpExpires: {
+    type: Date,
+    required: false,
+  },
+  verificationToken: {
+    type: String,
+    required: false,
   },
 });
 
