@@ -132,7 +132,7 @@ const sendOrderSuccessfulEmail = async ({
         }
 
         try {
-          const [info, sellerInfo] = await Promise.all([
+          const [info] = await Promise.all([
             transporter.sendMail(customerMail),
             transporter.sendMail(sellerMail),
           ]);
