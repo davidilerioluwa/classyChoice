@@ -11,7 +11,7 @@ export async function sendVerificationRequest(params: {
   const { host } = new URL(url);
 
   // In v5, provider.server might need a type cast or check
-  const transport = createTransport(provider.server as any);
+  const transport = createTransport(provider.server);
 
   const result = await transport.sendMail({
     to: identifier,
