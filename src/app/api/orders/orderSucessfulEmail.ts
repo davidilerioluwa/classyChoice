@@ -124,23 +124,26 @@ const sendOrderSuccessfulEmail = async ({
       `,
     };
 
-    // 5. Send concurrently and wait for BOTH to finish
-    const [info, messageToSeller] = await Promise.all([
-      transporter.sendMail(customerMail),
-      transporter.sendMail(sellerMail),
-    ]);
+    return new Promise((resolve) => {
+      transporter.verify(async (error) => {
+        if (error) {
+          console.error("Vercel Connection Error:", error);
+          return resolve({ success: false, error });
+        }
 
-    console.log(
-      "Emails sent successfully IDs:",
-      info.messageId,
-      messageToSeller.messageId,
-    );
-
-    return {
-      success: true,
-      messageId: info.messageId,
-      sellerMessageId: messageToSeller.messageId,
-    };
+        try {
+          const [info, sellerInfo] = await Promise.all([
+            transporter.sendMail(customerMail),
+            transporter.sendMail(sellerMail),
+          ]);
+          console.log("Emails sent!", info.messageId);
+          resolve({ success: true, messageId: info.messageId });
+        } catch (sendError) {
+          console.error("Vercel Send Error:", sendError);
+          resolve({ success: false, error: sendError });
+        }
+      });
+    });
   } catch (error) {
     console.error("Critical Error sending order email:", error);
     return {

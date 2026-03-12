@@ -1,3 +1,4 @@
+export const maxDuration = 30; // Extend to 30 seconds
 import sendOrderSucessfulEmail from "./orderSucessfulEmail";
 import dbConnect from "@/app/lib/DBconnect";
 import Cart from "@/app/lib/models/Cart";
