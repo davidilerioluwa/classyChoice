@@ -1,9 +1,2 @@
-
-import NextAuth from "next-auth/next";
-import { options } from "./options";
-
-
-
-
-const handler =NextAuth(options)
-export {handler as GET,handler as POST}
+import { handlers } from "./options"; // path to the file we just created
+export const { GET, POST } = handlers;

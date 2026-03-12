@@ -6,7 +6,6 @@ import { MongoDBAdapter } from "@auth/mongodb-adapter";
 import { MongoClient } from "mongodb";
 
 import dbConnect from "../../../lib/DBconnect";
-import { session } from "../../../lib/session";
 import { sendVerificationRequest } from "./sendVerificationRequest";
 import User from "@/app/lib/models/User";
 
