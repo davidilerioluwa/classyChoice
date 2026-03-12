@@ -1,5 +1,5 @@
 import nodemailer from "nodemailer";
-
+export const maxDuration = 30; // Extend to 30 seconds
 /**
  * TRANSPORTER CONFIGURATION
  * Note: Pooling is disabled for Vercel/Serverless to prevent handshake errors.
