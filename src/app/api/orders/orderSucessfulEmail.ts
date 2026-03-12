@@ -1,3 +1,4 @@
+import { log } from "console";
 import nodemailer from "nodemailer";
 
 // Initialize the transporter with pooling for better reliability
@@ -39,15 +40,15 @@ const sendOrderSuccessfulEmail = async ({
       <td style="padding: 8px; border: 1px solid #ddd;">${item.quantity}</td>
       <td style="padding: 8px; border: 1px solid #ddd;">₦${item.price.toLocaleString(
         undefined,
-        { minimumFractionDigits: 2 }
+        { minimumFractionDigits: 2 },
       )}</td>
-    </tr>`
+    </tr>`,
     )
     .join("");
 
   const total = items.reduce(
     (sum, item) => sum + item.price * Number(item.quantity),
-    0
+    0,
   );
 
   const finalHtml = `
@@ -75,6 +76,7 @@ const sendOrderSuccessfulEmail = async ({
   `;
 
   try {
+    console.log("Preparing to send order confirmation emails...");
     // Define both email configurations
     const customerMail = {
       from: '"Classy Choice Stores" <classychoicevarietiesstores@gmail.com>',
@@ -91,7 +93,8 @@ const sendOrderSuccessfulEmail = async ({
       text: `An order has been placed by ${name}.`,
       html: `<strong>An order has successfully been placed by ${name}</strong><br/>Email: ${email}${finalHtml}<p>Please check the admin panel to process the order.</p>`,
     };
-
+    console.log("Customer email content:", customerMail);
+    console.log("Seller email content:", sellerMail);
     // Send both emails concurrently
     const [info, messageToSeller] = await Promise.all([
       transporter.sendMail(customerMail),
@@ -101,7 +104,7 @@ const sendOrderSuccessfulEmail = async ({
     console.log(
       "Emails sent successfully. IDs:",
       info.messageId,
-      messageToSeller.messageId
+      messageToSeller.messageId,
     );
 
     return {

@@ -52,7 +52,7 @@ export async function PUT(req: Request) {
 
       const buffer = Buffer.from(await file.arrayBuffer());
       const base64String = `data:${file.type};base64,${buffer.toString(
-        "base64"
+        "base64",
       )}`;
       return new Promise<Url>((resolve, reject) => {
         // Use cloudinary.uploader.upload instead of upload_stream
@@ -71,7 +71,7 @@ export async function PUT(req: Request) {
               };
               resolve(newUrl);
             }
-          }
+          },
         );
       });
     };
@@ -91,6 +91,11 @@ export async function PUT(req: Request) {
     await newOrder.save();
     const deletedCart = await Cart.deleteMany({ userId: userId });
     if (deletedCart) {
+      console.log("Calling sendOrderSucessfulEmail with:", {
+        email,
+        name,
+        items,
+      });
       sendOrderSucessfulEmail({
         email: email as string,
         name: name as string,
