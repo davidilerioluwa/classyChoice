@@ -39,8 +39,9 @@ const Navbar = () => {
 
       const response = await fetch(`/api/profile/`, {
         headers: {
-          id: userSession.id,
-        },
+          // Ensure it's a string and not undefined
+          id: userSession.id || "",
+        } as HeadersInit,
       });
 
       const res = await response.json();
