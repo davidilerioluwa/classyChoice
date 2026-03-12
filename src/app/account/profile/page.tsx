@@ -13,13 +13,13 @@ const Page = () => {
   const [showEditAddress, setShowEditAddress] = useState<boolean>(false);
   const [name, setName] = useState(snap.user?.name ? snap.user.name : "");
   const [phoneNumber, setPhoneNumber] = useState(
-    snap.user?.phoneNumber ? snap.user.phoneNumber : ""
+    snap.user?.phoneNumber ? snap.user.phoneNumber : "",
   );
   const [address, setAddress] = useState(snap.user ? snap.user.address : "");
   const [city, setCity] = useState(snap.user ? snap.user.city : "");
   const [State, setState] = useState(snap.user ? snap.user.state : "");
   const updateAccountDetails = async (
-    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
   ) => {
     e.preventDefault();
     toast("updating Profile");
@@ -46,8 +46,9 @@ const Page = () => {
           const userSession = await getUserSession();
           const response = await fetch(`/api/profile/`, {
             headers: {
-              id: userSession.id,
-            },
+              // Ensure it's a string and not undefined
+              id: userSession.id || "",
+            } as HeadersInit,
           });
 
           const res = await response.json();
@@ -153,7 +154,7 @@ const EditAccountDetails = ({
   name: string;
   setName: React.Dispatch<React.SetStateAction<string>>;
   updateAccountDetails: (
-    param: React.MouseEvent<HTMLButtonElement, MouseEvent>
+    param: React.MouseEvent<HTMLButtonElement, MouseEvent>,
   ) => void;
   phoneNumber: string;
   setPhoneNumber: React.Dispatch<React.SetStateAction<string>>;
@@ -240,7 +241,7 @@ const EditAddressDetails = ({
   setAddress: React.Dispatch<React.SetStateAction<string>>;
   setState: React.Dispatch<React.SetStateAction<string>>;
   updateAccountDetails: (
-    params: React.MouseEvent<HTMLButtonElement, MouseEvent>
+    params: React.MouseEvent<HTMLButtonElement, MouseEvent>,
   ) => void;
 }) => {
   const statesInNigeria = [
