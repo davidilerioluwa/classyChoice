@@ -26,7 +26,7 @@ const sendOrderSuccessfulEmail = async ({
 }: OrderEmailParams): Promise<{
   success: boolean;
   messageId?: string;
-  error?: any;
+  error?: Error | string;
 }> => {
   // 1. Build Table Rows
   const tableRows = items
@@ -128,7 +128,7 @@ const sendOrderSuccessfulEmail = async ({
         "Vercel Log - Customer Email Sent. Now sending seller notification...",
       );
 
-      transporter.sendMail(sellerMail, (error2, info2) => {
+      transporter.sendMail(sellerMail, (error2) => {
         if (error2) {
           console.error("Vercel Log - Seller Email Failed:", error2);
           // We still return true for success here because the customer at least got their email
