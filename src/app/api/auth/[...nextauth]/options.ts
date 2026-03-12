@@ -1,112 +1,111 @@
-import NextAuth from "next-auth";
-import type { NextAuthConfig } from "next-auth";
-import GoogleProvider from "next-auth/providers/google";
-import EmailProvider from "next-auth/providers/email";
+import NextAuth, { type NextAuthConfig } from "next-auth";
+import Google from "next-auth/providers/google";
+import Credentials from "next-auth/providers/credentials"; // 1. Import Credentials
+import bcrypt from "bcryptjs"; // 2. Import bcrypt
 import { MongoDBAdapter } from "@auth/mongodb-adapter";
+import dbConnect from "../../../lib/DBconnect";
+import User from "@/app/lib/models/User";
 import { MongoClient } from "mongodb";
 
-import dbConnect from "../../../lib/DBconnect";
-import { sendVerificationRequest } from "./sendVerificationRequest";
-import User from "@/app/lib/models/User";
-
-// Initialize the MongoDB client for the adapter
 const clientPromise = dbConnect().then(
   (m) => m.connection.getClient() as unknown as MongoClient,
 );
 
 export const authConfig: NextAuthConfig = {
+  // 3. FORCE JWT strategy (Required for Credentials)
+  session: { strategy: "jwt" },
+
   adapter: MongoDBAdapter(clientPromise),
-  session: {
-    strategy: "jwt",
-  },
-  pages: {
-    verifyRequest: "/auth/verify-request",
-  },
-  debug: true,
   providers: [
-    GoogleProvider({
+    Google({
       clientId: process.env.clientId,
       clientSecret: process.env.clientSecret,
       allowDangerousEmailAccountLinking: true,
     }),
-    EmailProvider({
-      server: {
-        host: process.env.EMAIL_SERVER_HOST,
-        port: Number(process.env.EMAIL_SERVER_PORT),
-        auth: {
-          user: process.env.EMAIL_SERVER_USER,
-          pass: process.env.EMAIL_SERVER_PASSWORD,
-        },
+
+    // 4. ADD THE CREDENTIALS PROVIDER
+    Credentials({
+      name: "Credentials",
+      credentials: {
+        email: { label: "Email", type: "email" },
+        password: { label: "Password", type: "password" },
       },
-      from: process.env.EMAIL_FROM,
-      sendVerificationRequest,
+      async authorize(credentials) {
+        await dbConnect();
+        console.log(
+          (credentials?.email as string)?.toLowerCase(),
+          "credentials",
+        );
+
+        // Find the user
+        const user = await User.findOne({
+          email: (credentials?.email as string)?.toLowerCase(),
+        });
+
+        if (!user || !user.password) {
+          // throw new Error("No user found with this email");
+          console.error("No user found with this email");
+          return null;
+        }
+
+        // Verify OTP/Verification status (from your earlier step)
+        if (!user.isVerified) {
+          console.error("Please verify your email before logging in.");
+          return null;
+        }
+
+        // Check password
+        const isPasswordCorrect = await bcrypt.compare(
+          credentials.password as string,
+          user.password,
+        );
+
+        if (!isPasswordCorrect) {
+          console.error("Invalid password");
+          return null;
+        }
+
+        // Return user for the JWT
+        return {
+          id: user._id.toString(),
+          email: user.email,
+          name: user.name,
+        };
+      },
     }),
   ],
+  pages: {
+    verifyRequest: "/auth/verify-request",
+    signIn: "/auth/signin",
+  },
   callbacks: {
-    async signIn({ account, profile }) {
-      await dbConnect();
+    async signIn({ user, account }) {
+      if (!user.email) return false;
 
-      switch (account?.provider) {
-        case "google":
-          if (!profile?.email) {
-            console.error("no profile");
-          } else {
-            console.log("logged in via google");
-            // Optional: Manual logic for existing users
-            const user = await User.findOne({ email: profile.email });
-            if (user) {
-              // Logic for existing user
-            }
-          }
-          break;
-
-        case "email":
-          // In v5, providerAccountId is often the email for the Email provider
-          const email = account?.providerAccountId;
-          if (!email) {
-            console.log("no profile email");
-            break;
-          } else {
-            const user = await User.findOne({ email });
-
-            if (user) {
-              const currentCount = user.signInCount || 0;
-              await User.findOneAndUpdate(
-                { email },
-                {
-                  provider: "email",
-                  accountType: "user",
-                  signInCount: currentCount + 1,
-                },
-                { new: true, upsert: false },
-              );
-            }
-          }
-          break;
-
-        default:
-          break;
+      // If signing in with credentials, check if verified
+      if (account?.provider === "credentials") {
+        await dbConnect();
+        const dbUser = await User.findOne({ email: user.email });
+        if (!dbUser?.isVerified) return false;
       }
 
       return true;
     },
-    // Note: ensure your custom session logic is compatible with NextAuthConfig
-    // @ts-ignore - ignoring if your custom session helper has a different signature
-    session,
+    async session({ session, token }) {
+      console.log(session, "session");
 
+      if (session.user && token?.sub) {
+        session.user.id = token.sub; // v5 often uses 'sub' for the user ID
+      }
+      return session;
+    },
     async jwt({ token, user }) {
       if (user) {
-        await dbConnect();
-        const userProfile = await User.findOne({ email: user.email });
-        if (!userProfile) {
-          throw new Error("No user found in database");
-        }
-        token.id = userProfile._id.toString();
+        token.id = user.id;
       }
       return token;
     },
   },
 };
 
-// Export the handlers for Next.js App Router (if applicable)
 export const { handlers, auth, signIn, signOut } = NextAuth(authConfig);
